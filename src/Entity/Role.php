@@ -15,15 +15,18 @@ class Role
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 50, unique: true)]
+    private ?string $name = null;
+
     /**
-     * @var Collection<int, utilisateur>
+     * @var Collection<int, Utilisateur>
      */
-    #[ORM\OneToMany(targetEntity: utilisateur::class, mappedBy: 'role')]
-    private Collection $utilisateur;
+    #[ORM\OneToMany(targetEntity: Utilisateur::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
+    private Collection $utilisateurs;
 
     public function __construct()
     {
-        $this->utilisateur = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -31,28 +34,40 @@ class Role
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, utilisateur>
-     */
-    public function getUtilisateur(): Collection
+    public function getName(): ?string
     {
-        return $this->utilisateur;
+        return $this->name;
     }
 
-    public function addUtilisateur(utilisateur $utilisateur): static
+    public function setName(string $name): self
     {
-        if (!$this->utilisateur->contains($utilisateur)) {
-            $this->utilisateur->add($utilisateur);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
             $utilisateur->setRole($this);
         }
 
         return $this;
     }
 
-    public function removeUtilisateur(utilisateur $utilisateur): static
+    public function removeUtilisateur(Utilisateur $utilisateur): self
     {
-        if ($this->utilisateur->removeElement($utilisateur)) {
-            // set the owning side to null (unless already changed)
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            // Set the owning side to null (unless already changed)
             if ($utilisateur->getRole() === $this) {
                 $utilisateur->setRole(null);
             }

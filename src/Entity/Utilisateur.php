@@ -6,10 +6,12 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,19 +21,19 @@ class Utilisateur
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?int $credits = null;
 
-    #[ORM\Column]
+    #[ORM\Column (nullable: true)]
     private ?float $noteMoyenne = null;
 
-    #[ORM\Column(type: Types::BLOB)]
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $photo = null;
 
     #[ORM\Column]
@@ -46,7 +48,7 @@ class Utilisateur
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'utilisateur')]
     private Collection $vehicules;
 
-    #[ORM\ManyToOne(inversedBy: 'utilisateur')]
+    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'utilisateurs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Role $role = null;
 
@@ -62,11 +64,15 @@ class Utilisateur
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'auteur', orphanRemoval: true)]
     private Collection $avis;
 
+    #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Avis::class)]
+    private Collection $avisReçus;
+
     public function __construct()
     {
         $this->vehicules = new ArrayCollection();
         $this->preferences = new ArrayCollection();
         $this->avis = new ArrayCollection();
+        $this->avisReçus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -257,17 +263,17 @@ class Utilisateur
         return $this->avis;
     }
 
-    public function addAvi(Avis $avi): static
+    public function addAvis(Avis $avis): static
     {
-        if (!$this->avis->contains($avi)) {
-            $this->avis->add($avi);
-            $avi->setAuteur($this);
+        if (!$this->avis->contains($avis)) {
+            $this->avis->add($avis);
+            $avis->setAuteur($this);
         }
 
         return $this;
     }
 
-    public function removeAvi(Avis $avi): static
+    public function removeAvis(Avis $avi): static
     {
         if ($this->avis->removeElement($avi)) {
             // set the owning side to null (unless already changed)
@@ -277,5 +283,52 @@ class Utilisateur
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvisReçus(): Collection
+    {
+        return $this->avisReçus;
+    }
+
+    public function addAvisReçu(Avis $avis): self
+    {
+        if (!$this->avisReçus->contains($avis)) {
+            $this->avisReçus->add($avis);
+            $avis->setDestinataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvisReçu(Avis $avis): self
+    {
+        if ($this->avisReçus->removeElement($avis)) {
+            if ($avis->getDestinataire() === $this) {
+                $avis->setDestinataire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    // Méthodes requises par UserInterface
+    public function getRoles(): array
+    {
+        // Retourne le rôle sous forme de tableau
+        return [$this->role->getName()];
+    }
+    
+    public function getUserIdentifier(): string
+    {
+        // Utilise l'email comme identifiant unique de l'utilisateur
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si vous stockez des données sensibles temporaires, nettoyez-les ici
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CovoiturageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,11 +18,11 @@ class Covoiturage
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateur $chauffeur = null;
+    private ?Utilisateur $chauffeur = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?vehicule $vehicule = null;
+    private ?Vehicule $vehicule = null;
 
     #[ORM\Column(length: 255)]
     private ?string $adresseDepart = null;
@@ -49,29 +51,37 @@ class Covoiturage
     #[ORM\Column]
     private ?int $prix = null;
 
+    #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
+    private Collection $avis;
+
+    public function __construct()
+    {
+        $this->avis = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getChauffeur(): ?utilisateur
+    public function getChauffeur(): ?Utilisateur
     {
         return $this->chauffeur;
     }
 
-    public function setChauffeur(?utilisateur $chauffeur): static
+    public function setChauffeur(?Utilisateur $chauffeur): static
     {
         $this->chauffeur = $chauffeur;
 
         return $this;
     }
 
-    public function getVehicule(): ?vehicule
+    public function getVehicule(): ?Vehicule
     {
         return $this->vehicule;
     }
 
-    public function setVehicule(?vehicule $vehicule): static
+    public function setVehicule(?Vehicule $vehicule): static
     {
         $this->vehicule = $vehicule;
 
@@ -182,6 +192,32 @@ class Covoiturage
     public function setPrix(int $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvis(Avis $avis): self
+    {
+        if (!$this->avis->contains($avis)) {
+            $this->avis->add($avis);
+            $avis->setCovoiturage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvis(Avis $avis): self
+    {
+        if ($this->avis->removeElement($avis)) {
+            if ($avis->getCovoiturage() === $this) {
+                $avis->setCovoiturage(null);
+            }
+        }
 
         return $this;
     }

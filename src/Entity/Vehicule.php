@@ -15,7 +15,7 @@ class Vehicule
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'vehicules')]
-    private ?utilisateur $utilisateur = null;
+    private ?Utilisateur $utilisateur = null; // Correction ici
 
     #[ORM\Column(length: 255)]
     private ?string $marque = null;
@@ -43,12 +43,12 @@ class Vehicule
         return $this->id;
     }
 
-    public function getUtilisateur(): ?utilisateur
+    public function getUtilisateur(): ?Utilisateur // Correction ici
     {
         return $this->utilisateur;
     }
 
-    public function setUtilisateur(?utilisateur $utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static // Correction ici
     {
         $this->utilisateur = $utilisateur;
 

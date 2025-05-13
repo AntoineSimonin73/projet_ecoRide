@@ -25,13 +25,13 @@ class Avis
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateur $auteur = null;
+    private ?Utilisateur $auteur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'avisReçus')]
+    private ?Utilisateur $destinataire = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
-    private ?utilisateur $destinataire = null;
-
-    #[ORM\ManyToOne]
-    private ?covoiturage $covoiturage = null;
+    private ?Covoiturage $covoiturage = null;
 
     #[ORM\Column]
     private ?bool $isValide = null;
@@ -77,36 +77,36 @@ class Avis
         return $this;
     }
 
-    public function getAuteur(): ?utilisateur
+    public function getAuteur(): ?Utilisateur
     {
         return $this->auteur;
     }
 
-    public function setAuteur(?utilisateur $auteur): static
+    public function setAuteur(?Utilisateur $auteur): static
     {
         $this->auteur = $auteur;
 
         return $this;
     }
 
-    public function getDestinataire(): ?utilisateur
+    public function getDestinataire(): ?Utilisateur
     {
         return $this->destinataire;
     }
 
-    public function setDestinataire(?utilisateur $destinataire): static
+    public function setDestinataire(?Utilisateur $destinataire): static
     {
         $this->destinataire = $destinataire;
 
         return $this;
     }
 
-    public function getCovoiturage(): ?covoiturage
+    public function getCovoiturage(): ?Covoiturage
     {
         return $this->covoiturage;
     }
 
-    public function setCovoiturage(?covoiturage $covoiturage): static
+    public function setCovoiturage(?Covoiturage $covoiturage): static
     {
         $this->covoiturage = $covoiturage;
 

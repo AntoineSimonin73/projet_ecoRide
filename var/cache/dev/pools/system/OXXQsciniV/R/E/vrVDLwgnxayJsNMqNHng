@@ -1,0 +1,59 @@
+<?php //easyadmin.routes.fqcn_to_route
+
+return [PHP_INT_MAX, [
+    'App\\Controller\\Admin\\DashboardController' => [
+        '' => [
+            '' => 'app_admin',
+        ],
+        'App\\Controller\\Admin\\AvisCrudController' => [
+            'index' => 'app_admin_avis_index',
+            'new' => 'app_admin_avis_new',
+            'batchDelete' => 'app_admin_avis_batch_delete',
+            'autocomplete' => 'app_admin_avis_autocomplete',
+            'renderFilters' => 'app_admin_avis_render_filters',
+            'edit' => 'app_admin_avis_edit',
+            'delete' => 'app_admin_avis_delete',
+            'detail' => 'app_admin_avis_detail',
+        ],
+        'App\\Controller\\Admin\\CovoiturageCrudController' => [
+            'index' => 'app_admin_covoiturage_index',
+            'new' => 'app_admin_covoiturage_new',
+            'batchDelete' => 'app_admin_covoiturage_batch_delete',
+            'autocomplete' => 'app_admin_covoiturage_autocomplete',
+            'renderFilters' => 'app_admin_covoiturage_render_filters',
+            'edit' => 'app_admin_covoiturage_edit',
+            'delete' => 'app_admin_covoiturage_delete',
+            'detail' => 'app_admin_covoiturage_detail',
+        ],
+        'App\\Controller\\Admin\\RoleCrudController' => [
+            'index' => 'app_admin_role_index',
+            'new' => 'app_admin_role_new',
+            'batchDelete' => 'app_admin_role_batch_delete',
+            'autocomplete' => 'app_admin_role_autocomplete',
+            'renderFilters' => 'app_admin_role_render_filters',
+            'edit' => 'app_admin_role_edit',
+            'delete' => 'app_admin_role_delete',
+            'detail' => 'app_admin_role_detail',
+        ],
+        'App\\Controller\\Admin\\UtilisateurCrudController' => [
+            'index' => 'app_admin_utilisateur_index',
+            'new' => 'app_admin_utilisateur_new',
+            'batchDelete' => 'app_admin_utilisateur_batch_delete',
+            'autocomplete' => 'app_admin_utilisateur_autocomplete',
+            'renderFilters' => 'app_admin_utilisateur_render_filters',
+            'edit' => 'app_admin_utilisateur_edit',
+            'delete' => 'app_admin_utilisateur_delete',
+            'detail' => 'app_admin_utilisateur_detail',
+        ],
+        'App\\Controller\\Admin\\VehiculeCrudController' => [
+            'index' => 'app_admin_vehicule_index',
+            'new' => 'app_admin_vehicule_new',
+            'batchDelete' => 'app_admin_vehicule_batch_delete',
+            'autocomplete' => 'app_admin_vehicule_autocomplete',
+            'renderFilters' => 'app_admin_vehicule_render_filters',
+            'edit' => 'app_admin_vehicule_edit',
+            'delete' => 'app_admin_vehicule_delete',
+            'detail' => 'app_admin_vehicule_detail',
+        ],
+    ],
+]];

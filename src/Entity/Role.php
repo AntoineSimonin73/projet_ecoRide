@@ -15,14 +15,11 @@ class Role
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50, unique: true)]
-    private ?string $name = null;
-
-    /**
-     * @var Collection<int, Utilisateur>
-     */
-    #[ORM\OneToMany(targetEntity: Utilisateur::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'role', targetEntity: Utilisateur::class, cascade: ['persist', 'remove'])]
     private Collection $utilisateurs;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -39,11 +36,16 @@ class Role
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 
     /**

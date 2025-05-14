@@ -48,15 +48,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'utilisateur')]
     private Collection $vehicules;
 
-    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'utilisateurs')]
+    #[ORM\ManyToOne(targetEntity: Role::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Role $role = null;
-
-    /**
-     * @var Collection<int, Preference>
-     */
-    #[ORM\OneToMany(targetEntity: Preference::class, mappedBy: 'utilisateur')]
-    private Collection $preferences;
 
     /**
      * @var Collection<int, Avis>
@@ -70,7 +64,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->vehicules = new ArrayCollection();
-        $this->preferences = new ArrayCollection();
         $this->avis = new ArrayCollection();
         $this->avisReçus = new ArrayCollection();
     }
@@ -221,36 +214,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(?Role $role): static
     {
         $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Preference>
-     */
-    public function getPreferences(): Collection
-    {
-        return $this->preferences;
-    }
-
-    public function addPreference(Preference $preference): static
-    {
-        if (!$this->preferences->contains($preference)) {
-            $this->preferences->add($preference);
-            $preference->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removePreference(Preference $preference): static
-    {
-        if ($this->preferences->removeElement($preference)) {
-            // set the owning side to null (unless already changed)
-            if ($preference->getUtilisateur() === $this) {
-                $preference->setUtilisateur(null);
-            }
-        }
 
         return $this;
     }

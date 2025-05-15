@@ -1,0 +1,5 @@
+.hover-highlight:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Fond gris clair au survol */
+    border-radius: 5px; /* Coins arrondis */
+    transition: background-color 0.3s ease; /* Animation fluide */
+}

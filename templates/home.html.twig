@@ -3,10 +3,56 @@
 {% block title %}Accueil - EcoRide{% endblock %}
 
 {% block body %}
-    <header>
-        <h1>{{ title }}</h1>
+    <header class="py-5">
+        <div class="container">
+            <h1 class="text-center mb-5" style="color: #155724;">Partageons la route, préservons la planète !</h1> <!-- Texte vert foncé -->
+            <div class="row align-items-center">
+                <!-- Formulaire -->
+                <div class="col-md-6">
+                    <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;"> <!-- Fond gris clair -->
+                        <h2 class="h5 mb-4 text-center" style="color: #155724;">Rechercher un covoiturage</h2>
+                        <form action="" method="GET">
+                            <div class="mb-3">
+                                <label for="from" class="form-label">De</label>
+                                <input type="text" id="from" name="from" class="form-control" placeholder="Ville de départ" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="to" class="form-label">À</label>
+                                <input type="text" id="to" name="to" class="form-control" placeholder="Ville d'arrivée" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" id="date" name="date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Rechercher</button> <!-- Bouton vert -->
+                        </form>
+                    </div>
+                </div>
+                <!-- Image -->
+                <div class="col-md-6">
+                    <img src="{{ asset('images/accueilCovoit.png') }}" alt="EcoRide" class="img-fluid rounded shadow-sm">
+                </div>
+            </div>
+        </div>
     </header>
-    <main>
-        <p>Bienvenue sur EcoRide, votre plateforme de covoiturage écologique !</p>
+    <main class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4" style="color: #155724; font-size: 2.3rem;">L'entreprise EcoRide</h2> <!-- Titre centré -->
+            <div class="row align-items-center">
+                <!-- Image à gauche -->
+                <div class="col-md-6">
+                    <img src="{{ asset('images/accueilEntreprise.png') }}" alt="EcoRide" class="img-fluid rounded shadow-sm">
+                </div>
+                <!-- Paragraphe à droite -->
+                <div class="col-md-6 d-flex align-items-center">
+                    <p class="card p-4 shadow-sm border-0" style="color: #155724; line-height: 1.8; font-size: 1.3rem; background-color: #f8f9fa;">
+                        EcoRide est une jeune startup française engagée dans la transition écologique créée en 2020.<br><br>
+                        Notre mission : réduire l’empreinte carbone des déplacements quotidiens tout en facilitant le covoiturage entre particuliers.<br><br>
+                        En mettant en relation des conducteurs et des passagers à la recherche de trajets partagés,
+                        EcoRide offre une alternative économique, conviviale et respectueuse de l’environnement.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 {% endblock %}

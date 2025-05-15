@@ -1,28 +1,29 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion - EcoRide{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div style="max-width: 400px; margin: 60px auto; padding: 30px; background-color: #f0f9f0; border-radius: 10px; box-shadow: 0 0 10px #ccc;">
+        <h2 style="text-align: center; color: #2e7d32;">Connexion à EcoRide</h2>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+        {% if error %}
+            <div style="color: red; margin-bottom: 10px;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+        <form method="post">
+            <div style="margin-bottom: 15px;">
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" required autofocus class="form-control" style="width: 100%; padding: 8px;">
+            </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+            <div style="margin-bottom: 15px;">
+                <label for="inputPassword">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" required class="form-control" style="width: 100%; padding: 8px;">
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="btn btn-success" type="submit" style="width: 100%;">Se connecter</button>
+        </form>
+    </div>
 {% endblock %}

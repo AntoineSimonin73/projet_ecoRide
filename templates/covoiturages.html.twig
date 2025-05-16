@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Covoiturages disponibles - EcoRide{% endblock %}
+
+{% block body %}
+<div class="container py-5 main-content">
+    <h1 class="text-center mb-5" style="color: #155724;">Rechercher un covoiturage</h1>
+
+    <!-- Formulaire de recherche obligatoire -->
+    <form method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="adresseDepart" class="form-label" style="color: #155724;">Ville de départ</label>
+                <input type="text" name="adresseDepart" id="adresseDepart" class="form-control" placeholder="Ex : Paris" value="{{ app.request.query.get('adresseDepart') }}" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="adresseArrivee" class="form-label" style="color: #155724;">Ville d'arrivée</label>
+                <input type="text" name="adresseArrivee" id="adresseArrivee" class="form-control" placeholder="Ex : Lyon" value="{{ app.request.query.get('adresseArrivee') }}" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="dateDepart" class="form-label" style="color: #155724;">Date de départ</label>
+                <input type="date" name="dateDepart" id="dateDepart" class="form-control" value="{{ app.request.query.get('dateDepart') }}" required>
+            </div>
+        </div>
+
+        <!-- Filtres avancés : affichés uniquement si une recherche est effectuée -->
+        {% if hasFilter %}
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label class="form-label" style="color: #155724;">Voyage écologique</label>
+                <select name="ecologique" class="form-select">
+                    <option value="">Indifférent</option>
+                    <option value="1" {% if app.request.query.get('ecologique') == '1' %}selected{% endif %}>Oui</option>
+                    <option value="0" {% if app.request.query.get('ecologique') == '0' %}selected{% endif %}>Non</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="prixMax" class="form-label" style="color: #155724;">Prix maximum (Crédits)</label>
+                <input type="number" min="0" name="prixMax" id="prixMax" class="form-control" value="{{ app.request.query.get('prixMax') }}">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="dureeMax" class="form-label" style="color: #155724;">Durée max (heures)</label>
+                <input type="number" min="0" name="dureeMax" id="dureeMax" class="form-control" value="{{ app.request.query.get('dureeMax') }}">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="noteMin" class="form-label" style="color: #155724;">Note minimale</label>
+                <select name="noteMin" id="noteMin" class="form-select">
+                    <option value="">Indifférent</option>
+                    {% for i in 1..5 %}
+                        <option value="{{ i }}" {% if app.request.query.get('noteMin') == i %}selected{% endif %}>{{ i }}+</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-success w-100">Rechercher</button>
+    </form>
+
+    <div class="row">
+        {% set hasFilter = app.request.query.get('adresseDepart') and app.request.query.get('adresseArrivee') and app.request.query.get('dateDepart') %}
+        {% if hasFilter %}
+            {% if covoiturages is empty %}
+                <div class="text-center" style="color: #155724;">
+                    Aucun covoiturage disponible pour les critères sélectionnés.<br>
+                    {% if prochaineDate %}
+                        Prochain covoiturage disponible le <strong>{{ prochaineDate|date('d/m/Y') }}</strong>.
+                        <form method="get" class="d-inline">
+                            <input type="hidden" name="adresseDepart" value="{{ app.request.query.get('adresseDepart') }}">
+                            <input type="hidden" name="adresseArrivee" value="{{ app.request.query.get('adresseArrivee') }}">
+                            <input type="hidden" name="dateDepart" value="{{ prochaineDate|date('Y-m-d') }}">
+                            <button type="submit" class="btn btn-link p-0 align-baseline">Voir cette date</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% else %}
+                {% for covoiturage in covoiturages %}
+                    {% if covoiturage.placesRestantes > 0 %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-lg border-0 h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="{{ covoiturage.chauffeur.photo is defined and covoiturage.chauffeur.photo ? asset('uploads/photos/' ~ covoiturage.chauffeur.photo) : asset('images/default-user.svg') }}" alt="Photo du chauffeur" class="rounded-circle me-3" width="56" height="56">
+                                        <div>
+                                            <strong>{{ covoiturage.chauffeur.pseudo }}</strong><br>
+                                            <span class="text-warning">
+                                                {% for i in 1..5 %}
+                                                    {% if i <= covoiturage.chauffeur.noteMoyenne %}
+                                                        ★
+                                                    {% else %}
+                                                        ☆
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </span>
+                                            <small>({{ covoiturage.chauffeur.noteMoyenne|default(0) }}/5)</small>
+                                        </div>
+                                    </div>
+                                    <p class="mb-2">
+                                        <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
+                                        <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
+                                        <strong>Départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y') }} à {{ covoiturage.heureDepart }}<br>
+                                        <strong>Arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y') }} à {{ covoiturage.heureArrivee }}<br>
+                                        <strong>Écologique :</strong>
+                                        {% if covoiturage.vehicule.energie == 'électrique' %}
+                                            <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Non</span>
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ path('app_covoiturage_details', { id: covoiturage.id }) }}" class="btn btn-success w-100">Détails</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

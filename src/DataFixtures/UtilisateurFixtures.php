@@ -46,6 +46,7 @@ class UtilisateurFixtures extends Fixture
         $manager->persist($admin);
 
         // Créer des utilisateurs avec le rôle "ROLE_USER"
+        $firstUser = null;
         for ($i = 1; $i <= 5; $i++) {
             $user = new Utilisateur();
             $user->setPseudo("user$i");
@@ -54,6 +55,7 @@ class UtilisateurFixtures extends Fixture
             $user->setIsChauffeur(true);
             $user->setIsPassager(true);
             $user->setRole($roleUser); // Associer le rôle "ROLE_USER"
+            $user->setNoteMoyenne(4.5); // Note moyenne fictive
 
             $hashedPassword = $this->passwordHasher->hashPassword($user, "password$i");
             $user->setPassword($hashedPassword);
@@ -79,16 +81,63 @@ class UtilisateurFixtures extends Fixture
             $covoiturage->setVehicule($vehicule);
             $covoiturage->setAdresseDepart("10 rue des lilas");
             $covoiturage->setAdresseArrivee("20 avenue des fleurs");
-            $covoiturage->setDateDepart(new \DateTime('+2 days'));
-            $covoiturage->setDateArrivee(new \DateTime('+2 days +5 hours'));
-            $covoiturage->setHeureDepart("10h00");
-            $covoiturage->setHeureArrivee("15h00");
+            
+            // Définir les heures sous forme de variables
+            $heureDepart = 10;
+            $minuteDepart = 0;
+            $heureArrivee = 15;
+            $minuteArrivee = 0;
+
+            // Date de départ
+            $dateDepart = (new \DateTime('+2 days'))->setTime($heureDepart, $minuteDepart, 0);
+            // Date d'arrivée
+            $dateArrivee = (new \DateTime('+2 days'))->setTime($heureArrivee, $minuteArrivee, 0);
+
+            $covoiturage->setDateDepart($dateDepart);
+            $covoiturage->setDateArrivee($dateArrivee);
+            $covoiturage->setHeureDepart(sprintf('%02dh%02d', $heureDepart, $minuteDepart));
+            $covoiturage->setHeureArrivee(sprintf('%02dh%02d', $heureArrivee, $minuteArrivee));
             $covoiturage->setPrix(15);
             $covoiturage->setPlacesRestantes(3);
             $covoiturage->setIsEcologique(true);
 
             $manager->persist($covoiturage);
 
+            if ($i === 1) {
+                $firstUser = $user;
+            }
+        }
+
+        if ($firstUser) {
+            // Ajouter un covoiturage Lyon -> Paris non écologique pour le premier utilisateur
+            $vehicule = new Vehicule();
+            $vehicule->setUtilisateur($firstUser);
+            $vehicule->setMarque("Renault");
+            $vehicule->setModele("Clio");
+            $vehicule->setEnergie("essence");
+            $vehicule->setCouleur("rouge");
+            $vehicule->setImmatriculation("LY-123-PA");
+            $vehicule->setDatePremiereImmatriculation(new \DateTime('2020-06-15'));
+            $vehicule->setPlacesDispo(3);
+            $manager->persist($vehicule);
+
+            $covoiturage = new Covoiturage();
+            $covoiturage->setChauffeur($firstUser);
+            $covoiturage->setVehicule($vehicule);
+            $covoiturage->setAdresseDepart("Lyon");
+            $covoiturage->setAdresseArrivee("Paris");
+            $dateDepart = (new \DateTime('+3 days'))->setTime(8, 0, 0);
+            $dateArrivee = (clone $dateDepart)->modify('+5 hours')->setTime(13, 0, 0);
+
+            $covoiturage->setDateDepart($dateDepart);
+            $covoiturage->setDateArrivee($dateArrivee);
+            $covoiturage->setHeureDepart("08h00");
+            $covoiturage->setHeureArrivee("13h00");
+            $covoiturage->setPrix(25);
+            $covoiturage->setPlacesRestantes(2);
+            $covoiturage->setIsEcologique(false);
+
+            $manager->persist($covoiturage);
         }
 
         $manager->flush();

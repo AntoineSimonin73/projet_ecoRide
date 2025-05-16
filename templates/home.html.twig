@@ -11,18 +11,18 @@
                 <div class="col-md-6">
                     <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;"> <!-- Fond gris clair -->
                         <h2 class="h5 mb-4 text-center" style="color: #155724;">Rechercher un covoiturage</h2>
-                        <form action="" method="GET">
+                        <form action="{{ path('app_covoiturages') }}" method="get">
                             <div class="mb-3">
-                                <label for="from" class="form-label">De</label>
-                                <input type="text" id="from" name="from" class="form-control" placeholder="Ville de départ" required>
+                                <label for="adresseDepart" class="form-label">De</label>
+                                <input type="text" id="adresseDepart" name="adresseDepart" class="form-control" placeholder="Ville de départ" required>
                             </div>
                             <div class="mb-3">
-                                <label for="to" class="form-label">À</label>
-                                <input type="text" id="to" name="to" class="form-control" placeholder="Ville d'arrivée" required>
+                                <label for="adresseArrivee" class="form-label">À</label>
+                                <input type="text" id="adresseArrivee" name="adresseArrivee" class="form-control" placeholder="Ville d'arrivée" required>
                             </div>
                             <div class="mb-3">
-                                <label for="date" class="form-label">Date</label>
-                                <input type="date" id="date" name="date" class="form-control" required>
+                                <label for="dateDepart" class="form-label">Date</label>
+                                <input type="date" id="dateDepart" name="dateDepart" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-success w-100">Rechercher</button> <!-- Bouton vert -->
                         </form>

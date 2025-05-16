@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du covoiturage - EcoRide{% endblock %}
+
+{% block body %}
+<div class="container py-5 main-content">
+    <h1 class="text-center mb-5" style="color: #155724;">Détails du covoiturage</h1>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <!-- Informations principales -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Informations sur le voyage</h2>
+            <p>
+                <strong>Départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y') }} à {{ covoiturage.heureDepart }}<br>
+                <strong>Arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y') }} à {{ covoiturage.heureArrivee }}<br>
+                <strong>Adresse de départ :</strong> {{ covoiturage.adresseDepart }}<br>
+                <strong>Adresse d'arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
+                <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
+                <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
+                <strong>Voyage écologique :</strong>
+                {% if covoiturage.vehicule.energie == 'électrique' %}
+                    <span class="badge bg-success">Oui</span>
+                {% else %}
+                    <span class="badge bg-secondary">Non</span>
+                {% endif %}
+            </p>
+
+            <!-- Informations sur le conducteur -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Informations sur le conducteur</h2>
+            <div class="d-flex align-items-center mb-3">
+                <img src="{{ covoiturage.chauffeur.photo is defined and covoiturage.chauffeur.photo ? asset('uploads/photos/' ~ covoiturage.chauffeur.photo) : asset('images/default-user.svg') }}" alt="Photo du chauffeur" class="rounded-circle me-3" width="56" height="56">
+                <div>
+                    <strong>{{ covoiturage.chauffeur.pseudo }}</strong><br>
+                    <span class="text-warning">
+                        {% for i in 1..5 %}
+                            {% if i <= covoiturage.chauffeur.noteMoyenne %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    <small>({{ covoiturage.chauffeur.noteMoyenne|default(0) }}/5)</small>
+                </div>
+            </div>
+            <p><strong>Préférences :</strong> {{ covoiturage.chauffeur.preferences|default('Non spécifiées') }}</p>
+
+            <!-- Avis du conducteur -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Avis sur le conducteur</h2>
+            {% if covoiturage.chauffeur.avis is not empty %}
+                <ul class="list-group">
+                    {% for avis in covoiturage.chauffeur.avis %}
+                        <li class="list-group-item">
+                            <strong>{{ avis.auteur.pseudo }}</strong> ({{ avis.note }}/5) : {{ avis.commentaire }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucun avis pour ce conducteur.</p>
+            {% endif %}
+
+            <!-- Informations sur le véhicule -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Informations sur le véhicule</h2>
+            <p>
+                <strong>Marque :</strong> {{ covoiturage.vehicule.marque }}<br>
+                <strong>Modèle :</strong> {{ covoiturage.vehicule.modele }}<br>
+                <strong>Énergie :</strong> {{ covoiturage.vehicule.energie }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

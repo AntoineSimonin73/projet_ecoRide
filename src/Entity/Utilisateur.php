@@ -35,7 +35,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column (nullable: true)]
-    private ?int $credits = null;
+    private ?int $credits = 20;
 
     #[ORM\Column (nullable: true)]
     private ?float $noteMoyenne = 0.0;
@@ -56,7 +56,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $vehicules;
 
     #[ORM\ManyToOne(targetEntity: Role::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false)] // Cette contrainte indique que 'role_id' ne peut pas être NULL
     private ?Role $role = null;
 
     /**
@@ -241,10 +241,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->role;
     }
 
-    public function setRole(?Role $role): static
+    public function setRole(?Role $role): self
     {
         $this->role = $role;
-
         return $this;
     }
 

@@ -247,7 +247,9 @@ class Covoiturage
 
     public function removePassager(Utilisateur $passager): self
     {
+        if ($this->passagers->contains($passager)) {
         $this->passagers->removeElement($passager);
+        }
 
         return $this;
     }

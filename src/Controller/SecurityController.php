@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Utilisateur;
+use App\Entity\Role;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -57,6 +58,16 @@ class SecurityController extends AbstractController
                 $user->setEmail($email);
                 $user->setPassword($passwordHasher->hashPassword($user, $password));
                 $user->setCredits(0);
+
+                // Assignation du rôle par défaut
+                $roleRepository = $entityManager->getRepository(Role::class);
+                $defaultRole = $roleRepository->findOneBy(['name' => 'ROLE_USER']); // Remplacez 'ROLE_USER' par le rôle par défaut
+
+                if (!$defaultRole) {
+                    throw new \Exception('Le rôle par défaut n\'existe pas.');
+                }
+
+                $user->setRole($defaultRole);
 
                 $entityManager->persist($user);
                 $entityManager->flush();

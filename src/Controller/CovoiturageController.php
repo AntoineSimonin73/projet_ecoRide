@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class CovoiturageController extends AbstractController
 {
@@ -181,5 +183,58 @@ class CovoiturageController extends AbstractController
         $this->addFlash('success', 'Vous avez rejoint le covoiturage avec succès !');
 
         return $this->redirectToRoute('app_covoiturage_details', ['id' => $id]);
+    }
+
+    #[Route('/covoiturage/{id}/annuler', name: 'app_covoiturage_annuler', methods: ['POST'])]
+    public function annulerCovoiturage(
+        int $id,
+        Request $request,
+        ManagerRegistry $doctrine,
+        MailerInterface $mailer
+    ): Response {
+        $entityManager = $doctrine->getManager();
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage) {
+            $this->addFlash('error', 'Covoiturage introuvable.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        $user = $this->getUser();
+
+        // Rembourser les crédits à l'utilisateur
+        $user->incrementCredits($covoiturage->getPrix());
+
+        // Vérifiez si l'utilisateur est le chauffeur ou un passager
+        if ($covoiturage->getChauffeur() === $user) {
+            // Si le chauffeur annule
+            foreach ($covoiturage->getPassagers() as $passager) {
+                // Rembourse les crédits aux passagers
+                $passager->incrementCredits($covoiturage->getPrix());
+            }
+
+            // Envoi d'un email aux passagers
+            foreach ($covoiturage->getPassagers() as $passager) {
+                $email = (new Email())
+                    ->from('ecoride@exemple.com')
+                    ->to($passager->getEmail())
+                    ->subject('Annulation du covoiturage')
+                    ->text("Bonjour {$passager->getPseudo()},\n\nLe covoiturage prévu de {$covoiturage->getAdresseDepart()} à {$covoiturage->getAdresseArrivee()} a été annulé par le chauffeur.\n\nMerci de votre compréhension.");
+                $mailer->send($email);
+            }
+
+            // Supprime le covoiturage
+            $entityManager->remove($covoiturage);
+        } elseif ($covoiturage->getPassagers()->contains($user)) {
+            // Si un passager annule
+            $covoiturage->removePassager($user);
+            $covoiturage->setPlacesRestantes($covoiturage->getPlacesRestantes() + 1);
+
+        }
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le covoiturage a été annulé avec succès.');
+        return $this->redirectToRoute('app_user_space');
     }
 }

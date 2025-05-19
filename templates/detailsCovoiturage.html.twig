@@ -79,7 +79,7 @@
                 {% if covoiturage.placesRestantes > 0 and app.user.credits >= covoiturage.prix %}
                     <form method="post" action="{{ path('app_covoiturage_participer', { id: covoiturage.id }) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token('participer' ~ covoiturage.id) }}">
-                        <button type="submit" class="btn w-100 mt-4" style="background-color: #155724; color: white;" onclick="return confirm('Êtes-vous sûr de vouloir participer à ce covoiturage ? Cela coûtera {{ covoiturage.prix }} crédits.')">
+                        <button type="submit" class="btn btn-success w-100" onclick="return confirm('Êtes-vous sûr de vouloir participer à ce covoiturage ? Cela coûtera {{ covoiturage.prix }} crédits.')">
                             Participer
                         </button>
                     </form>
@@ -87,8 +87,8 @@
                     <p class="text-danger mt-4">Vous n'avez pas assez de crédits ou il n'y a plus de places disponibles.</p>
                 {% endif %}
             {% else %}
-                <a href="{{ path('app_login') }}" class="btn w-100 mt-4" style="background-color: #155724; color: white;">Connectez-vous pour participer</a>
-                <a href="{{ path('app_register') }}" class="btn w-100 mt-2" style="background-color: #6c757d; color: white;">Créer un compte</a>
+                <a href="{{ path('app_login') }}" class="btn btn-success w-100 mt-4" style="background-color: #155724; border-color: #155724; color: white;">Connectez-vous pour participer</a>
+                <a href="{{ path('app_register') }}" class="btn btn-secondary w-100 mt-2" style="background-color: #6c757d; border-color: #6c757d; color: white;">Créer un compte</a>
             {% endif %}
         </div>
     </div>

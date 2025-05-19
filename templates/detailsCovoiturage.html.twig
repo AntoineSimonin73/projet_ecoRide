@@ -68,11 +68,18 @@
 
             <!-- Préférences du covoiturage -->
             <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Préférences du covoiturage</h2>
-            <ul>
-                {% for preference in covoiturage.preferences %}
-                    <li>{{ preference.name }}</li>
-                {% endfor %}
-            </ul>
+            {% if covoiturage.preferences|length > 0 %}
+                <ul class="list-group">
+                    {% for preference in covoiturage.preferences %}
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i> <!-- Icône pour rendre l'affichage plus visuel -->
+                            {{ preference.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Aucune préférence spécifiée pour ce covoiturage.</p>
+            {% endif %}
 
             <!-- Bouton Participer -->
             {% if app.user %}

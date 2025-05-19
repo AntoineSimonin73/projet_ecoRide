@@ -31,6 +31,17 @@
             <label for="placesRestantes" class="form-label">Places restantes</label>
             <input type="number" name="placesRestantes" id="placesRestantes" class="form-control" value="{{ covoiturage.placesRestantes }}" required>
         </div>
+        <div class="mb-3">
+            <label for="preferences" class="form-label">Préférences</label>
+            <select name="preferences[]" id="preferences" class="form-select" multiple>
+                {% for preference in preferences %}
+                    <option value="{{ preference.id }}" {% if covoiturage.preferences.contains(preference) %}selected{% endif %}>
+                        {{ preference.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs préférences.</small>
+        </div>
         <button type="submit" class="btn btn-success w-100">Modifier</button>
     </form>
 </div>

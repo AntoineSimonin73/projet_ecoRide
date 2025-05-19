@@ -386,14 +386,31 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_space');
         }
 
+        // Récupération des préférences disponibles
+        $preferences = $entityManager->getRepository(Preference::class)->findAll();
+
         // Gestion du formulaire de modification
         if ($request->isMethod('POST')) {
             $covoiturage->setAdresseDepart($request->request->get('adresseDepart'));
             $covoiturage->setAdresseArrivee($request->request->get('adresseArrivee'));
             $covoiturage->setDateDepart(new \DateTime($request->request->get('dateDepart')));
             $covoiturage->setDateArrivee(new \DateTime($request->request->get('dateArrivee')));
-            $covoiturage->setPrix((int) $request->request->get('prix'));
-            $covoiturage->setPlacesRestantes((int) $request->request->get('placesRestantes'));
+            $covoiturage->setPrix($request->request->get('prix'));
+            $covoiturage->setPlacesRestantes($request->request->get('placesRestantes'));
+
+            // Gestion des préférences
+            $selectedPreferences = $request->request->all('preferences'); // Récupère un tableau ou une valeur par défaut vide
+            if (!is_array($selectedPreferences)) {
+                $selectedPreferences = []; // Assurez-vous que c'est un tableau
+            }
+
+            $covoiturage->getPreferences()->clear(); // Supprime les préférences existantes
+            foreach ($selectedPreferences as $preferenceId) {
+                $preference = $entityManager->getRepository(Preference::class)->find($preferenceId);
+                if ($preference) {
+                    $covoiturage->addPreference($preference);
+                }
+            }
 
             $entityManager->flush();
 
@@ -403,6 +420,7 @@ class UserController extends AbstractController
 
         return $this->render('edit_covoiturage.html.twig', [
             'covoiturage' => $covoiturage,
+            'preferences' => $preferences, // Ajout des préférences ici
         ]);
     }
 

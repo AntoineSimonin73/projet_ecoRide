@@ -63,10 +63,14 @@ class Covoiturage
     #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
     private Collection $avis;
 
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class)]
+    private Collection $passagers;
+
 
     public function __construct()
     {
         $this->avis = new ArrayCollection();
+        $this->passagers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,4 +248,24 @@ class Covoiturage
         return $this;
     }
 
+    public function getPassagers(): Collection
+    {
+        return $this->passagers;
+    }
+
+    public function addPassager(Utilisateur $passager): self
+    {
+        if (!$this->passagers->contains($passager)) {
+            $this->passagers->add($passager);
+        }
+
+        return $this;
+    }
+
+    public function removePassager(Utilisateur $passager): self
+    {
+        $this->passagers->removeElement($passager);
+
+        return $this;
+    }
 }

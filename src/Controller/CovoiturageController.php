@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Covoiturage;
+use App\Entity\Utilisateur;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -126,5 +127,59 @@ class CovoiturageController extends AbstractController
         return $this->render('detailsCovoiturage.html.twig', [
             'covoiturage' => $covoiturage, // L'objet covoiturage avec ses relations
         ]);
+    }
+
+    #[Route('/covoiturages/{id}/participer', name: 'app_covoiturage_participer', methods: ['POST'])]
+    public function participer(int $id, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $covoiturage = $doctrine->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage) {
+            throw $this->createNotFoundException('Covoiturage non trouvé.');
+        }
+
+        $user = $this->getUser();
+        if (!$user instanceof Utilisateur) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour participer à un covoiturage.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Vérifier les conditions
+        if ($covoiturage->getPlacesRestantes() <= 0) {
+            $this->addFlash('error', 'Il n\'y a plus de places disponibles pour ce covoiturage.');
+            return $this->redirectToRoute('app_covoiturage_details', ['id' => $id]);
+        }
+
+        try {
+            $user->decrementCredits($covoiturage->getPrix());
+        } catch (\LogicException $e) {
+            $this->addFlash('error', 'Vous n\'avez pas assez de crédits pour participer à ce covoiturage.');
+            return $this->redirectToRoute('app_covoiturage_details', ['id' => $id]);
+        }
+
+        // Vérification du CSRF token
+        if (!$this->isCsrfTokenValid('participer'.$id, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Action non autorisée.');
+            return $this->redirectToRoute('app_covoiturage_details', ['id' => $id]);
+        }
+
+        // Mettre à jour les places restantes
+        $covoiturage->setPlacesRestantes($covoiturage->getPlacesRestantes() - 1);
+
+        // Ajouter l'utilisateur comme passager
+        $covoiturage->addPassager($user);
+
+        // Sauvegarder les changements
+        $entityManager->persist($user);
+        $entityManager->persist($covoiturage);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Vous avez rejoint le covoiturage avec succès !');
+
+        return $this->redirectToRoute('app_covoiturage_details', ['id' => $id]);
     }
 }

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon espace{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Bienvenue dans votre espace, {{ app.user.pseudo }}</h1>
+
+    <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+        <h2 class="h5 mb-4" style="color: #155724;">Votre rôle</h2>
+        <form method="post" action="">
+            <div class="mb-3">
+                <label for="role" class="form-label" style="color: #155724;">Sélectionnez votre rôle :</label>
+                <select name="role" id="role" class="form-select" required>
+                    <option value="passager" {% if app.user.isPassager and not app.user.isChauffeur %}selected{% endif %}>Passager</option>
+                    <option value="chauffeur" {% if app.user.isChauffeur and not app.user.isPassager %}selected{% endif %}>Chauffeur</option>
+                    <option value="passager_chauffeur" {% if app.user.isPassager and app.user.isChauffeur %}selected{% endif %}>Passager & Chauffeur</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Mettre à jour mon rôle</button>
+        </form>
+        <a href="{{ path('app_user_preferences') }}" class="btn btn-outline-success w-100 mt-3">Gérer mes préférences</a>
+    </div>
+
+    {% if app.user.isChauffeur %}
+    <div class="card p-4 shadow-sm border-0 mt-4" style="background-color: #f8f9fa;">
+        <h2 class="h5 mb-4" style="color: #155724;">Vos véhicules enregistrés</h2>
+
+        {% if app.user.vehicules|length > 0 %}
+            <ul class="list-group mb-4">
+                {% for vehicule in app.user.vehicules %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Marque :</strong> {{ vehicule.marque }}<br>
+                            <strong>Modèle :</strong> {{ vehicule.modele }}<br>
+                            <strong>Couleur :</strong> {{ vehicule.couleur }}<br>
+                            <strong>Immatriculation :</strong> {{ vehicule.immatriculation }}<br>
+                            <strong>Énergie :</strong> {{ vehicule.energie }}<br>
+                            <strong>Places disponibles :</strong> {{ vehicule.placesDispo }}
+                        </div>
+                        <div>
+                            <a href="{{ path('app_user_edit_vehicle', { id: vehicule.id }) }}" class="btn btn-success btn-sm">Modifier</a>
+                            <form method="post" action="{{ path('app_user_delete_vehicle', { id: vehicule.id }) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete_vehicle_' ~ vehicule.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Vous n'avez pas encore enregistré de véhicule.</p>
+        {% endif %}
+
+        <h2 class="h5 mb-4" style="color: #155724;">Ajouter un véhicule</h2>
+        <form method="post" action="{{ path('app_user_add_vehicle') }}">
+            <div class="mb-3">
+                <label for="immatriculation" class="form-label" style="color: #155724;">Plaque d'immatriculation</label>
+                <input type="text" name="immatriculation" id="immatriculation" class="form-control" placeholder="Ex : AB-123-CD" required>
+            </div>
+            <div class="mb-3">
+                <label for="datePremiereImmatriculation" class="form-label" style="color: #155724;">Date de première immatriculation</label>
+                <input type="date" name="datePremiereImmatriculation" id="datePremiereImmatriculation" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="marque" class="form-label" style="color: #155724;">Marque</label>
+                <input type="text" name="marque" id="marque" class="form-control" placeholder="Ex : Renault" required>
+            </div>
+            <div class="mb-3">
+                <label for="modele" class="form-label" style="color: #155724;">Modèle</label>
+                <input type="text" name="modele" id="modele" class="form-control" placeholder="Ex : Clio" required>
+            </div>
+            <div class="mb-3">
+                <label for="couleur" class="form-label" style="color: #155724;">Couleur</label>
+                <input type="text" name="couleur" id="couleur" class="form-control" placeholder="Ex : Rouge" required>
+            </div>
+            <div class="mb-3">
+                <label for="energie" class="form-label" style="color: #155724;">Énergie</label>
+                <select name="energie" id="energie" class="form-select" required>
+                    <option value="essence">Essence</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="electrique">Électrique</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="placesDispo" class="form-label" style="color: #155724;">Nombre de places disponibles</label>
+                <input type="number" name="placesDispo" id="placesDispo" class="form-control" min="1" max="8" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Ajouter un véhicule</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

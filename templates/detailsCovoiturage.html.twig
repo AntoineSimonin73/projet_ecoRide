@@ -43,7 +43,6 @@
                     <small>({{ covoiturage.chauffeur.noteMoyenne|default(0) }}/5)</small>
                 </div>
             </div>
-            <p><strong>Préférences :</strong> {{ covoiturage.chauffeur.preferences|default('Non spécifiées') }}</p>
 
             <!-- Avis du conducteur -->
             <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Avis sur le conducteur</h2>
@@ -66,6 +65,14 @@
                 <strong>Modèle :</strong> {{ covoiturage.vehicule.modele }}<br>
                 <strong>Énergie :</strong> {{ covoiturage.vehicule.energie }}
             </p>
+
+            <!-- Préférences du covoiturage -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Préférences du covoiturage</h2>
+            <ul>
+                {% for preference in covoiturage.preferences %}
+                    <li>{{ preference.name }}</li>
+                {% endfor %}
+            </ul>
 
             <!-- Bouton Participer -->
             {% if app.user %}

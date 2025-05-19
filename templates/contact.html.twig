@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Contactez-nous</h1>
+    <p class="text-center mb-4">Vous avez une question ou une suggestion ? Remplissez le formulaire ci-dessous pour nous contacter.</p>
+
+    <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+        <form method="post" action="{{ path('app_contact_send') }}">
+            <div class="mb-3">
+                <label for="name" class="form-label" style="color: #155724;">Nom</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Votre nom" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label" style="color: #155724;">Adresse email</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Votre adresse email" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label" style="color: #155724;">Message</label>
+                <textarea name="message" id="message" class="form-control" rows="5" placeholder="Votre message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Envoyer</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

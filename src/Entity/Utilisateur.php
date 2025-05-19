@@ -75,6 +75,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $covoiturages;
 
     /**
+     * @var Collection<int, Covoiturage>
+     */
+    #[ORM\OneToMany(mappedBy: 'chauffeur', targetEntity: Covoiturage::class)]
+    private Collection $covoituragesEnTantQueChauffeur;
+
+    /**
      * @var Collection<int, Preference>
      */
     #[ORM\OneToMany(targetEntity: Preference::class, mappedBy: 'utilisateur')]
@@ -86,6 +92,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->avis = new ArrayCollection();
         $this->avisReçus = new ArrayCollection();
         $this->covoiturages = new ArrayCollection();
+        $this->covoituragesEnTantQueChauffeur = new ArrayCollection();
         $this->isChauffeur = false; // Par défaut, l'utilisateur n'est pas chauffeur
         $this->isPassager = true;  // Par défaut, l'utilisateur est passager
         $this->preferences = new ArrayCollection();
@@ -322,6 +329,36 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->covoiturages->removeElement($covoiturage)) {
             $covoiturage->removePassager($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Covoiturage>
+     */
+    public function getCovoituragesEnTantQueChauffeur(): Collection
+    {
+        return $this->covoituragesEnTantQueChauffeur;
+    }
+
+    public function addCovoiturageEnTantQueChauffeur(Covoiturage $covoiturage): self
+    {
+        if (!$this->covoituragesEnTantQueChauffeur->contains($covoiturage)) {
+            $this->covoituragesEnTantQueChauffeur->add($covoiturage);
+            $covoiturage->setChauffeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCovoiturageEnTantQueChauffeur(Covoiturage $covoiturage): self
+    {
+        if ($this->covoituragesEnTantQueChauffeur->removeElement($covoiturage)) {
+            // set the owning side to null (unless already changed)
+            if ($covoiturage->getChauffeur() === $this) {
+                $covoiturage->setChauffeur(null);
+            }
         }
 
         return $this;

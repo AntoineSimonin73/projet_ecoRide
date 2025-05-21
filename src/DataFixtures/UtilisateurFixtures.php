@@ -18,14 +18,29 @@ class UtilisateurFixtures extends Fixture
     {
         // Créer un rôle "ROLE_USER"
         $roleUser = new Role();
+<<<<<<< HEAD
         $roleUser->setName('ROLE_USER');
+=======
+        $roleUser->setName('ROLE_USER'); // Utilisez le format attendu par Symfony
+>>>>>>> back_end
         $manager->persist($roleUser);
 
         // Créer un rôle "ROLE_ADMIN"
         $roleAdmin = new Role();
+<<<<<<< HEAD
         $roleAdmin->setName('ROLE_ADMIN');
         $manager->persist($roleAdmin);
 
+=======
+        $roleAdmin->setName('ROLE_ADMIN'); // Utilisez le format attendu par Symfony
+        $manager->persist($roleAdmin);
+
+        // Créer un rôle "ROLE_EMPLOYE"
+        $roleEmploye = new Role();
+        $roleEmploye->setName('Employé');
+        $manager->persist($roleEmploye);
+
+>>>>>>> back_end
         // Créer un utilisateur avec le rôle "ROLE_ADMIN"
         $admin = new Utilisateur();
         $admin->setPseudo("admin");
@@ -83,6 +98,10 @@ class UtilisateurFixtures extends Fixture
             $covoiturage->setIsEcologique(true);
 
             $manager->persist($covoiturage);
+<<<<<<< HEAD
+=======
+
+>>>>>>> back_end
         }
 
         $manager->flush();

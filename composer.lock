@@ -7198,6 +7198,7 @@
         },
         {
             "name": "symfony/ux-twig-component",
+<<<<<<< HEAD
             "version": "v2.25.2",
             "source": {
                 "type": "git",
@@ -7208,6 +7209,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/d20da25517fc09d147897d02819a046f0a0f6735",
                 "reference": "d20da25517fc09d147897d02819a046f0a0f6735",
+=======
+            "version": "v2.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ux-twig-component.git",
+                "reference": "48a46e4c6215d41cc97ba8dff0cff21ea9b255a8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/48a46e4c6215d41cc97ba8dff0cff21ea9b255a8",
+                "reference": "48a46e4c6215d41cc97ba8dff0cff21ea9b255a8",
+>>>>>>> back_end
                 "shasum": ""
             },
             "require": {
@@ -7216,7 +7229,11 @@
                 "symfony/deprecation-contracts": "^2.2|^3.0",
                 "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
                 "symfony/property-access": "^5.4|^6.0|^7.0",
+<<<<<<< HEAD
                 "twig/twig": "^3.10.3"
+=======
+                "twig/twig": "^3.8"
+>>>>>>> back_end
             },
             "conflict": {
                 "symfony/config": "<5.4.0"
@@ -7261,7 +7278,11 @@
                 "twig"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/ux-twig-component/tree/v2.25.2"
+=======
+                "source": "https://github.com/symfony/ux-twig-component/tree/v2.24.0"
+>>>>>>> back_end
             },
             "funding": [
                 {
@@ -7277,7 +7298,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2025-05-20T13:06:01+00:00"
+=======
+            "time": "2025-03-21T20:14:36+00:00"
+>>>>>>> back_end
         },
         {
             "name": "symfony/validator",
@@ -10422,7 +10447,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
+<<<<<<< HEAD
     "stability-flags": [],
+=======
+    "stability-flags": {},
+>>>>>>> back_end
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10430,6 +10459,11 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
+<<<<<<< HEAD
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
+=======
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+>>>>>>> back_end
 }

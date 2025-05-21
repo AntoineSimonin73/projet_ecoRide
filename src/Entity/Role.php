@@ -15,6 +15,7 @@ class Role
     #[ORM\Column]
     private ?int $id = null;
 
+<<<<<<< HEAD
     #[ORM\Column(length: 50, unique: true)]
     private ?string $name = null;
 
@@ -24,6 +25,14 @@ class Role
     #[ORM\OneToMany(targetEntity: Utilisateur::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $utilisateurs;
 
+=======
+    #[ORM\OneToMany(mappedBy: 'role', targetEntity: Utilisateur::class, cascade: ['persist', 'remove'])]
+    private Collection $utilisateurs;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+>>>>>>> back_end
     public function __construct()
     {
         $this->utilisateurs = new ArrayCollection();
@@ -39,13 +48,25 @@ class Role
         return $this->name;
     }
 
+<<<<<<< HEAD
     public function setName(string $name): self
+=======
+    public function setName(string $name): static
+>>>>>>> back_end
     {
         $this->name = $name;
 
         return $this;
     }
 
+<<<<<<< HEAD
+=======
+    public function __toString(): string
+    {
+        return $this->name ?? '';
+    }
+
+>>>>>>> back_end
     /**
      * @return Collection<int, Utilisateur>
      */

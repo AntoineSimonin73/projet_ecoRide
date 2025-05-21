@@ -48,17 +48,24 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'utilisateur')]
     private Collection $vehicules;
 
+<<<<<<< HEAD
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'utilisateurs')]
+=======
+    #[ORM\ManyToOne(targetEntity: Role::class)]
+>>>>>>> back_end
     #[ORM\JoinColumn(nullable: false)]
     private ?Role $role = null;
 
     /**
+<<<<<<< HEAD
      * @var Collection<int, Preference>
      */
     #[ORM\OneToMany(targetEntity: Preference::class, mappedBy: 'utilisateur')]
     private Collection $preferences;
 
     /**
+=======
+>>>>>>> back_end
      * @var Collection<int, Avis>
      */
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'auteur', orphanRemoval: true)]
@@ -70,7 +77,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->vehicules = new ArrayCollection();
+<<<<<<< HEAD
         $this->preferences = new ArrayCollection();
+=======
+>>>>>>> back_end
         $this->avis = new ArrayCollection();
         $this->avisReçus = new ArrayCollection();
     }
@@ -226,6 +236,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+<<<<<<< HEAD
      * @return Collection<int, Preference>
      */
     public function getPreferences(): Collection
@@ -256,6 +267,8 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+=======
+>>>>>>> back_end
      * @return Collection<int, Avis>
      */
     public function getAvis(): Collection

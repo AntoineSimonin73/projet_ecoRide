@@ -17,11 +17,19 @@ class Covoiturage
     private ?int $id = null;
 
     #[ORM\ManyToOne]
+<<<<<<< HEAD
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $chauffeur = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+=======
+    #[ORM\JoinColumn]
+    private ?Utilisateur $chauffeur = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn]
+>>>>>>> back_end
     private ?Vehicule $vehicule = null;
 
     #[ORM\Column(length: 255)]
@@ -51,9 +59,25 @@ class Covoiturage
     #[ORM\Column]
     private ?int $prix = null;
 
+<<<<<<< HEAD
     #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
     private Collection $avis;
 
+=======
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preference = null;
+
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $preferenceAcceptee = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $preferences = [];
+
+    #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
+    private Collection $avis;
+
+
+>>>>>>> back_end
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -196,6 +220,21 @@ class Covoiturage
         return $this;
     }
 
+<<<<<<< HEAD
+=======
+    public function getPreferences(): ?array
+    {
+        return $this->preferences;
+    }
+
+    public function setPreferences(?array $preferences): static
+    {
+        $this->preferences = $preferences;
+
+        return $this;
+    }
+
+>>>>>>> back_end
     public function getAvis(): Collection
     {
         return $this->avis;
@@ -221,4 +260,8 @@ class Covoiturage
 
         return $this;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> back_end
 }

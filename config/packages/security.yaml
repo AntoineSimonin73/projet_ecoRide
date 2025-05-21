@@ -28,7 +28,7 @@ security:
                 default_target_path: /profile
             logout:
                 path: /logout
-                target: /
+                target: app_logout_message
             custom_authenticator: App\Security\SecurityControllerAuthenticator
             entry_point: form_login
 

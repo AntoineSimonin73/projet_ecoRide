@@ -1,8 +1,13 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block title %}Tableau de bord EcoRide{% endblock %}
-
-
 {% block content %}
-    <h1>Bienvenue sur le tableau de bord EcoRide</h1>
+    <div class="container py-5">
+        <h1 class="text-center mb-4" style="color: #155724;">Tableau de bord EcoRide</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Contenu du tableau de bord EasyAdmin -->
+                {{ parent() }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -38,11 +38,11 @@ class Covoiturage
     #[ORM\Column(length: 255)]
     private ?string $adresseArrivee = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $dateDepart = null;
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    private ?\DateTimeInterface $dateDepart = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $dateArrivee = null;
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    private ?\DateTimeInterface $dateArrivee = null;
 
     #[ORM\Column(length: 255)]
     private ?string $heureDepart = null;
@@ -50,7 +50,7 @@ class Covoiturage
     #[ORM\Column(length: 255)]
     private ?string $heureArrivee = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean', nullable: false)]
     private ?bool $isEcologique = null;
 
     #[ORM\Column]
@@ -59,6 +59,7 @@ class Covoiturage
     #[ORM\Column]
     private ?int $prix = null;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
     private Collection $avis;
@@ -73,14 +74,24 @@ class Covoiturage
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $preferences = [];
 
+=======
+>>>>>>> frontend
     #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
     private Collection $avis;
+
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class)]
+    private Collection $passagers;
+
+    #[ORM\ManyToMany(targetEntity: Preference::class)]
+    private Collection $preferences;
 
 
 >>>>>>> back_end
     public function __construct()
     {
         $this->avis = new ArrayCollection();
+        $this->passagers = new ArrayCollection();
+        $this->preferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,24 +147,24 @@ class Covoiturage
         return $this;
     }
 
-    public function getDateDepart(): ?\DateTime
+    public function getDateDepart(): ?\DateTimeInterface
     {
         return $this->dateDepart;
     }
 
-    public function setDateDepart(\DateTime $dateDepart): static
+    public function setDateDepart(\DateTimeInterface $dateDepart): self
     {
         $this->dateDepart = $dateDepart;
 
         return $this;
     }
 
-    public function getDateArrivee(): ?\DateTime
+    public function getDateArrivee(): ?\DateTimeInterface
     {
         return $this->dateArrivee;
     }
 
-    public function setDateArrivee(\DateTime $dateArrivee): static
+    public function setDateArrivee(\DateTimeInterface $dateArrivee): self
     {
         $this->dateArrivee = $dateArrivee;
 
@@ -165,7 +176,7 @@ class Covoiturage
         return $this->heureDepart;
     }
 
-    public function setHeureDepart(string $heureDepart): static
+    public function setHeureDepart(string $heureDepart): self
     {
         $this->heureDepart = $heureDepart;
 
@@ -177,19 +188,19 @@ class Covoiturage
         return $this->heureArrivee;
     }
 
-    public function setHeureArrivee(string $heureArrivee): static
+    public function setHeureArrivee(string $heureArrivee): self
     {
         $this->heureArrivee = $heureArrivee;
 
         return $this;
     }
 
-    public function isEcologique(): ?bool
+    public function getIsEcologique(): ?bool
     {
         return $this->isEcologique;
     }
 
-    public function setIsEcologique(bool $isEcologique): static
+    public function setIsEcologique(bool $isEcologique): self
     {
         $this->isEcologique = $isEcologique;
 
@@ -221,6 +232,7 @@ class Covoiturage
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public function getPreferences(): ?array
     {
@@ -235,6 +247,8 @@ class Covoiturage
     }
 
 >>>>>>> back_end
+=======
+>>>>>>> frontend
     public function getAvis(): Collection
     {
         return $this->avis;
@@ -263,5 +277,51 @@ class Covoiturage
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> back_end
+=======
+    public function getPassagers(): Collection
+    {
+        return $this->passagers;
+    }
+
+    public function addPassager(Utilisateur $passager): self
+    {
+        if (!$this->passagers->contains($passager)) {
+            $this->passagers->add($passager);
+        }
+
+        return $this;
+    }
+
+    public function removePassager(Utilisateur $passager): self
+    {
+        if ($this->passagers->contains($passager)) {
+        $this->passagers->removeElement($passager);
+        }
+
+        return $this;
+    }
+
+    public function getPreferences(): Collection
+    {
+        return $this->preferences;
+    }
+
+    public function addPreference(Preference $preference): self
+    {
+        if (!$this->preferences->contains($preference)) {
+            $this->preferences[] = $preference;
+        }
+
+        return $this;
+    }
+
+    public function removePreference(Preference $preference): self
+    {
+        $this->preferences->removeElement($preference);
+
+        return $this;
+    }
+>>>>>>> frontend
 }

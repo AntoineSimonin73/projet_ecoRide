@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le covoiturage{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Modifier le covoiturage</h1>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="adresseDepart" class="form-label">Adresse de départ</label>
+            <input type="text" name="adresseDepart" id="adresseDepart" class="form-control" value="{{ covoiturage.adresseDepart }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="adresseArrivee" class="form-label">Adresse d'arrivée</label>
+            <input type="text" name="adresseArrivee" id="adresseArrivee" class="form-control" value="{{ covoiturage.adresseArrivee }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="dateDepart" class="form-label">Date de départ</label>
+            <input type="datetime-local" name="dateDepart" id="dateDepart" class="form-control" value="{{ covoiturage.dateDepart|date('Y-m-d\TH:i') }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="dateArrivee" class="form-label">Date d'arrivée</label>
+            <input type="datetime-local" name="dateArrivee" id="dateArrivee" class="form-control" value="{{ covoiturage.dateArrivee|date('Y-m-d\TH:i') }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="prix" class="form-label">Prix</label>
+            <input type="number" name="prix" id="prix" class="form-control" value="{{ covoiturage.prix }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="placesRestantes" class="form-label">Places restantes</label>
+            <input type="number" name="placesRestantes" id="placesRestantes" class="form-control" value="{{ covoiturage.placesRestantes }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="preferences" class="form-label">Préférences</label>
+            <select name="preferences[]" id="preferences" class="form-select" multiple>
+                {% for preference in preferences %}
+                    <option value="{{ preference.id }}" {% if covoiturage.preferences.contains(preference) %}selected{% endif %}>
+                        {{ preference.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs préférences.</small>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Modifier</button>
+    </form>
+</div>
+{% endblock %}

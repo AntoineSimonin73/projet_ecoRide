@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Covoiturage;
+use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,19 @@ class CovoiturageRepository extends ServiceEntityRepository
         parent::__construct($registry, Covoiturage::class);
     }
 
-//    /**
-//     * @return Covoiturage[] Returns an array of Covoiturage objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Covoiturage
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * Récupère l'historique des covoiturages d'un utilisateur.
+     */
+    public function findByUserHistorique(Utilisateur $user): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.passagers', 'p')
+            ->where('c.chauffeur = :user OR p = :user')
+            ->andWhere('c.dateDepart < :now') // Historique : covoiturages passés
+            ->setParameter('user', $user)
+            ->setParameter('now', new \DateTime())
+            ->orderBy('c.dateDepart', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

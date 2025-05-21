@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique des covoiturages{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Historique de vos covoiturages</h1>
+
+    {% if covoiturages|length > 0 %}
+        <ul class="list-group">
+            {% for covoiturage in covoiturages %}
+                <li class="list-group-item">
+                    <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
+                    <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
+                    <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
+                    <strong>Prix :</strong> {{ covoiturage.prix }} crédits
+                </li>
+                <a href="{{ path('app_covoiturage_details', { id: covoiturage.id }) }}" class="btn btn-success w-100">Détails</a>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Vous n'avez aucun covoiturage dans votre historique.</p>
+    {% endif %}
+</div>
+{% endblock %}

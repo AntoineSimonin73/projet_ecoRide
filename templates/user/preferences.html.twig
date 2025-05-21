@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer mes préférences{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Gérer mes préférences</h1>
+
+    <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+        <h2 class="h5 mb-4" style="color: #155724;">Ajouter une nouvelle préférence</h2>
+        <form method="post" action="{{ path('app_user_preferences') }}">
+            <div class="mb-3">
+                <label for="preference_name" class="form-label" style="color: #155724;">Nom de la préférence</label>
+                <input type="text" name="preference_name" id="preference_name" class="form-control" placeholder="Ex : Fumeur accepté" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Ajouter</button>
+        </form>
+    </div>
+
+    <div class="card p-4 shadow-sm border-0 mt-4" style="background-color: #f8f9fa;">
+        <h2 class="h5 mb-4" style="color: #155724;">Mes préférences</h2>
+        {% if preferences|length > 0 %}
+            <ul class="list-group">
+                {% for preference in preferences %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ preference.name }}
+                        <form method="post" action="{{ path('app_user_delete_preference', { id: preference.id }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette préférence ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_preference_' ~ preference.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Vous n'avez pas encore ajouté de préférences.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

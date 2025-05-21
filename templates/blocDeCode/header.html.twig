@@ -1,0 +1,28 @@
+<header class="border-bottom" style="background-color: #d4edda;"> <!-- Fond vert léger -->
+    <div class="container-fluid">
+        <div class="d-flex flex-wrap align-items-center justify-content-between py-3">
+            <div class="col-md-3 mb-2 mb-md-0">
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                    <img src="{{ asset('images/logo.svg') }}" alt="Logo EcoRide" width="80" height="64">
+                </a>
+            </div>
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 fs-5">
+                <li><a href="{{ path('app_home') }}" class="nav-link px-2 text-dark hover-highlight">Accueil</a></li>
+                <li><a href="{{ path('app_covoiturages') }}" class="nav-link px-2 text-dark hover-highlight">Covoiturages</a></li>
+                <li><a href="{{ path('app_contact') }}" class="nav-link px-2 text-dark hover-highlight">Contact</a></li>
+                {% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_EMPLOYE' in app.user.roles) %}
+                    <li><a href="{{ path('app_admin') }}" class="nav-link px-2 text-dark hover-highlight">Tableau de bord</a></li>
+                {% endif %}
+            </ul>
+            <div class="col-md-3 text-end">
+                {% if app.user %}
+                    <a href="{{ path('app_user_space') }}" class="btn btn-outline-dark me-2">Mon espace</a>
+                    <a href="{{ path('app_logout') }}" class="btn btn-dark">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-dark me-2">Connexion</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-dark">S'inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>

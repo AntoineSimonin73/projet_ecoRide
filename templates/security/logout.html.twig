@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Déconnexion{% endblock %}
+
+{% block body %}
+    <div class="container py-5 text-center">
+        <h1 class="mb-4" style="color: #155724;">Vous avez été déconnecté avec succès</h1>
+        <p>Merci d'avoir utilisé EcoRide. À bientôt !</p>
+        <a href="{{ path('app_home') }}" class="btn btn-success mt-3">Retour à l'accueil</a>
+    </div>
+{% endblock %}

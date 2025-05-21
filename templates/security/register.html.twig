@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - EcoRide{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;"> <!-- Fond gris clair -->
+                    <h2 class="h5 mb-4 text-center" style="color: #155724;">Créer un compte sur EcoRide</h2>
+
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" action="{{ path('app_register') }}">
+                        <div class="mb-3">
+                            <label for="inputPseudo" class="form-label" style="color: #155724;">Pseudo</label>
+                            <input type="text" name="pseudo" id="inputPseudo" required class="form-control" placeholder="Entrez votre pseudo">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label" style="color: #155724;">Email</label>
+                            <input type="email" name="email" id="inputEmail" required class="form-control" placeholder="Entrez votre email">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label" style="color: #155724;">Mot de passe</label>
+                            <input type="password" name="password" id="inputPassword" required class="form-control" placeholder="Entrez un mot de passe sécurisé">
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
+
+                        <button class="btn btn-success w-100" type="submit">Créer un compte</button> <!-- Bouton vert -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

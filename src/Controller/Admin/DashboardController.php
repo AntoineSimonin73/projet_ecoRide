@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[Route('/admin')]
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/', name: 'admin_dashboard', methods: ['GET'])]
+    #[Route('/', name: 'app_admin', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig');
@@ -41,7 +41,7 @@ class DashboardController extends AbstractDashboardController
 >>>>>>> back_end
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Tableau de bord', 'fas fa-chart-line');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', Utilisateur::class);
         yield MenuItem::linkToCrud('Véhicules', 'fas fa-car', Vehicule::class);
         yield MenuItem::linkToCrud('Covoiturages', 'fas fa-road', Covoiturage::class);
@@ -51,7 +51,11 @@ class DashboardController extends AbstractDashboardController
 =======
         yield MenuItem::linkToCrud('Avis', 'fas fa-comment', Avis::class);
         yield MenuItem::linkToCrud('Rôles', 'fas fa-user-tag', Role::class);
+<<<<<<< HEAD
         yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
 >>>>>>> back_end
+=======
+        yield MenuItem::linkToRoute('Retour à l\'accueil', 'fas fa-home', 'app_home');
+>>>>>>> frontend
     }
 }

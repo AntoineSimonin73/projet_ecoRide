@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un covoiturage{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Ajouter un covoiturage</h1>
+
+    <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+        <form method="post" action="{{ path('app_user_add_covoiturage') }}">
+            <div class="mb-3">
+                <label for="departure" class="form-label" style="color: #155724;">Adresse de départ</label>
+                <input type="text" name="departure" id="departure" class="form-control" placeholder="Ex : 10 rue de Paris, 75000 Paris" required>
+            </div>
+            <div class="mb-3">
+                <label for="arrival" class="form-label" style="color: #155724;">Adresse d'arrivée</label>
+                <input type="text" name="arrival" id="arrival" class="form-control" placeholder="Ex : 20 avenue de Lyon, 69000 Lyon" required>
+            </div>
+            <div class="mb-3">
+                <label for="departure_time" class="form-label" style="color: #155724;">Date et heure de départ</label>
+                <input type="datetime-local" name="departure_time" id="departure_time" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="arrival_time" class="form-label" style="color: #155724;">Date et heure d'arrivée</label>
+                <input type="datetime-local" name="arrival_time" id="arrival_time" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label" style="color: #155724;">Prix (en crédits)</label>
+                <input type="number" name="price" id="price" class="form-control" min="3" placeholder="Ex : 10" required>
+                <small class="text-muted">2 crédits seront déduits pour la plateforme.</small>
+            </div>
+            <div class="mb-3">
+                <label for="vehicle" class="form-label" style="color: #155724;">Sélectionnez un véhicule</label>
+                <select name="vehicle" id="vehicle" class="form-select" required>
+                    {% for vehicule in vehicules %}
+                        <option value="{{ vehicule.id }}">{{ vehicule.marque }} {{ vehicule.modele }} ({{ vehicule.immatriculation }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="preferences" class="form-label" style="color: #155724;">Préférences pour le covoiturage</label>
+                <select name="preferences[]" id="preferences" class="form-select" multiple>
+                    {% for preference in preferences %}
+                        <option value="{{ preference.id }}">{{ preference.name }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs préférences.</small>
+            </div>
+            <div class="mb-3">
+                <label for="places_dispo" class="form-label" style="color: #155724;">Nombre de places disponibles</label>
+                <input type="number" name="places_dispo" id="places_dispo" class="form-control" min="1" placeholder="Ex : 4" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Ajouter le covoiturage</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du covoiturage - EcoRide{% endblock %}
+
+{% block body %}
+<div class="container py-5 main-content">
+    <h1 class="text-center mb-5" style="color: #155724;">Détails du covoiturage</h1>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <!-- Informations principales -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Informations sur le voyage</h2>
+            <p>
+                <strong>Départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y') }} à {{ covoiturage.heureDepart }}<br>
+                <strong>Arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y') }} à {{ covoiturage.heureArrivee }}<br>
+                <strong>Adresse de départ :</strong> {{ covoiturage.adresseDepart }}<br>
+                <strong>Adresse d'arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
+                <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
+                <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
+                <strong>Voyage écologique :</strong>
+                {% if covoiturage.vehicule.energie == 'électrique' %}
+                    <span class="badge bg-success">Oui</span>
+                {% else %}
+                    <span class="badge bg-secondary">Non</span>
+                {% endif %}
+            </p>
+
+            <!-- Informations sur le conducteur -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Informations sur le conducteur</h2>
+            <div class="d-flex align-items-center mb-3">
+                <img src="{{ covoiturage.chauffeur.photo is defined and covoiturage.chauffeur.photo ? asset('uploads/photos/' ~ covoiturage.chauffeur.photo) : asset('images/default-user.svg') }}" alt="Photo du chauffeur" class="rounded-circle me-3" width="56" height="56">
+                <div>
+                    <strong>{{ covoiturage.chauffeur.pseudo }}</strong><br>
+                    <span class="text-warning">
+                        {% for i in 1..5 %}
+                            {% if i <= covoiturage.chauffeur.noteMoyenne %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    <small>({{ covoiturage.chauffeur.noteMoyenne|default(0) }}/5)</small>
+                </div>
+            </div>
+
+            <!-- Avis du conducteur -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Avis sur le conducteur</h2>
+            {% if covoiturage.chauffeur.avis is not empty %}
+                <ul class="list-group">
+                    {% for avis in covoiturage.chauffeur.avis %}
+                        <li class="list-group-item">
+                            <strong>{{ avis.auteur.pseudo }}</strong> ({{ avis.note }}/5) : {{ avis.commentaire }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucun avis pour ce conducteur.</p>
+            {% endif %}
+
+            <!-- Informations sur le véhicule -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Informations sur le véhicule</h2>
+            <p>
+                <strong>Marque :</strong> {{ covoiturage.vehicule.marque }}<br>
+                <strong>Modèle :</strong> {{ covoiturage.vehicule.modele }}<br>
+                <strong>Énergie :</strong> {{ covoiturage.vehicule.energie }}
+            </p>
+
+            <!-- Préférences du covoiturage -->
+            <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Préférences du covoiturage</h2>
+            {% if covoiturage.preferences|length > 0 %}
+                <ul class="list-group">
+                    {% for preference in covoiturage.preferences %}
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i> <!-- Icône pour rendre l'affichage plus visuel -->
+                            {{ preference.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Aucune préférence spécifiée pour ce covoiturage.</p>
+            {% endif %}
+
+            <!-- Bouton Participer -->
+            {% if app.user %}
+                {% if covoiturage.placesRestantes > 0 and app.user.credits >= covoiturage.prix %}
+                    <form method="post" action="{{ path('app_covoiturage_participer', { id: covoiturage.id }) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('participer' ~ covoiturage.id) }}">
+                        <button type="submit" class="btn btn-success w-100" onclick="return confirm('Êtes-vous sûr de vouloir participer à ce covoiturage ? Cela coûtera {{ covoiturage.prix }} crédits.')">
+                            Participer
+                        </button>
+                    </form>
+                {% else %}
+                    <p class="text-danger mt-4">Vous n'avez pas assez de crédits ou il n'y a plus de places disponibles.</p>
+                {% endif %}
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-success w-100 mt-4" style="background-color: #155724; border-color: #155724; color: white;">Connectez-vous pour participer</a>
+                <a href="{{ path('app_register') }}" class="btn btn-secondary w-100 mt-2" style="background-color: #6c757d; border-color: #6c757d; color: white;">Créer un compte</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

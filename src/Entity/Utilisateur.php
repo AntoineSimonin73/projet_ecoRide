@@ -55,28 +55,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'utilisateur')]
     private Collection $vehicules;
 
-<<<<<<< HEAD
-    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'utilisateurs')]
-=======
     #[ORM\ManyToOne(targetEntity: Role::class)]
-<<<<<<< HEAD
->>>>>>> back_end
-    #[ORM\JoinColumn(nullable: false)]
-=======
     #[ORM\JoinColumn(nullable: false)] // Cette contrainte indique que 'role_id' ne peut pas être NULL
->>>>>>> frontend
     private ?Role $role = null;
 
     /**
-<<<<<<< HEAD
-     * @var Collection<int, Preference>
-     */
-    #[ORM\OneToMany(targetEntity: Preference::class, mappedBy: 'utilisateur')]
-    private Collection $preferences;
-
-    /**
-=======
->>>>>>> back_end
      * @var Collection<int, Avis>
      */
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'auteur', orphanRemoval: true)]
@@ -106,10 +89,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->vehicules = new ArrayCollection();
-<<<<<<< HEAD
-        $this->preferences = new ArrayCollection();
-=======
->>>>>>> back_end
         $this->avis = new ArrayCollection();
         $this->avisReçus = new ArrayCollection();
         $this->covoiturages = new ArrayCollection();
@@ -269,39 +248,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-<<<<<<< HEAD
-     * @return Collection<int, Preference>
-     */
-    public function getPreferences(): Collection
-    {
-        return $this->preferences;
-    }
-
-    public function addPreference(Preference $preference): static
-    {
-        if (!$this->preferences->contains($preference)) {
-            $this->preferences->add($preference);
-            $preference->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removePreference(Preference $preference): static
-    {
-        if ($this->preferences->removeElement($preference)) {
-            // set the owning side to null (unless already changed)
-            if ($preference->getUtilisateur() === $this) {
-                $preference->setUtilisateur(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-=======
->>>>>>> back_end
      * @return Collection<int, Avis>
      */
     public function getAvis(): Collection

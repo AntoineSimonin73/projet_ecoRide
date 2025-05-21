@@ -17,19 +17,11 @@ class Covoiturage
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-<<<<<<< HEAD
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $chauffeur = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-=======
-    #[ORM\JoinColumn]
-    private ?Utilisateur $chauffeur = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn]
->>>>>>> back_end
     private ?Vehicule $vehicule = null;
 
     #[ORM\Column(length: 255)]
@@ -59,23 +51,7 @@ class Covoiturage
     #[ORM\Column]
     private ?int $prix = null;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
-    private Collection $avis;
 
-=======
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $preference = null;
-
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private ?bool $preferenceAcceptee = null;
-
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $preferences = [];
-
-=======
->>>>>>> frontend
     #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
     private Collection $avis;
 
@@ -85,8 +61,6 @@ class Covoiturage
     #[ORM\ManyToMany(targetEntity: Preference::class)]
     private Collection $preferences;
 
-
->>>>>>> back_end
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -231,24 +205,6 @@ class Covoiturage
         return $this;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    public function getPreferences(): ?array
-    {
-        return $this->preferences;
-    }
-
-    public function setPreferences(?array $preferences): static
-    {
-        $this->preferences = $preferences;
-
-        return $this;
-    }
-
->>>>>>> back_end
-=======
->>>>>>> frontend
     public function getAvis(): Collection
     {
         return $this->avis;
@@ -274,12 +230,7 @@ class Covoiturage
 
         return $this;
     }
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
->>>>>>> back_end
-=======
     public function getPassagers(): Collection
     {
         return $this->passagers;
@@ -323,5 +274,4 @@ class Covoiturage
 
         return $this;
     }
->>>>>>> frontend
 }

@@ -5,10 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Covoiturage;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-<<<<<<< HEAD
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-=======
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -17,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
->>>>>>> back_end
 
 class CovoiturageCrudController extends AbstractCrudController
 {
@@ -26,18 +21,6 @@ class CovoiturageCrudController extends AbstractCrudController
         return Covoiturage::class;
     }
 
-<<<<<<< HEAD
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
-=======
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -55,5 +38,4 @@ class CovoiturageCrudController extends AbstractCrudController
                 ]),
         ];
     }
->>>>>>> back_end
 }

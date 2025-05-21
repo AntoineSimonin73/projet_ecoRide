@@ -5,10 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Utilisateur;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-<<<<<<< HEAD
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-=======
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -16,7 +12,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
->>>>>>> back_end
 
 class UtilisateurCrudController extends AbstractCrudController
 {
@@ -25,18 +20,6 @@ class UtilisateurCrudController extends AbstractCrudController
         return Utilisateur::class;
     }
 
-<<<<<<< HEAD
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
-=======
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -60,5 +43,4 @@ class UtilisateurCrudController extends AbstractCrudController
             AssociationField::new('avisReçus', 'Avis reçus')->hideOnForm(),
         ];
     }
->>>>>>> back_end
 }

@@ -13,31 +13,17 @@ class Preference
     #[ORM\Column]
     private ?int $id = null;
 
-<<<<<<< HEAD
-    #[ORM\ManyToOne(inversedBy: 'preferences')]
-    private ?Utilisateur $utilisateur = null; // Correction ici
-
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
-
-    #[ORM\Column]
-    private ?bool $accepte = null;
-=======
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'preferences')]
     private ?utilisateur $utilisateur = null;
->>>>>>> frontend
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-<<<<<<< HEAD
-    public function getUtilisateur(): ?Utilisateur // Correction ici
-=======
     public function getName(): ?string
     {
         return $this->name;
@@ -51,46 +37,14 @@ class Preference
     }
 
     public function getUtilisateur(): ?utilisateur
->>>>>>> frontend
     {
         return $this->utilisateur;
     }
 
-<<<<<<< HEAD
-    public function setUtilisateur(?Utilisateur $utilisateur): static // Correction ici
-=======
     public function setUtilisateur(?utilisateur $utilisateur): static
->>>>>>> frontend
     {
         $this->utilisateur = $utilisateur;
 
         return $this;
     }
-<<<<<<< HEAD
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function isAccepte(): ?bool
-    {
-        return $this->accepte;
-    }
-
-    public function setAccepte(bool $accepte): static
-    {
-        $this->accepte = $accepte;
-
-        return $this;
-    }
-=======
->>>>>>> frontend
 }

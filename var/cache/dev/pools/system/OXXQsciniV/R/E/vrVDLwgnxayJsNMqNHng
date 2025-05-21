@@ -25,6 +25,16 @@ return [PHP_INT_MAX, [
             'delete' => 'app_admin_covoiturage_delete',
             'detail' => 'app_admin_covoiturage_detail',
         ],
+        'App\\Controller\\Admin\\PreferenceCrudController' => [
+            'index' => 'app_admin_preference_index',
+            'new' => 'app_admin_preference_new',
+            'batchDelete' => 'app_admin_preference_batch_delete',
+            'autocomplete' => 'app_admin_preference_autocomplete',
+            'renderFilters' => 'app_admin_preference_render_filters',
+            'edit' => 'app_admin_preference_edit',
+            'delete' => 'app_admin_preference_delete',
+            'detail' => 'app_admin_preference_detail',
+        ],
         'App\\Controller\\Admin\\RoleCrudController' => [
             'index' => 'app_admin_role_index',
             'new' => 'app_admin_role_new',

@@ -18,6 +18,11 @@ return [
         '/covoiturage/batch-delete' => [[['_route' => 'app_admin_covoiturage_batch_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\CovoiturageCrudController::batchDelete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController', 'crudAction' => 'batchDelete'], null, ['POST' => 0], null, false, false, null]],
         '/covoiturage/autocomplete' => [[['_route' => 'app_admin_covoiturage_autocomplete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\CovoiturageCrudController::autocomplete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController', 'crudAction' => 'autocomplete'], null, ['GET' => 0], null, false, false, null]],
         '/covoiturage/render-filters' => [[['_route' => 'app_admin_covoiturage_render_filters', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\CovoiturageCrudController::renderFilters', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController', 'crudAction' => 'renderFilters'], null, ['GET' => 0], null, false, false, null]],
+        '/preference' => [[['_route' => 'app_admin_preference_index', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::index', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'index'], null, ['GET' => 0], null, false, false, null]],
+        '/preference/new' => [[['_route' => 'app_admin_preference_new', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::new', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        '/preference/batch-delete' => [[['_route' => 'app_admin_preference_batch_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::batchDelete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'batchDelete'], null, ['POST' => 0], null, false, false, null]],
+        '/preference/autocomplete' => [[['_route' => 'app_admin_preference_autocomplete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::autocomplete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'autocomplete'], null, ['GET' => 0], null, false, false, null]],
+        '/preference/render-filters' => [[['_route' => 'app_admin_preference_render_filters', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::renderFilters', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'renderFilters'], null, ['GET' => 0], null, false, false, null]],
         '/role' => [[['_route' => 'app_admin_role_index', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::index', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'index'], null, ['GET' => 0], null, false, false, null]],
         '/role/new' => [[['_route' => 'app_admin_role_new', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::new', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/role/batch-delete' => [[['_route' => 'app_admin_role_batch_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::batchDelete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'batchDelete'], null, ['POST' => 0], null, false, false, null]],
@@ -81,54 +86,61 @@ return [
                         .'|/participer(*:174)'
                     .')'
                 .')'
+                .'|/preference/([^/]++)(?'
+                    .'|/(?'
+                        .'|edit(*:215)'
+                        .'|delete(*:229)'
+                    .')'
+                    .'|(*:238)'
+                .')'
                 .'|/role/([^/]++)(?'
                     .'|/(?'
-                        .'|edit(*:209)'
-                        .'|delete(*:223)'
+                        .'|edit(*:272)'
+                        .'|delete(*:286)'
                     .')'
-                    .'|(*:232)'
+                    .'|(*:295)'
                 .')'
                 .'|/utilisateur/([^/]++)(?'
                     .'|/(?'
-                        .'|edit(*:273)'
-                        .'|delete(*:287)'
+                        .'|edit(*:336)'
+                        .'|delete(*:350)'
                     .')'
-                    .'|(*:296)'
+                    .'|(*:359)'
                 .')'
                 .'|/vehicule/([^/]++)(?'
                     .'|/(?'
-                        .'|edit(*:334)'
-                        .'|delete(*:348)'
+                        .'|edit(*:397)'
+                        .'|delete(*:411)'
                     .')'
-                    .'|(*:357)'
+                    .'|(*:420)'
                 .')'
                 .'|/_(?'
-                    .'|error/(\\d+)(?:\\.([^/]++))?(*:397)'
-                    .'|wdt/([^/]++)(*:417)'
+                    .'|error/(\\d+)(?:\\.([^/]++))?(*:460)'
+                    .'|wdt/([^/]++)(*:480)'
                     .'|profiler/(?'
-                        .'|font/([^/\\.]++)\\.woff2(*:459)'
+                        .'|font/([^/\\.]++)\\.woff2(*:522)'
                         .'|([^/]++)(?'
                             .'|/(?'
-                                .'|search/results(*:496)'
-                                .'|router(*:510)'
+                                .'|search/results(*:559)'
+                                .'|router(*:573)'
                                 .'|exception(?'
-                                    .'|(*:530)'
-                                    .'|\\.css(*:543)'
+                                    .'|(*:593)'
+                                    .'|\\.css(*:606)'
                                 .')'
                             .')'
-                            .'|(*:553)'
+                            .'|(*:616)'
                         .')'
                     .')'
                 .')'
                 .'|/mon\\-espace/(?'
-                    .'|preferences/supprimer/([^/]++)(*:610)'
+                    .'|preferences/supprimer/([^/]++)(*:673)'
                     .'|vehicule/(?'
-                        .'|supprimer/([^/]++)(*:648)'
-                        .'|modifier/([^/]++)(*:673)'
+                        .'|supprimer/([^/]++)(*:711)'
+                        .'|modifier/([^/]++)(*:736)'
                     .')'
                     .'|covoiturage/([^/]++)/(?'
-                        .'|modifier(*:714)'
-                        .'|supprimer(*:731)'
+                        .'|modifier(*:777)'
+                        .'|supprimer(*:794)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -143,28 +155,31 @@ return [
         133 => [[['_route' => 'app_admin_covoiturage_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\CovoiturageCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
         155 => [[['_route' => 'app_covoiturage_details', '_controller' => 'App\\Controller\\CovoiturageController::details'], ['id'], null, null, false, true, null]],
         174 => [[['_route' => 'app_covoiturage_participer', '_controller' => 'App\\Controller\\CovoiturageController::participer'], ['id'], ['POST' => 0], null, false, false, null]],
-        209 => [[['_route' => 'app_admin_role_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
-        223 => [[['_route' => 'app_admin_role_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
-        232 => [[['_route' => 'app_admin_role_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
-        273 => [[['_route' => 'app_admin_utilisateur_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\UtilisateurCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
-        287 => [[['_route' => 'app_admin_utilisateur_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\UtilisateurCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
-        296 => [[['_route' => 'app_admin_utilisateur_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\UtilisateurCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
-        334 => [[['_route' => 'app_admin_vehicule_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\VehiculeCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
-        348 => [[['_route' => 'app_admin_vehicule_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\VehiculeCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
-        357 => [[['_route' => 'app_admin_vehicule_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\VehiculeCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
-        397 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
-        417 => [[['_route' => '_wdt', '_controller' => 'web_profiler.controller.profiler::toolbarAction'], ['token'], null, null, false, true, null]],
-        459 => [[['_route' => '_profiler_font', '_controller' => 'web_profiler.controller.profiler::fontAction'], ['fontName'], null, null, false, false, null]],
-        496 => [[['_route' => '_profiler_search_results', '_controller' => 'web_profiler.controller.profiler::searchResultsAction'], ['token'], null, null, false, false, null]],
-        510 => [[['_route' => '_profiler_router', '_controller' => 'web_profiler.controller.router::panelAction'], ['token'], null, null, false, false, null]],
-        530 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
-        543 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
-        553 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
-        610 => [[['_route' => 'app_user_delete_preference', '_controller' => 'App\\Controller\\UserController::deletePreference'], ['id'], ['POST' => 0], null, false, true, null]],
-        648 => [[['_route' => 'app_user_delete_vehicle', '_controller' => 'App\\Controller\\UserController::deleteVehicle'], ['id'], ['POST' => 0], null, false, true, null]],
-        673 => [[['_route' => 'app_user_edit_vehicle', '_controller' => 'App\\Controller\\UserController::editVehicle'], ['id'], null, null, false, true, null]],
-        714 => [[['_route' => 'app_user_edit_covoiturage', '_controller' => 'App\\Controller\\UserController::editCovoiturage'], ['id'], null, null, false, false, null]],
-        731 => [
+        215 => [[['_route' => 'app_admin_preference_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
+        229 => [[['_route' => 'app_admin_preference_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
+        238 => [[['_route' => 'app_admin_preference_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\PreferenceCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
+        272 => [[['_route' => 'app_admin_role_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
+        286 => [[['_route' => 'app_admin_role_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
+        295 => [[['_route' => 'app_admin_role_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\RoleCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
+        336 => [[['_route' => 'app_admin_utilisateur_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\UtilisateurCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
+        350 => [[['_route' => 'app_admin_utilisateur_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\UtilisateurCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
+        359 => [[['_route' => 'app_admin_utilisateur_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\UtilisateurCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
+        397 => [[['_route' => 'app_admin_vehicule_edit', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\VehiculeCrudController::edit', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController', 'crudAction' => 'edit'], ['entityId'], ['GET' => 0, 'POST' => 1, 'PATCH' => 2], null, false, false, null]],
+        411 => [[['_route' => 'app_admin_vehicule_delete', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\VehiculeCrudController::delete', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController', 'crudAction' => 'delete'], ['entityId'], ['POST' => 0], null, false, false, null]],
+        420 => [[['_route' => 'app_admin_vehicule_detail', '_locale' => 'en', '_controller' => 'App\\Controller\\Admin\\VehiculeCrudController::detail', 'routeCreatedByEasyAdmin' => true, 'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController', 'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController', 'crudAction' => 'detail'], ['entityId'], ['GET' => 0], null, false, true, null]],
+        460 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
+        480 => [[['_route' => '_wdt', '_controller' => 'web_profiler.controller.profiler::toolbarAction'], ['token'], null, null, false, true, null]],
+        522 => [[['_route' => '_profiler_font', '_controller' => 'web_profiler.controller.profiler::fontAction'], ['fontName'], null, null, false, false, null]],
+        559 => [[['_route' => '_profiler_search_results', '_controller' => 'web_profiler.controller.profiler::searchResultsAction'], ['token'], null, null, false, false, null]],
+        573 => [[['_route' => '_profiler_router', '_controller' => 'web_profiler.controller.router::panelAction'], ['token'], null, null, false, false, null]],
+        593 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
+        606 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
+        616 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
+        673 => [[['_route' => 'app_user_delete_preference', '_controller' => 'App\\Controller\\UserController::deletePreference'], ['id'], ['POST' => 0], null, false, true, null]],
+        711 => [[['_route' => 'app_user_delete_vehicle', '_controller' => 'App\\Controller\\UserController::deleteVehicle'], ['id'], ['POST' => 0], null, false, true, null]],
+        736 => [[['_route' => 'app_user_edit_vehicle', '_controller' => 'App\\Controller\\UserController::editVehicle'], ['id'], null, null, false, true, null]],
+        777 => [[['_route' => 'app_user_edit_covoiturage', '_controller' => 'App\\Controller\\UserController::editCovoiturage'], ['id'], null, null, false, false, null]],
+        794 => [
             [['_route' => 'app_user_delete_covoiturage', '_controller' => 'App\\Controller\\UserController::deleteCovoiturage'], ['id'], ['POST' => 0], null, false, false, null],
             [null, null, null, null, false, false, 0],
         ],

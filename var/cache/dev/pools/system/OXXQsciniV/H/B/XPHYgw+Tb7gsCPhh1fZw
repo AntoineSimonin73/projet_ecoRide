@@ -86,6 +86,46 @@ return [PHP_INT_MAX, [
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'detail',
     ],
+    'app_admin_preference_index' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'index',
+    ],
+    'app_admin_preference_new' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'new',
+    ],
+    'app_admin_preference_batch_delete' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'batchDelete',
+    ],
+    'app_admin_preference_autocomplete' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'autocomplete',
+    ],
+    'app_admin_preference_render_filters' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'renderFilters',
+    ],
+    'app_admin_preference_edit' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'edit',
+    ],
+    'app_admin_preference_delete' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'delete',
+    ],
+    'app_admin_preference_detail' => [
+        'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
+        'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
+        'crudAction' => 'detail',
+    ],
     'app_admin_role_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',

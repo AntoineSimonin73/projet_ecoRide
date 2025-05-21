@@ -44,10 +44,12 @@ class CovoiturageController extends AbstractController
                 ->andWhere('c.adresseArrivee LIKE :adresseArrivee')
                 ->andWhere('c.dateDepart BETWEEN :dateStart AND :dateEnd')
                 ->andWhere('c.placesRestantes > 0')
+                ->andWhere('c.dateDepart >= :now') // Exclure les covoiturages passés
                 ->setParameter('adresseDepart', '%' . $adresseDepart . '%')
                 ->setParameter('adresseArrivee', '%' . $adresseArrivee . '%')
                 ->setParameter('dateStart', $dateStart)
-                ->setParameter('dateEnd', $dateEnd);
+                ->setParameter('dateEnd', $dateEnd)
+                ->setParameter('now', new \DateTime()); // Date et heure actuelles
 
             // Filtre écologique
             if ($ecologique !== null && $ecologique !== '') {

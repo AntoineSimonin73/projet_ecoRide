@@ -70,6 +70,11 @@
         {% else %}
             <p class="text-muted">Vous ne participez à aucun covoiturage pour le moment.</p>
         {% endif %}
+
+        <!-- Bouton pour accéder à l'historique des covoiturages -->
+        <a href="{{ path('app_user_covoiturage_historique') }}" class="btn btn-success w-100">
+            Voir l'historique de vos covoiturages
+        </a>
     </div>
 
     <!-- Section pour les véhicules enregistrés -->

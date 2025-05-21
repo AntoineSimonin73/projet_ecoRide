@@ -443,4 +443,17 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_space');
     }
+
+    #[Route('/mon-espace/covoiturages/historique', name: 'app_user_covoiturage_historique')]
+    public function historiqueCovoiturages(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        // Récupérer les covoiturages passés de l'utilisateur
+        $covoiturages = $entityManager->getRepository(Covoiturage::class)->findByUserHistorique($user);
+
+        return $this->render('historique_covoiturages.html.twig', [
+            'covoiturages' => $covoiturages,
+        ]);
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Covoiturage;
 use App\Entity\Utilisateur;
+use App\Entity\Vehicule;
+use App\Entity\Preference;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class CovoiturageController extends AbstractController
 {
@@ -118,7 +122,7 @@ class CovoiturageController extends AbstractController
         ]);
     }
 
-    #[Route('/covoiturages/{id}', name: 'app_covoiturage_details')]
+    #[Route('/covoiturages/{id<\d+>}', name: 'app_covoiturage_details')]
     public function details(int $id, ManagerRegistry $doctrine): Response
     {
         $repository = $doctrine->getRepository(Covoiturage::class);
@@ -133,7 +137,7 @@ class CovoiturageController extends AbstractController
         ]);
     }
 
-    #[Route('/covoiturages/{id}/participer', name: 'app_covoiturage_participer', methods: ['POST'])]
+    #[Route('/covoiturages/{id<\d+>}/participer', name: 'app_covoiturage_participer', methods: ['POST'])]
     public function participer(int $id, ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
@@ -187,7 +191,7 @@ class CovoiturageController extends AbstractController
         return $this->redirectToRoute('app_covoiturage_details', ['id' => $id]);
     }
 
-    #[Route('/covoiturage/{id}/annuler', name: 'app_covoiturage_annuler', methods: ['POST'])]
+    #[Route('/covoiturage/{id<\d+>}/annuler', name: 'app_covoiturage_annuler', methods: ['POST'])]
     public function annulerCovoiturage(
         int $id,
         Request $request,
@@ -238,5 +242,170 @@ class CovoiturageController extends AbstractController
 
         $this->addFlash('success', 'Le covoiturage a été annulé avec succès.');
         return $this->redirectToRoute('app_user_space');
+    }
+
+    #[Route('/covoiturage/{id<\d+>}/supprimer', name: 'app_covoiturage_delete', methods: ['POST'])]
+    public function deleteCovoiturage(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage) {
+            $this->addFlash('error', 'Covoiturage introuvable.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        if ($this->isCsrfTokenValid('delete_covoiturage_' . $covoiturage->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($covoiturage);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Covoiturage supprimé avec succès.');
+        }
+
+        return $this->redirectToRoute('app_user_space');
+    }
+
+    #[Route('/covoiturages/historique', name: 'app_covoiturage_historique')]
+    public function historiqueCovoiturages(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        // Récupérer les covoiturages passés de l'utilisateur
+        $covoiturages = $entityManager->getRepository(Covoiturage::class)->findByUserHistorique($user);
+
+        return $this->render('historique_covoiturages.html.twig', [
+            'covoiturages' => $covoiturages,
+        ]);
+    }
+
+    #[Route('/covoiturage/nouveau', name: 'app_covoiturage_add')]
+    public function addCovoiturage(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user || !$user->isChauffeur()) {
+            $this->addFlash('error', 'Vous devez être chauffeur pour ajouter un covoiturage.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        if ($request->isMethod('POST')) {
+            $departure = $request->request->get('departure');
+            $arrival = $request->request->get('arrival');
+            $departureTime = $request->request->get('departure_time');
+            $arrivalTime = $request->request->get('arrival_time');
+            $price = $request->request->get('price');
+            $vehicleId = $request->request->get('vehicle');
+            $placesDispo = $request->request->get('places_dispo');
+            $preferences = $request->request->all('preferences');
+
+            if (!is_array($preferences)) {
+                $preferences = [];
+            }
+
+            if (empty($departure) || empty($arrival) || empty($departureTime) || empty($arrivalTime) || empty($price) || empty($vehicleId) || empty($placesDispo)) {
+                $this->addFlash('error', 'Tous les champs obligatoires doivent être remplis.');
+                return $this->redirectToRoute('app_covoiturage_add');
+            }
+
+            try {
+                $departureDateTime = new \DateTime($departureTime);
+                $arrivalDateTime = new \DateTime($arrivalTime);
+                $heureDepart = $departureDateTime->format('H:i');
+                $heureArrivee = $arrivalDateTime->format('H:i');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Les dates et heures doivent être valides.');
+                return $this->redirectToRoute('app_covoiturage_add');
+            }
+
+            $vehicle = $entityManager->getRepository(Vehicule::class)->find($vehicleId);
+            if (!$vehicle || $vehicle->getUtilisateur() !== $user) {
+                $this->addFlash('error', 'Le véhicule sélectionné est invalide.');
+                return $this->redirectToRoute('app_covoiturage_add');
+            }
+
+            $ecologicalEnergies = ['électrique', 'hybride'];
+            $isEcologique = in_array(strtolower($vehicle->getEnergie()), $ecologicalEnergies);
+
+            $covoiturage = new Covoiturage();
+            $covoiturage->setAdresseDepart($departure);
+            $covoiturage->setAdresseArrivee($arrival);
+            $covoiturage->setDateDepart($departureDateTime);
+            $covoiturage->setDateArrivee($arrivalDateTime);
+            $covoiturage->setHeureDepart($heureDepart);
+            $covoiturage->setHeureArrivee($heureArrivee);
+            $covoiturage->setPrix($price - 2);
+            $covoiturage->setVehicule($vehicle);
+            $covoiturage->setIsEcologique($isEcologique);
+            $covoiturage->setPlacesRestantes((int) $placesDispo);
+            $covoiturage->setChauffeur($user);
+
+            foreach ($preferences as $preferenceId) {
+                $preference = $entityManager->getRepository(Preference::class)->find($preferenceId);
+                if ($preference && $preference->getUtilisateur() === $user) {
+                    $covoiturage->addPreference($preference);
+                }
+            }
+            $covoiturage->setChauffeur($user);
+
+            $entityManager->persist($covoiturage);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre covoiturage a été ajouté avec succès.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        return $this->render('add_covoiturage.html.twig', [
+            'vehicules' => $user->getVehicules(),
+            'preferences' => $user->getPreferences(),
+        ]);
+    }
+
+    #[Route('/covoiturage/{id<\d+>}/modifier', name: 'app_covoiturage_edit')]
+    public function editCovoiturage(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage) {
+            $this->addFlash('error', 'Covoiturage introuvable.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        if ($covoiturage->getChauffeur() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à modifier ce covoiturage.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        $preferences = $entityManager->getRepository(Preference::class)->findAll();
+
+        if ($request->isMethod('POST')) {
+            $covoiturage->setAdresseDepart($request->request->get('adresseDepart'));
+            $covoiturage->setAdresseArrivee($request->request->get('adresseArrivee'));
+            $covoiturage->setDateDepart(new \DateTime($request->request->get('dateDepart')));
+            $covoiturage->setDateArrivee(new \DateTime($request->request->get('dateArrivee')));
+            $covoiturage->setPrix($request->request->get('prix'));
+            $covoiturage->setPlacesRestantes($request->request->get('placesRestantes'));
+
+            $selectedPreferences = $request->request->all('preferences');
+            if (!is_array($selectedPreferences)) {
+                $selectedPreferences = [];
+            }
+
+            $covoiturage->getPreferences()->clear();
+            foreach ($selectedPreferences as $preferenceId) {
+                $preference = $entityManager->getRepository(Preference::class)->find($preferenceId);
+                if ($preference) {
+                    $covoiturage->addPreference($preference);
+                }
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Covoiturage modifié avec succès.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        return $this->render('edit_covoiturage.html.twig', [
+            'covoiturage' => $covoiturage,
+            'preferences' => $preferences,
+        ]);
     }
 }

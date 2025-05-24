@@ -156,7 +156,7 @@ class __TwigTemplate_e921e3f8c9f6828100fb00d0a0e7b867 extends Template
                         <div>
                             <a href=\"";
                     // line 31
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_user_edit_covoiturage", ["id" => CoreExtension::getAttribute($this->env, $this->source, $context["covoiturage"], "id", [], "any", false, false, false, 31)]), "html", null, true);
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_covoiturage_edit", ["id" => CoreExtension::getAttribute($this->env, $this->source, $context["covoiturage"], "id", [], "any", false, false, false, 31)]), "html", null, true);
                     yield "\" class=\"btn btn-success btn-sm\">Modifier</a>
                             <form method=\"post\" action=\"";
                     // line 32
@@ -179,7 +179,7 @@ class __TwigTemplate_e921e3f8c9f6828100fb00d0a0e7b867 extends Template
                 yield "            </ul>
             <a href=\"";
                 // line 40
-                yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_user_add_covoiturage");
+                yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_covoiturage_add");
                 yield "\" class=\"btn btn-success w-100\">Ajouter un covoiturage</a>
         ";
             } else {
@@ -258,7 +258,7 @@ class __TwigTemplate_e921e3f8c9f6828100fb00d0a0e7b867 extends Template
         <!-- Bouton pour accéder à l'historique des covoiturages -->
         <a href=\"";
         // line 75
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_user_covoiturage_historique");
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_covoiturage_historique");
         yield "\" class=\"btn btn-success w-100\">
             Voir l'historique de vos covoiturages
         </a>
@@ -548,7 +548,7 @@ class __TwigTemplate_e921e3f8c9f6828100fb00d0a0e7b867 extends Template
                             <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}
                         </div>
                         <div>
-                            <a href=\"{{ path('app_user_edit_covoiturage', { id: covoiturage.id }) }}\" class=\"btn btn-success btn-sm\">Modifier</a>
+                            <a href=\"{{ path('app_covoiturage_edit', { id: covoiturage.id }) }}\" class=\"btn btn-success btn-sm\">Modifier</a>
                             <form method=\"post\" action=\"{{ path('app_covoiturage_annuler', { id: covoiturage.id }) }}\" class=\"d-inline\" onsubmit=\"return confirm('Êtes-vous sûr de vouloir annuler ce covoiturage ?');\">
                                 <input type=\"hidden\" name=\"_token\" value=\"{{ csrf_token('annuler_covoiturage_' ~ covoiturage.id) }}\">
                                 <button type=\"submit\" class=\"btn btn-danger btn-sm\">Annuler</button>
@@ -557,7 +557,7 @@ class __TwigTemplate_e921e3f8c9f6828100fb00d0a0e7b867 extends Template
                     </li>
                 {% endfor %}
             </ul>
-            <a href=\"{{ path('app_user_add_covoiturage') }}\" class=\"btn btn-success w-100\">Ajouter un covoiturage</a>
+            <a href=\"{{ path('app_covoiturage_add') }}\" class=\"btn btn-success w-100\">Ajouter un covoiturage</a>
         {% else %}
             <p class=\"text-muted\">Vous n'avez pas encore enregistré de covoiturage.</p>
         {% endif %}
@@ -592,7 +592,7 @@ class __TwigTemplate_e921e3f8c9f6828100fb00d0a0e7b867 extends Template
         {% endif %}
 
         <!-- Bouton pour accéder à l'historique des covoiturages -->
-        <a href=\"{{ path('app_user_covoiturage_historique') }}\" class=\"btn btn-success w-100\">
+        <a href=\"{{ path('app_covoiturage_historique') }}\" class=\"btn btn-success w-100\">
             Voir l'historique de vos covoiturages
         </a>
     </div>

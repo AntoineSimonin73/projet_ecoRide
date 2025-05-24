@@ -103,7 +103,7 @@ class __TwigTemplate_3e71ce8ade5896a8ca0ae801a7f2c986 extends Template
     <div class=\"card p-4 shadow-sm border-0\" style=\"background-color: #f8f9fa;\">
         <form method=\"post\" action=\"";
         // line 10
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_user_add_covoiturage");
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_covoiturage_add");
         yield "\">
             <div class=\"mb-3\">
                 <label for=\"departure\" class=\"form-label\" style=\"color: #155724;\">Adresse de départ</label>
@@ -228,7 +228,7 @@ class __TwigTemplate_3e71ce8ade5896a8ca0ae801a7f2c986 extends Template
     <h1 class=\"text-center mb-4\" style=\"color: #155724;\">Ajouter un covoiturage</h1>
 
     <div class=\"card p-4 shadow-sm border-0\" style=\"background-color: #f8f9fa;\">
-        <form method=\"post\" action=\"{{ path('app_user_add_covoiturage') }}\">
+        <form method=\"post\" action=\"{{ path('app_covoiturage_add') }}\">
             <div class=\"mb-3\">
                 <label for=\"departure\" class=\"form-label\" style=\"color: #155724;\">Adresse de départ</label>
                 <input type=\"text\" name=\"departure\" id=\"departure\" class=\"form-control\" placeholder=\"Ex : 10 rue de Paris, 75000 Paris\" required>

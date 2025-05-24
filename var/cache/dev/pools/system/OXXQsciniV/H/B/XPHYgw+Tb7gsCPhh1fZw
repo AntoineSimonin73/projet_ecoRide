@@ -1,247 +1,247 @@
 <?php //easyadmin.routes.route_to_fqcn
 
 return [PHP_INT_MAX, [
-    'app_admin' => [
+    '' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => null,
         'crudAction' => null,
     ],
-    'app_admin_avis_index' => [
+    '_avis_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'index',
     ],
-    'app_admin_avis_new' => [
+    '_avis_new' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'new',
     ],
-    'app_admin_avis_batch_delete' => [
+    '_avis_batch_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'batchDelete',
     ],
-    'app_admin_avis_autocomplete' => [
+    '_avis_autocomplete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'autocomplete',
     ],
-    'app_admin_avis_render_filters' => [
+    '_avis_render_filters' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'renderFilters',
     ],
-    'app_admin_avis_edit' => [
+    '_avis_edit' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'edit',
     ],
-    'app_admin_avis_delete' => [
+    '_avis_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'delete',
     ],
-    'app_admin_avis_detail' => [
+    '_avis_detail' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\AvisCrudController',
         'crudAction' => 'detail',
     ],
-    'app_admin_covoiturage_index' => [
+    '_covoiturage_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'index',
     ],
-    'app_admin_covoiturage_new' => [
+    '_covoiturage_new' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'new',
     ],
-    'app_admin_covoiturage_batch_delete' => [
+    '_covoiturage_batch_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'batchDelete',
     ],
-    'app_admin_covoiturage_autocomplete' => [
+    '_covoiturage_autocomplete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'autocomplete',
     ],
-    'app_admin_covoiturage_render_filters' => [
+    '_covoiturage_render_filters' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'renderFilters',
     ],
-    'app_admin_covoiturage_edit' => [
+    '_covoiturage_edit' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'edit',
     ],
-    'app_admin_covoiturage_delete' => [
+    '_covoiturage_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'delete',
     ],
-    'app_admin_covoiturage_detail' => [
+    '_covoiturage_detail' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\CovoiturageCrudController',
         'crudAction' => 'detail',
     ],
-    'app_admin_preference_index' => [
+    '_preference_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'index',
     ],
-    'app_admin_preference_new' => [
+    '_preference_new' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'new',
     ],
-    'app_admin_preference_batch_delete' => [
+    '_preference_batch_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'batchDelete',
     ],
-    'app_admin_preference_autocomplete' => [
+    '_preference_autocomplete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'autocomplete',
     ],
-    'app_admin_preference_render_filters' => [
+    '_preference_render_filters' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'renderFilters',
     ],
-    'app_admin_preference_edit' => [
+    '_preference_edit' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'edit',
     ],
-    'app_admin_preference_delete' => [
+    '_preference_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'delete',
     ],
-    'app_admin_preference_detail' => [
+    '_preference_detail' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\PreferenceCrudController',
         'crudAction' => 'detail',
     ],
-    'app_admin_role_index' => [
+    '_role_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'index',
     ],
-    'app_admin_role_new' => [
+    '_role_new' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'new',
     ],
-    'app_admin_role_batch_delete' => [
+    '_role_batch_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'batchDelete',
     ],
-    'app_admin_role_autocomplete' => [
+    '_role_autocomplete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'autocomplete',
     ],
-    'app_admin_role_render_filters' => [
+    '_role_render_filters' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'renderFilters',
     ],
-    'app_admin_role_edit' => [
+    '_role_edit' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'edit',
     ],
-    'app_admin_role_delete' => [
+    '_role_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'delete',
     ],
-    'app_admin_role_detail' => [
+    '_role_detail' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\RoleCrudController',
         'crudAction' => 'detail',
     ],
-    'app_admin_utilisateur_index' => [
+    '_utilisateur_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'index',
     ],
-    'app_admin_utilisateur_new' => [
+    '_utilisateur_new' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'new',
     ],
-    'app_admin_utilisateur_batch_delete' => [
+    '_utilisateur_batch_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'batchDelete',
     ],
-    'app_admin_utilisateur_autocomplete' => [
+    '_utilisateur_autocomplete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'autocomplete',
     ],
-    'app_admin_utilisateur_render_filters' => [
+    '_utilisateur_render_filters' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'renderFilters',
     ],
-    'app_admin_utilisateur_edit' => [
+    '_utilisateur_edit' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'edit',
     ],
-    'app_admin_utilisateur_delete' => [
+    '_utilisateur_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'delete',
     ],
-    'app_admin_utilisateur_detail' => [
+    '_utilisateur_detail' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\UtilisateurCrudController',
         'crudAction' => 'detail',
     ],
-    'app_admin_vehicule_index' => [
+    '_vehicule_index' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'index',
     ],
-    'app_admin_vehicule_new' => [
+    '_vehicule_new' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'new',
     ],
-    'app_admin_vehicule_batch_delete' => [
+    '_vehicule_batch_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'batchDelete',
     ],
-    'app_admin_vehicule_autocomplete' => [
+    '_vehicule_autocomplete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'autocomplete',
     ],
-    'app_admin_vehicule_render_filters' => [
+    '_vehicule_render_filters' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'renderFilters',
     ],
-    'app_admin_vehicule_edit' => [
+    '_vehicule_edit' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'edit',
     ],
-    'app_admin_vehicule_delete' => [
+    '_vehicule_delete' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'delete',
     ],
-    'app_admin_vehicule_detail' => [
+    '_vehicule_detail' => [
         'dashboardControllerFqcn' => 'App\\Controller\\Admin\\DashboardController',
         'crudControllerFqcn' => 'App\\Controller\\Admin\\VehiculeCrudController',
         'crudAction' => 'detail',

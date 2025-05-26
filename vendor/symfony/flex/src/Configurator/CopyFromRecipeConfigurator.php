@@ -37,16 +37,33 @@ class CopyFromRecipeConfigurator extends AbstractConfigurator
     public function update(RecipeUpdate $recipeUpdate, array $originalConfig, array $newConfig): void
     {
         foreach ($recipeUpdate->getOriginalRecipe()->getFiles() as $filename => $data) {
+            $filename = $this->resolveTargetFolder($filename, $originalConfig);
             $recipeUpdate->setOriginalFile($filename, $data['contents']);
         }
 
         $files = [];
         foreach ($recipeUpdate->getNewRecipe()->getFiles() as $filename => $data) {
+            $filename = $this->resolveTargetFolder($filename, $newConfig);
             $recipeUpdate->setNewFile($filename, $data['contents']);
 
             $files[] = $this->getLocalFilePath($recipeUpdate->getRootDir(), $filename);
         }
+
         $recipeUpdate->getLock()->add($recipeUpdate->getPackageName(), ['files' => $files]);
+    }
+
+    /**
+     * @param array<string, string> $config
+     */
+    private function resolveTargetFolder(string $path, array $config): string
+    {
+        foreach ($config as $key => $target) {
+            if (0 === strpos($path, $key)) {
+                return $this->options->expandTargetDir($target).substr($path, \strlen($key));
+            }
+        }
+
+        return $path;
     }
 
     private function getRemovableFilesFromRecipeAndLock(Recipe $recipe, Lock $lock): array
@@ -110,11 +127,10 @@ class CopyFromRecipeConfigurator extends AbstractConfigurator
 
     private function copyFile(string $to, string $contents, bool $executable, array $options): string
     {
-        $overwrite = $options['force'] ?? false;
         $basePath = $options['root-dir'] ?? '.';
         $copiedFile = $this->getLocalFilePath($basePath, $to);
 
-        if (!$this->options->shouldWriteFile($to, $overwrite)) {
+        if (!$this->options->shouldWriteFile($to, $options['force'] ?? false, $options['assumeYesForPrompts'] ?? false)) {
             return $copiedFile;
         }
 

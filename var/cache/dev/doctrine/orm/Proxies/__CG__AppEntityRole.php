@@ -24,10 +24,8 @@ class Role extends \App\Entity\Role implements \Doctrine\ORM\Proxy\InternalProxy
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
         "\0".parent::class."\0".'name' => [parent::class, 'name', null, 16],
-        "\0".parent::class."\0".'utilisateurs' => [parent::class, 'utilisateurs', null, 16],
         'id' => [parent::class, 'id', null, 16],
         'name' => [parent::class, 'name', null, 16],
-        'utilisateurs' => [parent::class, 'utilisateurs', null, 16],
     ];
 
     public function __isInitialized(): bool

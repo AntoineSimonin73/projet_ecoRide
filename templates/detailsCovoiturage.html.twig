@@ -31,26 +31,30 @@
                 <img src="{{ covoiturage.chauffeur.photo is defined and covoiturage.chauffeur.photo ? asset('uploads/photos/' ~ covoiturage.chauffeur.photo) : asset('images/default-user.svg') }}" alt="Photo du chauffeur" class="rounded-circle me-3" width="56" height="56">
                 <div>
                     <strong>{{ covoiturage.chauffeur.pseudo }}</strong><br>
-                    <span class="text-warning">
-                        {% for i in 1..5 %}
-                            {% if i <= covoiturage.chauffeur.noteMoyenne %}
-                                ★
-                            {% else %}
-                                ☆
-                            {% endif %}
-                        {% endfor %}
-                    </span>
-                    <small>({{ covoiturage.chauffeur.noteMoyenne|default(0) }}/5)</small>
+                    {% if nombreAvis > 0 %}
+                        <span class="text-warning">
+                            {% for i in 1..5 %}
+                                {% if i <= noteMoyenne %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                        <small>({{ noteMoyenne }}/5)</small>
+                    {% else %}
+                        <p class="text-muted">Pas encore de note !</p>
+                    {% endif %}
                 </div>
             </div>
 
             <!-- Avis du conducteur -->
             <h2 class="mb-4" style="color: #155724; font-size: 1.8rem;">Avis sur le conducteur</h2>
-            {% if covoiturage.chauffeur.avis is not empty %}
+            {% if avisValides|length > 0 %}
                 <ul class="list-group">
-                    {% for avis in covoiturage.chauffeur.avis %}
+                    {% for avis in avisValides %}
                         <li class="list-group-item">
-                            <strong>{{ avis.auteur.pseudo }}</strong> ({{ avis.note }}/5) : {{ avis.commentaire }}
+                            <strong>{{ avis.auteur.pseudo }}</strong> ({{ avis.note }}/5) : {{ avis.commentaires }}
                         </li>
                     {% endfor %}
                 </ul>

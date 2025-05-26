@@ -1,13 +1,131 @@
-{% extends '@EasyAdmin/page/content.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block content %}
-    <div class="container py-5">
-        <h1 class="text-center mb-4" style="color: #155724;">Tableau de bord EcoRide</h1>
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Contenu du tableau de bord EasyAdmin -->
-                {{ parent() }}
+{% block title %}Tableau de bord{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .dashboard-card {
+        height: 175px; /* Hauteur fixe pour toutes les cartes */
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724; font-weight: bold;">Tableau de bord EcoRide</h1>
+    
+    <div class="row text-center mb-5">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success dashboard-card">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h5 class="card-title text-success">Employés</h5>
+                    <p class="card-text display-6">{{ employes|length }}</p>
+                    <a href="{{ path('app_admin_employes') }}" class="btn btn-outline-success mt-auto">Gérer les employés</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm  border-success dashboard-card">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h5 class="card-title text-success">Utilisateurs</h5>
+                    <p class="card-text display-6">{{ utilisateursTotal }}</p>
+                    <a href="{{ path('app_admin_users') }}" class="btn btn-outline-success mt-auto">Liste des utilisateurs</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success dashboard-card">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h5 class="card-title text-success">Crédits totaux</h5>
+                    <p class="card-text display-6">{{ totalCredits }} crédits</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success dashboard-card">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h5 class="card-title text-success">Covoiturages totaux</h5>
+                    <p class="card-text display-6">{{ covoituragesTotal }}</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Nombre de covoiturages par jour</h5>
+                    <canvas id="covoituragesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Gains de la plateforme par jour</h5>
+                    <canvas id="creditsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const covoituragesData = {{ covoituragesData|json_encode|raw }};
+    const creditsData = {{ creditsData|json_encode|raw }};
+
+    // Graphique des covoiturages par jour
+    const ctx1 = document.getElementById('covoituragesChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: covoituragesData.labels,
+            datasets: [{
+                label: 'Covoiturages',
+                data: covoituragesData.values,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        }
+    });
+
+    // Graphique des crédits par jour
+    const ctx2 = document.getElementById('creditsChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: creditsData.labels,
+            datasets: [{
+                label: 'Crédits',
+                data: creditsData.values,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

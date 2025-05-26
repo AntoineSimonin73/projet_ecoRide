@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Valider le trajet{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Valider le trajet</h1>
+
+    <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;">
+        <form method="post" action="{{ path('app_covoiturage_feedback', { id: covoiturage.id }) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('feedback_covoiturage_' ~ covoiturage.id) }}">
+
+            <div class="mb-3">
+                <label for="validation" class="form-label">Le trajet s'est-il bien passé ?</label>
+                <select name="validation" id="validation" class="form-select" required>
+                    <option value="ok">Oui</option>
+                    <option value="probleme">Non</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Note (1 à 5)</label>
+                <div id="rating" class="d-flex gap-1">
+                    {% for i in 1..5 %}
+                        <input type="radio" name="note" id="note_{{ i }}" value="{{ i }}" class="d-none" required>
+                        <label for="note_{{ i }}" class="star" style="font-size: 2rem; cursor: pointer; color: #ccc;">
+                            ★
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="commentaires" class="form-label">Votre avis</label>
+                <textarea name="commentaires" id="commentaires" class="form-control" rows="4" placeholder="Ajoutez un commentaire (facultatif)"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Soumettre</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // JavaScript pour gérer l'interaction des étoiles
+    document.querySelectorAll('#rating .star').forEach((star, index) => {
+        star.addEventListener('click', () => {
+            // Réinitialise toutes les étoiles
+            document.querySelectorAll('#rating .star').forEach(s => s.style.color = '#ccc');
+            // Active les étoiles jusqu'à celle cliquée
+            for (let i = 0; i <= index; i++) {
+                document.querySelectorAll('#rating .star')[i].style.color = '#ffc107';
+            }
+        });
+    });
+</script>
+{% endblock %}

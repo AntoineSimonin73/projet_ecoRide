@@ -49,13 +49,16 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isPassager = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isActive = true;
+
     /**
      * @var Collection<int, Vehicule>
      */
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'utilisateur')]
     private Collection $vehicules;
 
-    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\ManyToOne(targetEntity: Role::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)] // Cette contrainte indique que 'role_id' ne peut pas être NULL
     private ?Role $role = null;
 
@@ -96,6 +99,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isChauffeur = false; // Par défaut, l'utilisateur n'est pas chauffeur
         $this->isPassager = true;  // Par défaut, l'utilisateur est passager
         $this->preferences = new ArrayCollection();
+        $this->avisRecus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +210,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Vehicule>
      */
@@ -244,6 +260,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(?Role $role): self
     {
         $this->role = $role;
+
         return $this;
     }
 
@@ -366,10 +383,26 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     // Méthodes requises par UserInterface
     public function getRoles(): array
     {
-        // Retourne le rôle sous forme de tableau
-        return [$this->role->getName()];
+        // Retourne un tableau contenant le rôle principal et le rôle par défaut "ROLE_USER"
+        $roles = [$this->role->getName()]; // Récupère le rôle principal
+        $roles[] = 'ROLE_USER'; // Ajoute le rôle par défaut
+        return array_unique($roles); // Évite les doublons
     }
     
+    public function setRoles(array $roles): self
+    {
+        // Définit le rôle principal à partir du tableau (le premier rôle)
+        if (!empty($roles)) {
+            $roleName = $roles[0];
+            // Récupère ou crée un rôle correspondant
+            $role = new Role();
+            $role->setName($roleName);
+            $this->setRole($role);
+        }
+
+        return $this;
+    }
+
     public function getUserIdentifier(): string
     {
         // Utilise l'email comme identifiant unique de l'utilisateur
@@ -426,5 +459,24 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function calculerNoteMoyenne(): float
+    {
+        $totalNotes = 0;
+        $nombreAvis = 0;
+
+        foreach ($this->avisReçus as $avis) {
+            if ($avis->IsValide()) { // Ne prendre en compte que les avis validés
+                $totalNotes += $avis->getNote();
+                $nombreAvis++;
+            }
+        }
+
+        if ($nombreAvis === 0) {
+            return 0; // Pas d'avis validé, donc note moyenne = 0
+        }
+
+        return round($totalNotes / $nombreAvis, 1); // Arrondi à une décimale
     }
 }

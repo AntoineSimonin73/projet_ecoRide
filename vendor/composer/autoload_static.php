@@ -21,13 +21,12 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
-        '1052008401d4a2a5be02f7b4e274d051' => __DIR__ . '/..' . '/twig/html-extra/Resources/functions.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
+        'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -42,7 +41,6 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         'T' => 
         array (
             'Twig\\Extra\\TwigExtraBundle\\' => 27,
-            'Twig\\Extra\\Html\\' => 16,
             'Twig\\' => 5,
         ),
         'S' => 
@@ -139,10 +137,13 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
             'Monolog\\' => 8,
             'Masterminds\\' => 12,
         ),
+        'F' => 
+        array (
+            'Faker\\' => 6,
+        ),
         'E' => 
         array (
             'Egulias\\EmailValidator\\' => 23,
-            'EasyCorp\\Bundle\\EasyAdminBundle\\' => 32,
         ),
         'D' => 
         array (
@@ -189,10 +190,6 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         'Twig\\Extra\\TwigExtraBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/extra-bundle',
-        ),
-        'Twig\\Extra\\Html\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/twig/html-extra',
         ),
         'Twig\\' => 
         array (
@@ -538,13 +535,13 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
+        'Faker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
+        ),
         'Egulias\\EmailValidator\\' => 
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
-        ),
-        'EasyCorp\\Bundle\\EasyAdminBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/easycorp/easyadmin-bundle/src',
         ),
         'Doctrine\\SqlFormatter\\' => 
         array (

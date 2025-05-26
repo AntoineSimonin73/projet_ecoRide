@@ -91,6 +91,8 @@ final class TwigComponentExtension extends Extension implements ConfigurationInt
                 new Reference('property_accessor'),
                 new Reference('event_dispatcher'),
                 new AbstractArgument(\sprintf('Added in %s.', TwigComponentPass::class)),
+                new AbstractArgument(\sprintf('Added in %s.', TwigComponentPass::class)),
+                new Reference('twig'),
             ])
             ->addTag('kernel.reset', ['method' => 'reset'])
         ;

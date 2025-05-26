@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un employé{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-4" style="color: #155724;">Créer un nouvel employé</h1>
+    <form method="post" action="{{ path('app_admin_create_employe') }}">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="pseudo" class="form-label">Pseudo</label>
+            <input type="text" name="pseudo" id="pseudo" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" name="password" id="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Créer</button>
+    </form>
+</div>
+{% endblock %}

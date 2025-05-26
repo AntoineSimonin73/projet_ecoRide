@@ -10,8 +10,13 @@
                 <li><a href="{{ path('app_home') }}" class="nav-link px-2 text-dark hover-highlight">Accueil</a></li>
                 <li><a href="{{ path('app_covoiturages') }}" class="nav-link px-2 text-dark hover-highlight">Covoiturages</a></li>
                 <li><a href="{{ path('app_contact') }}" class="nav-link px-2 text-dark hover-highlight">Contact</a></li>
-                {% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_EMPLOYE' in app.user.roles) %}
-                    <li><a href="{{ path('app_admin') }}" class="nav-link px-2 text-dark hover-highlight">Tableau de bord</a></li>
+                {% if app.user %}
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <li><a href="{{ path('app_admin_dashboard') }}" class="nav-link px-2 text-dark hover-highlight">Tableau de bord</a></li>
+                    {% endif %}
+                    {% if 'ROLE_EMPLOYE' in app.user.roles %}
+                        <li><a href="{{ path('app_employe_space') }}" class="nav-link px-2 text-dark hover-highlight">Espace Employé</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
             <div class="col-md-3 text-end">

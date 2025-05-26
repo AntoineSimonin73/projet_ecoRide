@@ -26,7 +26,7 @@ class Vehicule
     #[ORM\Column(length: 255)]
     private ?string $couleur = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $energie = null;
 
     #[ORM\Column]
@@ -98,6 +98,13 @@ class Vehicule
 
     public function setEnergie(string $energie): static
     {
+        $validEnergies = ['Électrique', 'hybride', 'essence', 'diesel'];
+        $energie = strtolower(trim($energie));
+
+        if (!in_array($energie, $validEnergies, true)) {
+            throw new \InvalidArgumentException('Énergie invalide pour le véhicule.');
+        }
+
         $this->energie = $energie;
 
         return $this;

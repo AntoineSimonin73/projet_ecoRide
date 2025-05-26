@@ -57,11 +57,11 @@ class SecurityController extends AbstractController
                 $user->setPseudo($pseudo);
                 $user->setEmail($email);
                 $user->setPassword($passwordHasher->hashPassword($user, $password));
-                $user->setCredits(0);
+                $user->setCredits(20);
 
                 // Assignation du rôle par défaut
                 $roleRepository = $entityManager->getRepository(Role::class);
-                $defaultRole = $roleRepository->findOneBy(['name' => 'ROLE_USER']); // Remplacez 'ROLE_USER' par le rôle par défaut
+                $defaultRole = $roleRepository->findOneBy(['name' => 'ROLE_UTILISATEUR']); // Remplacez 'ROLE_USER' par le rôle par défaut
 
                 if (!$defaultRole) {
                     throw new \Exception('Le rôle par défaut n\'existe pas.');

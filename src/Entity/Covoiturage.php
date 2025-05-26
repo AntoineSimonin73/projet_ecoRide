@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\CovoiturageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CovoiturageRepository::class)]
@@ -51,21 +50,37 @@ class Covoiturage
     #[ORM\Column]
     private ?int $prix = null;
 
-
-    #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
-    private Collection $avis;
+    #[ORM\Column(length: 50, options: ["default" => "en_attente"])]
+    private ?string $status = 'en_attente'; // Statut du covoiturage : en_attente, en_cours, termine
 
     #[ORM\ManyToMany(targetEntity: Utilisateur::class)]
     private Collection $passagers;
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\JoinColumn(nullable: true)] // Permet que le passager soit optionnel
+    private ?Utilisateur $passager = null;
 
     #[ORM\ManyToMany(targetEntity: Preference::class)]
     private Collection $preferences;
 
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class)]
+    #[ORM\JoinTable(name: 'covoiturage_validations')]
+    private Collection $validations; // Participants ayant validé le trajet
+
+    #[ORM\OneToMany(mappedBy: 'covoiturage', targetEntity: Avis::class)]
+    private Collection $avis;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $problemes = []; // Problèmes signalés par les participants
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isArchived = false;
+
     public function __construct()
     {
-        $this->avis = new ArrayCollection();
         $this->passagers = new ArrayCollection();
         $this->preferences = new ArrayCollection();
+        $this->validations = new ArrayCollection();
+        $this->avis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,6 +220,39 @@ class Covoiturage
         return $this;
     }
 
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getValidations(): Collection
+    {
+        return $this->validations;
+    }
+
+    public function addValidation(Utilisateur $utilisateur): self
+    {
+        if (!$this->validations->contains($utilisateur)) {
+            $this->validations->add($utilisateur);
+        }
+
+        return $this;
+    }
+
+    public function removeValidation(Utilisateur $utilisateur): self
+    {
+        $this->validations->removeElement($utilisateur);
+
+        return $this;
+    }
+
     public function getAvis(): Collection
     {
         return $this->avis;
@@ -234,6 +282,18 @@ class Covoiturage
     public function getPassagers(): Collection
     {
         return $this->passagers;
+    }
+    
+    public function getPassager(): ?Utilisateur
+    {
+        return $this->passager;
+    }
+
+    public function setPassager(?Utilisateur $passager): self
+    {
+        $this->passager = $passager;
+
+        return $this;
     }
 
     public function addPassager(Utilisateur $passager): self
@@ -271,6 +331,40 @@ class Covoiturage
     public function removePreference(Preference $preference): self
     {
         $this->preferences->removeElement($preference);
+
+        return $this;
+    }
+
+    public function getProblemes(): ?array
+    {
+        return $this->problemes;
+    }
+
+    public function addProbleme(Utilisateur $utilisateur, string $commentaire): self
+    {
+        $this->problemes[] = [
+            'utilisateur' => $utilisateur->getId(),
+            'commentaire' => $commentaire,
+        ];
+
+        return $this;
+    }
+
+    public function clearProblemes(): self
+    {
+        $this->problemes = [];
+
+        return $this;
+    }
+
+    public function getIsArchived(): bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }

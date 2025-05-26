@@ -13,6 +13,7 @@ namespace Symfony\UX\TwigComponent;
 
 use Symfony\UX\StimulusBundle\Dto\StimulusAttributes;
 use Symfony\WebpackEncoreBundle\Dto\AbstractStimulusDto;
+use Twig\Runtime\EscaperRuntime;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -31,8 +32,10 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
     /**
      * @param array<string, string|bool> $attributes
      */
-    public function __construct(private array $attributes)
-    {
+    public function __construct(
+        private array $attributes,
+        private readonly EscaperRuntime $escaper,
+    ) {
     }
 
     public function __toString(): string
@@ -41,6 +44,10 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
 
         foreach ($this->attributes as $key => $value) {
             if (isset($this->rendered[$key])) {
+                continue;
+            }
+
+            if (false === $value) {
                 continue;
             }
 
@@ -66,11 +73,26 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
                 $value = 'true';
             }
 
-            $attributes .= match ($value) {
-                true => ' '.$key,
-                false => '',
-                default => \sprintf(' %s="%s"', $key, $value),
-            };
+            // Allowed characters in attribute names:
+            // - common attribute names (HTML 5):
+            //      id, class, style, title, lang, dir, role,...
+            //      data-*, aria-*,
+            //      xml:*, xmlns:*,
+            // - special syntax names (Vue.js, Svelte, Alpine.js, ...)
+            //      v-*, x-*, @*, :*
+            if (!ctype_alpha(str_replace(['-', '_', ':', '@', '.'], '', $key))) {
+                $key = (string) $this->escaper->escape($key, 'html_attr');
+            }
+
+            if (true === $value) {
+                $attributes .= ' '.$key;
+            } else {
+                if (!ctype_alnum(str_replace(['-', '_'], '', $value))) {
+                    $value = $this->escaper->escape($value, 'html');
+                }
+
+                $attributes .= ' '.\sprintf('%s="%s"', $key, $value);
+            }
         }
 
         return $attributes;
@@ -122,7 +144,7 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
     public function defaults(iterable $attributes): self
     {
         if ($attributes instanceof StimulusAttributes) {
-            $attributes = $attributes->toEscapedArray();
+            $attributes = $attributes->toArray();
         }
 
         if ($attributes instanceof \Traversable) {
@@ -143,7 +165,7 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
             unset($attributes[$attribute]);
         }
 
-        return new self($attributes);
+        return new self($attributes, $this->escaper);
     }
 
     /**
@@ -159,7 +181,7 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
             }
         }
 
-        return new self($attributes);
+        return new self($attributes, $this->escaper);
     }
 
     /**
@@ -197,7 +219,7 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
         )));
         unset($controllersAttributes['data-controller']);
 
-        $clone = new self($attributes);
+        $clone = new self($attributes, $this->escaper);
 
         // add the remaining attributes for values/classes
         return $clone->defaults($controllersAttributes);
@@ -209,7 +231,7 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
 
         unset($attributes[$key]);
 
-        return new self($attributes);
+        return new self($attributes, $this->escaper);
     }
 
     public function nested(string $namespace): self
@@ -225,7 +247,7 @@ final class ComponentAttributes implements \Stringable, \IteratorAggregate, \Cou
             }
         }
 
-        return new self($attributes);
+        return new self($attributes, $this->escaper);
     }
 
     public function getIterator(): \Traversable

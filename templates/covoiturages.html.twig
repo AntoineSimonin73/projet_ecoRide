@@ -60,7 +60,7 @@
     <div class="row">
         {% set hasFilter = app.request.query.get('adresseDepart') and app.request.query.get('adresseArrivee') and app.request.query.get('dateDepart') %}
         {% if hasFilter %}
-            {% if covoiturages is empty %}
+            {% if covoituragesData is empty %}
                 <div class="text-center" style="color: #155724;">
                     Aucun covoiturage disponible pour les critères sélectionnés.<br>
                     {% if prochaineDate %}
@@ -74,32 +74,40 @@
                     {% endif %}
                 </div>
             {% else %}
-                {% for covoiturage in covoiturages %}
+                {% for data in covoituragesData %}
+                    {% set covoiturage = data.covoiturage %}
+                    {% set noteMoyenne = data.noteMoyenne %}
+                    {% set nombreAvis = data.nombreAvis %}
+
                     {% if covoiturage.placesRestantes > 0 %}
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card shadow-lg border-0 h-100">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-3">
                                         <img src="{{ covoiturage.chauffeur.photo is defined and covoiturage.chauffeur.photo ? asset('uploads/photos/' ~ covoiturage.chauffeur.photo) : asset('images/default-user.svg') }}" alt="Photo du chauffeur" class="rounded-circle me-3" width="56" height="56">
-                                        <div>
-                                            <strong>{{ covoiturage.chauffeur.pseudo }}</strong><br>
-                                            <span class="text-warning">
-                                                {% for i in 1..5 %}
-                                                    {% if i <= covoiturage.chauffeur.noteMoyenne %}
-                                                        ★
-                                                    {% else %}
-                                                        ☆
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </span>
-                                            <small>({{ covoiturage.chauffeur.noteMoyenne|default(0) }}/5)</small>
-                                        </div>
                                     </div>
                                     <p class="mb-2">
-                                        <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
-                                        <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
+                                        <strong>Conducteur :</strong> {{ covoiturage.chauffeur.pseudo }}<br>
+                                        {% if nombreAvis > 0 %}
+                                                <span class="text-warning">
+                                                    {% for i in 1..5 %}
+                                                        {% if i <= noteMoyenne %}
+                                                            ★
+                                                        {% else %}
+                                                            ☆
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </span>
+                                                <small>({{ noteMoyenne }}/5)</small>
+                                            {% else %}
+                                                <p class="text-muted">Pas encore de note pour ce chauffeur !</p>
+                                        {% endif %}
                                         <strong>Départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y') }} à {{ covoiturage.heureDepart }}<br>
                                         <strong>Arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y') }} à {{ covoiturage.heureArrivee }}<br>
+                                        <strong>De :</strong> {{ covoiturage.adresseDepart }}<br>
+                                        <strong>À :</strong> {{ covoiturage.adresseArrivee }}<br>
+                                        <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
+                                        <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
                                         <strong>Écologique :</strong>
                                         {% if covoiturage.vehicule.energie == 'électrique' %}
                                             <span class="badge bg-success">Oui</span>

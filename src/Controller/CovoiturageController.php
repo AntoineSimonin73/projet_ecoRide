@@ -6,6 +6,7 @@ use App\Entity\Covoiturage;
 use App\Entity\Utilisateur;
 use App\Entity\Vehicule;
 use App\Entity\Preference;
+use App\Entity\Avis;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -115,25 +116,57 @@ class CovoiturageController extends AbstractController
             }
         }
 
+        // Calculer les avis et notes pour chaque covoiturage
+        $covoituragesData = [];
+        foreach ($covoiturages as $covoiturage) {
+            $chauffeur = $covoiturage->getChauffeur();
+            $avisValides = $doctrine->getRepository(Avis::class)->findBy([
+                'destinataire' => $chauffeur,
+                'isValide' => true,
+            ]);
+            $noteMoyenne = $chauffeur->calculerNoteMoyenne();
+            $nombreAvis = count($avisValides);
+
+            $covoituragesData[] = [
+                'covoiturage' => $covoiturage,
+                'noteMoyenne' => $noteMoyenne,
+                'nombreAvis' => $nombreAvis,
+            ];
+        }
+
         return $this->render('covoiturages.html.twig', [
-            'covoiturages' => $covoiturages,
+            'covoituragesData' => $covoituragesData,
             'prochaineDate' => $prochaineDate,
             'hasFilter' => $hasFilter, // Indique si des filtres ont été appliqués
         ]);
     }
 
     #[Route('/covoiturages/{id<\d+>}', name: 'app_covoiturage_details')]
-    public function details(int $id, ManagerRegistry $doctrine): Response
+    public function details(int $id, EntityManagerInterface $entityManager): Response
     {
-        $repository = $doctrine->getRepository(Covoiturage::class);
-        $covoiturage = $repository->find($id);
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
 
         if (!$covoiturage) {
-            throw $this->createNotFoundException('Covoiturage non trouvé.');
+            throw $this->createNotFoundException('Covoiturage introuvable.');
         }
 
+        // Récupère les avis validés pour le chauffeur
+        $avisValides = $entityManager->getRepository(Avis::class)->findBy([
+            'destinataire' => $covoiturage->getChauffeur(),
+            'isValide' => true,
+        ]);
+
+        // Calcul de la note moyenne
+        $noteMoyenne = $covoiturage->getChauffeur()->calculerNoteMoyenne();
+
+        // Compte le nombre d'avis validés
+        $nombreAvis = count($avisValides);
+
         return $this->render('detailsCovoiturage.html.twig', [
-            'covoiturage' => $covoiturage, // L'objet covoiturage avec ses relations
+            'covoiturage' => $covoiturage,
+            'avisValides' => $avisValides,
+            'noteMoyenne' => $noteMoyenne,
+            'nombreAvis' => $nombreAvis, // Passe le nombre d'avis au template
         ]);
     }
 
@@ -268,9 +301,10 @@ class CovoiturageController extends AbstractController
     public function historiqueCovoiturages(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-
-        // Récupérer les covoiturages passés de l'utilisateur
-        $covoiturages = $entityManager->getRepository(Covoiturage::class)->findByUserHistorique($user);
+        $covoiturages = $entityManager->getRepository(Covoiturage::class)->findBy([
+            'chauffeur' => $user,
+            'isArchived' => true,
+        ]);
 
         return $this->render('historique_covoiturages.html.twig', [
             'covoiturages' => $covoiturages,
@@ -323,7 +357,9 @@ class CovoiturageController extends AbstractController
             }
 
             $ecologicalEnergies = ['électrique', 'hybride'];
-            $isEcologique = in_array(strtolower($vehicle->getEnergie()), $ecologicalEnergies);
+            $energieVehicule = strtolower(trim($vehicle->getEnergie())); // Normalise la valeur
+
+            $isEcologique = in_array($energieVehicule, $ecologicalEnergies, true);
 
             $covoiturage = new Covoiturage();
             $covoiturage->setAdresseDepart($departure);
@@ -407,5 +443,155 @@ class CovoiturageController extends AbstractController
             'covoiturage' => $covoiturage,
             'preferences' => $preferences,
         ]);
+    }
+
+    #[Route('/covoiturage/{id<\d+>}/demarrer', name: 'app_covoiturage_start', methods: ['POST'])]
+    public function startCovoiturage(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage || $covoiturage->getChauffeur() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à démarrer ce covoiturage.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        if (!$this->isCsrfTokenValid('start_covoiturage_' . $id, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Action non autorisée.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        $covoiturage->setStatus('en_cours');
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le covoiturage a démarré.');
+        return $this->redirectToRoute('app_user_space');
+    }
+
+    #[Route('/covoiturage/{id<\d+>}/terminer', name: 'app_covoiturage_end', methods: ['POST'])]
+    public function endCovoiturage(int $id, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage || $covoiturage->getChauffeur() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à terminer ce covoiturage.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        if (!$this->isCsrfTokenValid('end_covoiturage_' . $id, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Action non autorisée.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        $covoiturage->setStatus('termine');
+        $entityManager->flush();
+
+        // Envoi d'un email aux participants
+        foreach ($covoiturage->getPassagers() as $passager) {
+            $email = (new Email())
+                ->from('ecoride@exemple.com')
+                ->to($passager->getEmail())
+                ->subject('Validation du covoiturage')
+                ->text("Bonjour {$passager->getPseudo()},\n\nLe covoiturage de {$covoiturage->getAdresseDepart()} à {$covoiturage->getAdresseArrivee()} est terminé. Veuillez vous rendre sur votre espace pour valider que tout s'est bien passé.");
+            $mailer->send($email);
+        }
+
+        $this->addFlash('success', 'Le covoiturage est terminé. Les participants ont été notifiés.');
+        return $this->redirectToRoute('app_user_space');
+    }
+
+    #[Route('/covoiturage/{id<\d+>}/validation', name: 'app_covoiturage_validate', methods: ['POST'])]
+    public function validateCovoiturage(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+        $user = $this->getUser();
+
+        if (!$covoiturage || !$covoiturage->getPassagers()->contains($user)) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à valider ce covoiturage.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        $validation = $request->request->get('validation');
+        $commentaire = $request->request->get('commentaire');
+
+        $avis = new Avis();
+        $avis->setAuteur($user);
+        $avis->setCovoiturage($covoiturage);
+        $avis->setCommentaires($commentaire);
+        $avis->setNote($request->request->get('note'));
+        $avis->setIsValide($validation === 'ok');
+
+        $entityManager->persist($avis);
+        $entityManager->flush();
+
+        // Vérifie si le covoiturage peut être archivé
+        $this->archiveCovoiturageIfValidated($covoiturage, $entityManager);
+
+        $this->addFlash('success', 'Votre retour a été enregistré.');
+        return $this->redirectToRoute('app_user_space');
+    }
+
+    #[Route('/covoiturage/{id<\d+>}/feedback', name: 'app_covoiturage_feedback', methods: ['GET', 'POST'])]
+    public function feedback(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage || !$covoiturage->getPassagers()->contains($this->getUser())) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à évaluer ce covoiturage.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        if ($request->isMethod('POST')) {
+            $note = $request->request->get('note');
+            $commentaires = $request->request->get('commentaires');
+            $validation = $request->request->get('validation');
+
+            // Validation des données
+            if ($note < 1 || $note > 5) {
+                $this->addFlash('error', 'La note doit être comprise entre 1 et 5.');
+                return $this->redirectToRoute('app_covoiturage_feedback', ['id' => $id]);
+            }
+
+            // Enregistrement de l'avis
+            $avis = new Avis();
+            $avis->setNote((int) $note);
+            $avis->setCommentaires($commentaires);
+            $avis->setDate(new \DateTime());
+            $avis->setAuteur($this->getUser());
+            $avis->setCovoiturage($covoiturage);
+            $avis->setIsValide(false); // Avis en attente de validation par un employé
+
+            $entityManager->persist($avis);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre avis a été soumis avec succès. Il sera validé par un employé.');
+            return $this->redirectToRoute('app_user_space');
+        }
+
+        return $this->render('feedback.html.twig', [
+            'covoiturage' => $covoiturage,
+        ]);
+    }
+
+    private function archiveCovoiturageIfValidated(Covoiturage $covoiturage, EntityManagerInterface $entityManager): void
+    {
+        // Vérifie si tous les passagers ont validé
+        $allValidated = true;
+        foreach ($covoiturage->getPassagers() as $passager) {
+            $avis = $entityManager->getRepository(Avis::class)->findOneBy([
+                'covoiturage' => $covoiturage,
+                'auteur' => $passager,
+            ]);
+
+            if (!$avis || !$avis->IsValide()) {
+                $allValidated = false;
+                break;
+            }
+        }
+
+        // Si tous les passagers ont validé, archive le covoiturage
+        if ($allValidated) {
+            $covoiturage->setIsArchived(true);
+            $entityManager->flush();
+        }
     }
 }

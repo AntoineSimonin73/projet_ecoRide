@@ -53,13 +53,14 @@ class UserController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $plate = $request->request->get('plate');
-            $registrationDate = $request->request->get('registration_date');
-            $brand = $request->request->get('brand');
-            $model = $request->request->get('model');
-            $color = $request->request->get('color');
-            $seats = $request->request->get('seats');
-            $energy = $request->request->get('energy');
+
+            $plate = $request->request->get('immatriculation');
+            $registrationDate = $request->request->get('datePremiereImmatriculation');
+            $brand = $request->request->get('marque');
+            $model = $request->request->get('modele');
+            $color = $request->request->get('couleur');
+            $seats = $request->request->get('placesDispo');
+            $energy = $request->request->get('energie');
 
             // Validation basique
             if (empty($plate) || empty($registrationDate) || empty($brand) || empty($model) || empty($color) || empty($seats)) {
@@ -183,13 +184,13 @@ class UserController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $plate = $request->request->get('plate');
-            $registrationDate = $request->request->get('registration_date');
-            $brand = $request->request->get('brand');
-            $model = $request->request->get('model');
-            $color = $request->request->get('color');
-            $seats = $request->request->get('seats');
-            $energy = $request->request->get('energy');
+            $plate = $request->request->get('immatriculation');
+            $registrationDate = $request->request->get('datePremiereImmatriculation');
+            $brand = $request->request->get('marque');
+            $model = $request->request->get('modele');
+            $color = $request->request->get('couleur');
+            $seats = $request->request->get('placesDispo');
+            $energy = $request->request->get('energie');
 
             // Validation basique
             if (empty($plate) || empty($registrationDate) || empty($brand) || empty($model) || empty($color) || empty($seats)) {

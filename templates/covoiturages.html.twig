@@ -89,18 +89,18 @@
                                     <p class="mb-2">
                                         <strong>Conducteur :</strong> {{ covoiturage.chauffeur.pseudo }}<br>
                                         {% if nombreAvis > 0 %}
-                                                <span class="text-warning">
-                                                    {% for i in 1..5 %}
-                                                        {% if i <= noteMoyenne %}
-                                                            ★
-                                                        {% else %}
-                                                            ☆
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </span>
-                                                <small>({{ noteMoyenne }}/5)</small>
-                                            {% else %}
-                                                <p class="text-muted">Pas encore de note pour ce chauffeur !</p>
+                                            <span class="text-warning">
+                                                {% for i in 1..5 %}
+                                                    {% if i <= noteMoyenne %}
+                                                        ★
+                                                    {% else %}
+                                                        ☆
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </span>
+                                            <small>({{ noteMoyenne }}/5)</small>
+                                        {% else %}
+                                            <p class="text-muted">Pas encore de note pour ce chauffeur !</p>
                                         {% endif %}
                                         <strong>Départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y') }} à {{ covoiturage.heureDepart }}<br>
                                         <strong>Arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y') }} à {{ covoiturage.heureArrivee }}<br>
@@ -109,7 +109,7 @@
                                         <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
                                         <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
                                         <strong>Écologique :</strong>
-                                        {% if covoiturage.vehicule.energie == 'électrique' %}
+                                        {% if covoiturage.vehicule.energie == 'electrique' %}
                                             <span class="badge bg-success">Oui</span>
                                         {% else %}
                                             <span class="badge bg-secondary">Non</span>

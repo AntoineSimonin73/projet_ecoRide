@@ -487,7 +487,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.bx3kxYK"/>
+      <argument type="service" id=".service_locator..QrUuGN"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3420,7 +3420,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.bx3kxYK"/>
+      <argument type="service" id=".service_locator..QrUuGN"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -7964,7 +7964,7 @@
         <argument key="vehicule" type="service_closure" id=".errored..service_locator.zT40IkP.App\Entity\Vehicule"/>
       </argument>
     </service>
-    <service id=".service_locator.bx3kxYK" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator..QrUuGN" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AdminController::createEmploye" type="service_closure" id=".service_locator.ESgEUJd"/>
@@ -7979,6 +7979,7 @@
         <argument key="App\Controller\ContactController::send" type="service_closure" id=".service_locator.uVvF4gL"/>
         <argument key="App\Controller\CovoiturageController::addCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::annulerCovoiturage" type="service_closure" id=".service_locator.UGQzfSd"/>
+        <argument key="App\Controller\CovoiturageController::avisRecus" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::deleteCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::details" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::editCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
@@ -8016,6 +8017,7 @@
         <argument key="App\Controller\ContactController:send" type="service_closure" id=".service_locator.uVvF4gL"/>
         <argument key="App\Controller\CovoiturageController:addCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:annulerCovoiturage" type="service_closure" id=".service_locator.UGQzfSd"/>
+        <argument key="App\Controller\CovoiturageController:avisRecus" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:deleteCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:details" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:editCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
@@ -10339,7 +10341,7 @@
     </service>
     <service id="container.env_var_processors_locator" alias=".service_locator.w7.f4fT" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.bx3kxYK"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator..QrUuGN"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10366,7 +10368,7 @@
     <service id=".service_locator.qrNhk2c" alias=".service_locator.ESgEUJd"/>
     <service id=".service_locator.ar5NMPa" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.8HEHVDJ" alias=".service_locator.zT40IkP"/>
-    <service id=".service_locator.DKeOuST" alias=".service_locator.bx3kxYK"/>
+    <service id=".service_locator.oxGwHuk" alias=".service_locator..QrUuGN"/>
     <service id=".service_locator.BFrsqsn" alias=".service_locator.F9PKc.7"/>
     <service id=".service_locator.Za9MpXe" alias=".service_locator.y4dplYt"/>
     <service id=".service_locator.XtmiKbi" alias=".service_locator.MfxSDRP"/>

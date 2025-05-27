@@ -18,7 +18,7 @@
                 <strong>Prix :</strong> {{ covoiturage.prix }} Crédits<br>
                 <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
                 <strong>Voyage écologique :</strong>
-                {% if covoiturage.vehicule.energie == 'électrique' %}
+                {% if covoiturage.vehicule.energie == 'electrique' %}
                     <span class="badge bg-success">Oui</span>
                 {% else %}
                     <span class="badge bg-secondary">Non</span>

@@ -53,11 +53,9 @@ class Covoiturage
     #[ORM\Column(length: 50, options: ["default" => "en_attente"])]
     private ?string $status = 'en_attente'; // Statut du covoiturage : en_attente, en_cours, termine
 
-    #[ORM\ManyToMany(targetEntity: Utilisateur::class)]
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'covoiturages')]
+    #[ORM\JoinTable(name: 'covoiturage_passagers')]
     private Collection $passagers;
-    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-    #[ORM\JoinColumn(nullable: true)] // Permet que le passager soit optionnel
-    private ?Utilisateur $passager = null;
 
     #[ORM\ManyToMany(targetEntity: Preference::class)]
     private Collection $preferences;
@@ -191,7 +189,10 @@ class Covoiturage
 
     public function setIsEcologique(bool $isEcologique): self
     {
-        $this->isEcologique = $isEcologique;
+        $ecologicalEnergies = ['electrique', 'hybride']; // Énergies considérées comme écologiques
+        $energieVehicule = $this->vehicule ? $this->vehicule->getEnergie() : null;
+
+        $this->isEcologique = in_array($energieVehicule, $ecologicalEnergies, true);
 
         return $this;
     }
@@ -283,18 +284,6 @@ class Covoiturage
     {
         return $this->passagers;
     }
-    
-    public function getPassager(): ?Utilisateur
-    {
-        return $this->passager;
-    }
-
-    public function setPassager(?Utilisateur $passager): self
-    {
-        $this->passager = $passager;
-
-        return $this;
-    }
 
     public function addPassager(Utilisateur $passager): self
     {
@@ -367,5 +356,14 @@ class Covoiturage
         $this->isArchived = $isArchived;
 
         return $this;
+    }
+    public function hasAvisFromPassager(Utilisateur $passager): bool
+    {
+        foreach ($this->avis as $avis) {
+            if ($avis->getAuteur() === $passager) {
+                return true; // Un avis a déjà été soumis par ce passager
+            }
+        }
+        return false;
     }
 }

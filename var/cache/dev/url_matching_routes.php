@@ -29,6 +29,7 @@ return [
         '/covoiturages' => [[['_route' => 'app_covoiturages', '_controller' => 'App\\Controller\\CovoiturageController::index'], null, null, null, false, false, null]],
         '/covoiturages/historique' => [[['_route' => 'app_covoiturage_historique', '_controller' => 'App\\Controller\\CovoiturageController::historiqueCovoiturages'], null, null, null, false, false, null]],
         '/covoiturage/nouveau' => [[['_route' => 'app_covoiturage_add', '_controller' => 'App\\Controller\\CovoiturageController::addCovoiturage'], null, null, null, false, false, null]],
+        '/chauffeur/avis' => [[['_route' => 'app_chauffeur_avis', '_controller' => 'App\\Controller\\CovoiturageController::avisRecus'], null, null, null, false, false, null]],
         '/employe' => [[['_route' => 'app_employe_space', '_controller' => 'App\\Controller\\EmployeController::index'], null, null, null, false, false, null]],
         '/' => [[['_route' => 'app_home', '_controller' => 'App\\Controller\\HomeController::index'], null, null, null, false, false, null]],
         '/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],

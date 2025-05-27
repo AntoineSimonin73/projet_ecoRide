@@ -10,27 +10,27 @@
         <form method="post" action="{{ path('app_user_edit_vehicle', { id: vehicule.id }) }}">
             <div class="mb-3">
                 <label for="plate" class="form-label" style="color: #155724;">Plaque d'immatriculation</label>
-                <input type="text" name="plate" id="plate" class="form-control" value="{{ vehicule.immatriculation }}" required>
+                <input type="text" name="immatriculation" id="plate" class="form-control" value="{{ vehicule.immatriculation }}" required>
             </div>
             <div class="mb-3">
-                <label for="registration_date" class="form-label" style="color: #155724;">Date de première immatriculation</label>
-                <input type="date" name="registration_date" id="registration_date" class="form-control" value="{{ vehicule.datePremiereImmatriculation|date('Y-m-d') }}" required>
+                <label for="registrationDate" class="form-label" style="color: #155724;">Date de première immatriculation</label>
+                <input type="date" name="datePremiereImmatriculation" id="registrationDate" class="form-control" value="{{ vehicule.datePremiereImmatriculation|date('Y-m-d') }}" required>
             </div>
             <div class="mb-3">
                 <label for="brand" class="form-label" style="color: #155724;">Marque</label>
-                <input type="text" name="brand" id="brand" class="form-control" value="{{ vehicule.marque }}" required>
+                <input type="text" name="marque" id="brand" class="form-control" value="{{ vehicule.marque }}" required>
             </div>
             <div class="mb-3">
                 <label for="model" class="form-label" style="color: #155724;">Modèle</label>
-                <input type="text" name="model" id="model" class="form-control" value="{{ vehicule.modele }}" required>
+                <input type="text" name="modele" id="model" class="form-control" value="{{ vehicule.modele }}" required>
             </div>
             <div class="mb-3">
                 <label for="color" class="form-label" style="color: #155724;">Couleur</label>
-                <input type="text" name="color" id="color" class="form-control" value="{{ vehicule.couleur }}" required>
+                <input type="text" name="couleur" id="color" class="form-control" value="{{ vehicule.couleur }}" required>
             </div>
             <div class="mb-3">
                 <label for="energy" class="form-label" style="color: #155724;">Énergie</label>
-                <select name="energy" id="energy" class="form-select" required>
+                <select name="energie" id="energy" class="form-select" required>
                     <option value="essence" {% if vehicule.energie == 'essence' %}selected{% endif %}>Essence</option>
                     <option value="diesel" {% if vehicule.energie == 'diesel' %}selected{% endif %}>Diesel</option>
                     <option value="electrique" {% if vehicule.energie == 'electrique' %}selected{% endif %}>Électrique</option>
@@ -38,7 +38,7 @@
             </div>
             <div class="mb-3">
                 <label for="seats" class="form-label" style="color: #155724;">Nombre de places disponibles</label>
-                <input type="number" name="seats" id="seats" class="form-control" value="{{ vehicule.placesDispo }}" min="1" max="8" required>
+                <input type="number" name="placesDispo" id="seats" class="form-control" value="{{ vehicule.placesDispo }}" min="1" max="8" required>
             </div>
             <button type="submit" class="btn btn-success w-100">Modifier</button>
         </form>

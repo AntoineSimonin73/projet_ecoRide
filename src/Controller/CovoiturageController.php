@@ -50,18 +50,22 @@ class CovoiturageController extends AbstractController
                 ->andWhere('c.dateDepart BETWEEN :dateStart AND :dateEnd')
                 ->andWhere('c.placesRestantes > 0')
                 ->andWhere('c.dateDepart >= :now') // Exclure les covoiturages passés
+                ->andWhere('c.status != :statusEnCours') // Exclure les covoiturages en cours
+                ->andWhere('c.status != :statusTermine') // Exclure les covoiturages terminés
                 ->setParameter('adresseDepart', '%' . $adresseDepart . '%')
                 ->setParameter('adresseArrivee', '%' . $adresseArrivee . '%')
                 ->setParameter('dateStart', $dateStart)
                 ->setParameter('dateEnd', $dateEnd)
-                ->setParameter('now', new \DateTime()); // Date et heure actuelles
+                ->setParameter('now', new \DateTime()) // Date et heure actuelles
+                ->setParameter('statusEnCours', 'en_cours') // Ajout du paramètre manquant
+                ->setParameter('statusTermine', 'termine'); // Ajout du paramètre manquant
 
             // Filtre écologique
             if ($ecologique !== null && $ecologique !== '') {
                 if ($ecologique == '1') {
-                    $qb->andWhere('v.energie = :energie')->setParameter('energie', 'électrique');
+                    $qb->andWhere('LOWER(v.energie) = :energie')->setParameter('energie', 'électrique');
                 } elseif ($ecologique == '0') {
-                    $qb->andWhere('v.energie != :energie')->setParameter('energie', 'électrique');
+                    $qb->andWhere('LOWER(v.energie) != :energie')->setParameter('energie', 'électrique');
                 }
             }
 
@@ -174,7 +178,7 @@ class CovoiturageController extends AbstractController
     public function participer(int $id, ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
-        $covoiturage = $doctrine->getRepository(Covoiturage::class)->find($id);
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
 
         if (!$covoiturage) {
             throw $this->createNotFoundException('Covoiturage non trouvé.');
@@ -516,6 +520,8 @@ class CovoiturageController extends AbstractController
         $avis = new Avis();
         $avis->setAuteur($user);
         $avis->setCovoiturage($covoiturage);
+        $avis->setDate(new \DateTime());
+        $avis->setDestinataire($covoiturage->getChauffeur());
         $avis->setCommentaires($commentaire);
         $avis->setNote($request->request->get('note'));
         $avis->setIsValide($validation === 'ok');
@@ -543,7 +549,6 @@ class CovoiturageController extends AbstractController
         if ($request->isMethod('POST')) {
             $note = $request->request->get('note');
             $commentaires = $request->request->get('commentaires');
-            $validation = $request->request->get('validation');
 
             // Validation des données
             if ($note < 1 || $note > 5) {
@@ -558,6 +563,7 @@ class CovoiturageController extends AbstractController
             $avis->setDate(new \DateTime());
             $avis->setAuteur($this->getUser());
             $avis->setCovoiturage($covoiturage);
+            $avis->setDestinataire($covoiturage->getChauffeur());
             $avis->setIsValide(false); // Avis en attente de validation par un employé
 
             $entityManager->persist($avis);
@@ -574,24 +580,47 @@ class CovoiturageController extends AbstractController
 
     private function archiveCovoiturageIfValidated(Covoiturage $covoiturage, EntityManagerInterface $entityManager): void
     {
-        // Vérifie si tous les passagers ont validé
-        $allValidated = true;
+        // Vérifie si le covoiturage a le statut "termine"
+        if ($covoiturage->getStatus() !== 'termine') {
+            return; // Ne pas archiver si le covoiturage n'est pas terminé
+        }
+
+        // Vérifie si tous les passagers ont soumis un avis validé
         foreach ($covoiturage->getPassagers() as $passager) {
             $avis = $entityManager->getRepository(Avis::class)->findOneBy([
                 'covoiturage' => $covoiturage,
                 'auteur' => $passager,
+                'isValide' => true, // Vérifie que l'avis est validé
             ]);
 
-            if (!$avis || !$avis->IsValide()) {
-                $allValidated = false;
-                break;
+            if (!$avis) {
+                return; // Si un passager n'a pas soumis d'avis validé, ne pas archiver
             }
         }
 
         // Si tous les passagers ont validé, archive le covoiturage
-        if ($allValidated) {
-            $covoiturage->setIsArchived(true);
-            $entityManager->flush();
+        $covoiturage->setIsArchived(true);
+        $entityManager->persist($covoiturage);
+        $entityManager->flush();
+    }
+
+    #[Route('/chauffeur/avis', name: 'app_chauffeur_avis')]
+    public function avisRecus(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user || !$user->isChauffeur()) {
+            $this->addFlash('error', 'Vous devez être chauffeur pour accéder à cette page.');
+            return $this->redirectToRoute('app_user_space');
         }
+
+        $avisRecus = $entityManager->getRepository(Avis::class)->findBy([
+            'destinataire' => $user,
+            'isValide' => true,
+        ]);
+
+        return $this->render('user/avis_recus.html.twig', [
+            'avisRecus' => $avisRecus,
+        ]);
     }
 }

@@ -47,7 +47,16 @@
                     <li class="list-group-item">
                         <strong>Numéro :</strong> {{ covoiturage.id }}<br>
                         <strong>Chauffeur :</strong> {{ covoiturage.chauffeur.pseudo }} ({{ covoiturage.chauffeur.email }})<br>
-                        <strong>Passager :</strong> {{ covoiturage.passager.pseudo }} ({{ covoiturage.passager.email }})<br>
+                        <strong>Passagers :</strong>
+                        {% if covoiturage.passagers|length > 0 %}
+                            <ul>
+                                {% for passager in covoiturage.passagers %}
+                                    <li>{{ passager.pseudo }} ({{ passager.email }})</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">Aucun passager</span>
+                        {% endif %}
                         <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
                         <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
                         <strong>Date :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }} - {{ covoiturage.dateArrivee|date('d/m/Y H:i') }}

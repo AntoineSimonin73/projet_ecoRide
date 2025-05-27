@@ -9,17 +9,29 @@
     {% if covoiturages|length > 0 %}
         <ul class="list-group">
             {% for covoiturage in covoiturages %}
-                <li class="list-group-item">
-                    <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
-                    <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
-                    <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
-                    <strong>Prix :</strong> {{ covoiturage.prix }} crédits
+                <li class="list-group-item mb-3">
+                    <div>
+                        <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
+                        <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
+                        <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
+                        <strong>Date d'arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y H:i') }}<br>
+                        <strong>Prix :</strong> {{ covoiturage.prix }} crédits<br>
+                        <strong>Chauffeur :</strong> {{ covoiturage.chauffeur.pseudo }}<br>
+                        <strong>Statut :</strong>
+                        {% if covoiturage.status == 'termine' %}
+                            <span class="badge bg-success">Terminé</span>
+                        {% elseif covoiturage.status == 'annule' %}
+                            <span class="badge bg-danger">Annulé</span>
+                        {% endif %}
+                    </div>
+                    <div class="mt-3">
+                        <a href="{{ path('app_covoiturage_details', { id: covoiturage.id }) }}" class="btn btn-success btn-sm">Voir les détails</a>
+                    </div>
                 </li>
-                <a href="{{ path('app_covoiturage_details', { id: covoiturage.id }) }}" class="btn btn-success w-100">Détails</a>
             {% endfor %}
         </ul>
     {% else %}
-        <p class="text-muted">Vous n'avez aucun covoiturage dans votre historique.</p>
+        <p class="text-muted text-center">Vous n'avez aucun covoiturage dans votre historique.</p>
     {% endif %}
 </div>
 {% endblock %}

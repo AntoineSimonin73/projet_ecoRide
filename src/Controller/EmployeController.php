@@ -27,10 +27,10 @@ class EmployeController extends AbstractController
 
         // Récupère les covoiturages problématiques
         $covoituragesProblemes = $entityManager->createQuery(
-            'SELECT c, chauffeur, passager
+            'SELECT c, chauffeur, passagers
              FROM App\Entity\Covoiturage c
              JOIN c.chauffeur chauffeur
-             LEFT JOIN c.passager passager
+             LEFT JOIN c.passagers passagers
              WHERE c.status = :status'
         )->setParameter('status', 'probleme')->getResult();
 
@@ -54,8 +54,13 @@ class EmployeController extends AbstractController
         $avis->setIsValide(true); // Marque l'avis comme validé
         $entityManager->flush();
 
+        // Vérifie si le covoiturage peut être archivé
+        $covoiturage = $avis->getCovoiturage();
+        $this->archiveCovoiturageIfValidated($covoiturage, $entityManager);
+
         $this->addFlash('success', 'Avis validé avec succès.');
         return $this->redirectToRoute('app_employe_space');
+
     }
 
     #[Route('/employe/avis/{id}/refuser', name: 'app_employe_refuser_avis', methods: ['POST'])]
@@ -73,5 +78,31 @@ class EmployeController extends AbstractController
 
         $this->addFlash('success', 'Avis refusé avec succès.');
         return $this->redirectToRoute('app_employe_space');
+    }
+
+    private function archiveCovoiturageIfValidated(Covoiturage $covoiturage, EntityManagerInterface $entityManager): void
+    {
+        // Vérifie si le covoiturage a le statut "termine"
+        if ($covoiturage->getStatus() !== 'termine') {
+            return; // Ne pas archiver si le covoiturage n'est pas terminé
+        }
+
+        // Vérifie si tous les passagers ont soumis un avis validé
+        foreach ($covoiturage->getPassagers() as $passager) {
+            $avis = $entityManager->getRepository(Avis::class)->findOneBy([
+                'covoiturage' => $covoiturage,
+                'auteur' => $passager,
+                'isValide' => true, // Vérifie que l'avis est validé
+            ]);
+
+            if (!$avis) {
+                return; // Si un passager n'a pas soumis d'avis validé, ne pas archiver
+            }
+        }
+
+        // Si tous les passagers ont validé, archive le covoiturage
+        $covoiturage->setIsArchived(true);
+        $entityManager->persist($covoiturage);
+        $entityManager->flush();
     }
 }

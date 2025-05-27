@@ -78,7 +78,7 @@ class CovoiturageFixtures extends Fixture
             $vehicule->setUtilisateur($utilisateur);
             $vehicule->setMarque($faker->randomElement(['Tesla', 'Renault', 'Peugeot']));
             $vehicule->setModele($faker->word);
-            $vehicule->setEnergie($faker->randomElement(['Électrique', 'hybride', 'essence', 'diesel']));
+            $vehicule->setEnergie($faker->randomElement(['électrique', 'hybride', 'essence', 'diesel']));
             $vehicule->setCouleur($faker->safeColorName);
             $vehicule->setImmatriculation($faker->regexify('[A-Z]{2}-[0-9]{3}-[A-Z]{2}'));
             $vehicule->setDatePremiereImmatriculation($faker->dateTimeBetween('-5 years', 'now'));
@@ -102,7 +102,6 @@ class CovoiturageFixtures extends Fixture
 
             $covoiturage = new Covoiturage();
             $covoiturage->setChauffeur($utilisateur);
-            $covoiturage->setPassager($passager);
             $covoiturage->setVehicule($vehicule);
             $covoiturage->setAdresseDepart($faker->address);
             $covoiturage->setAdresseArrivee($faker->address);
@@ -142,7 +141,6 @@ class CovoiturageFixtures extends Fixture
 
             $covoiturage = new Covoiturage();
             $covoiturage->setChauffeur($chauffeur);
-            $covoiturage->setPassager($passager);
             $covoiturage->setVehicule($vehicule);
             $covoiturage->setAdresseDepart($faker->address);
             $covoiturage->setAdresseArrivee($faker->address);

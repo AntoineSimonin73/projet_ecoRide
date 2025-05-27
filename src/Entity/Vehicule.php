@@ -93,13 +93,13 @@ class Vehicule
 
     public function getEnergie(): ?string
     {
-        return $this->energie;
+        return $this->energie ? strtolower(trim($this->energie)) : null; // Normalise la valeur
     }
 
     public function setEnergie(string $energie): static
     {
-        $validEnergies = ['Électrique', 'hybride', 'essence', 'diesel'];
-        $energie = strtolower(trim($energie));
+        $validEnergies = ['essence', 'diesel', 'electrique']; // Liste des énergies valides
+        $energie = strtolower(trim($energie)); // Normalise la valeur
 
         if (!in_array($energie, $validEnergies, true)) {
             throw new \InvalidArgumentException('Énergie invalide pour le véhicule.');

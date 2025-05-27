@@ -335,7 +335,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->covoiturages->contains($covoiturage)) {
             $this->covoiturages->add($covoiturage);
-            $covoiturage->addPassager($this);
+            $covoiturage->addPassager($this); // Met à jour la relation inverse
         }
 
         return $this;

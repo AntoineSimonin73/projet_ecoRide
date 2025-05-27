@@ -19,45 +19,47 @@
         {% if app.user.covoituragesEnTantQueChauffeur|length > 0 %}
             <ul class="list-group mb-4">
                 {% for covoiturage in app.user.covoituragesEnTantQueChauffeur %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
-                            <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
-                            <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
-                            <strong>Prix :</strong> {{ covoiturage.prix }} crédits<br>
-                            <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
-                            <strong>Statut :</strong>
-                            {% if covoiturage.status == 'en_attente' %}
-                                <span class="badge bg-secondary">En attente</span>
-                            {% elseif covoiturage.status == 'en_cours' %}
-                                <span class="badge bg-primary">En cours</span>
-                            {% elseif covoiturage.status == 'termine' %}
-                                <span class="badge bg-success">Terminé</span>
-                            {% elseif covoiturage.status == 'annule' %}
-                                <span class="badge bg-danger">Annulé</span>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <a href="{{ path('app_covoiturage_edit', { id: covoiturage.id }) }}" class="btn btn-success btn-sm">Modifier</a>
-                            <form method="post" action="{{ path('app_covoiturage_annuler', { id: covoiturage.id }) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler ce covoiturage ?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('annuler_covoiturage_' ~ covoiturage.id) }}">
-                                <button type="submit" class="btn btn-danger btn-sm">Annuler</button>
-                            </form>
-                        </div>
-                        <div>
-                            {% if covoiturage.status == 'en_attente' %}
-                                <form method="post" action="{{ path('app_covoiturage_start', { id: covoiturage.id }) }}" class="d-inline">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('start_covoiturage_' ~ covoiturage.id) }}">
-                                    <button type="submit" class="btn btn-success btn-sm">Démarrer</button>
-                                </form>
-                            {% elseif covoiturage.status == 'en_cours' %}
-                                <form method="post" action="{{ path('app_covoiturage_end', { id: covoiturage.id }) }}" class="d-inline">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('end_covoiturage_' ~ covoiturage.id) }}">
-                                    <button type="submit" class="btn btn-success btn-sm">Arrivés à destination</button>
-                                </form>
-                            {% endif %}
-                        </div>
-                    </li>
+                    {% if covoiturage.status != 'termine' %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
+                                <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
+                                <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
+                                <strong>Prix :</strong> {{ covoiturage.prix }} crédits<br>
+                                <strong>Places restantes :</strong> {{ covoiturage.placesRestantes }}<br>
+                                <strong>Statut :</strong>
+                                {% if covoiturage.status == 'en_attente' %}
+                                    <span class="badge bg-secondary">En attente</span>
+                                {% elseif covoiturage.status == 'en_cours' %}
+                                    <span class="badge bg-primary">En cours</span>
+                                {% elseif covoiturage.status == 'annule' %}
+                                    <span class="badge bg-danger">Annulé</span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if covoiturage.status == 'en_attente' %}
+                                    <a href="{{ path('app_covoiturage_edit', { id: covoiturage.id }) }}" class="btn btn-success btn-sm">Modifier</a>
+                                    <form method="post" action="{{ path('app_covoiturage_annuler', { id: covoiturage.id }) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler ce covoiturage ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('annuler_covoiturage_' ~ covoiturage.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Annuler</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if covoiturage.status == 'en_attente' %}
+                                    <form method="post" action="{{ path('app_covoiturage_start', { id: covoiturage.id }) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('start_covoiturage_' ~ covoiturage.id) }}">
+                                        <button type="submit" class="btn btn-success btn-sm">Démarrer</button>
+                                    </form>
+                                {% elseif covoiturage.status == 'en_cours' %}
+                                    <form method="post" action="{{ path('app_covoiturage_end', { id: covoiturage.id }) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('end_covoiturage_' ~ covoiturage.id) }}">
+                                        <button type="submit" class="btn btn-success btn-sm">Arrivés à destination</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         {% else %}
@@ -74,38 +76,40 @@
         {% if app.user.covoiturages|length > 0 %}
             <ul class="list-group mb-4">
                 {% for covoiturage in app.user.covoiturages %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
-                            <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
-                            <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
-                            <strong>Prix :</strong> {{ covoiturage.prix }} crédits<br>
-                            <strong>Chauffeur :</strong> {{ covoiturage.chauffeur.pseudo }}<br>
-                            <strong>Statut :</strong>
-                            {% if covoiturage.status == 'en_attente' %}
-                                <span class="badge bg-secondary">En attente</span>
-                            {% elseif covoiturage.status == 'en_cours' %}
-                                <span class="badge bg-primary">En cours</span>
-                            {% elseif covoiturage.status == 'termine' %}
-                                <span class="badge bg-success">Terminé</span>
-                            {% elseif covoiturage.status == 'annule' %}
-                                <span class="badge bg-danger">Annulé</span>
-                            {% endif %}
-                        </div>
-                        <div>
-                            {% if covoiturage.status == 'termine' %}
-                                <a href="{{ path('app_covoiturage_feedback', { id: covoiturage.id }) }}" class="btn btn-success btn-sm">Valider le trajet</a>
-                            {% endif %}
-                        </div>
-                        <div>
-                            {% if covoiturage.status == 'en_attente' %}
-                                <form method="post" action="{{ path('app_covoiturage_annuler', { id: covoiturage.id }) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler votre participation à ce covoiturage ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('annuler_covoiturage_' ~ covoiturage.id) }}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Annuler</button>
-                                </form>
-                            {% endif %}
-                        </div>
-                    </li>
+                    {% if not covoiturage.hasAvisFromPassager(app.user) %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
+                                <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
+                                <strong>Date de départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }}<br>
+                                <strong>Prix :</strong> {{ covoiturage.prix }} crédits<br>
+                                <strong>Chauffeur :</strong> {{ covoiturage.chauffeur.pseudo }}<br>
+                                <strong>Statut :</strong>
+                                {% if covoiturage.status == 'en_attente' %}
+                                    <span class="badge bg-secondary">En attente</span>
+                                {% elseif covoiturage.status == 'en_cours' %}
+                                    <span class="badge bg-primary">En cours</span>
+                                {% elseif covoiturage.status == 'termine' %}
+                                    <span class="badge bg-success">Terminé</span>
+                                {% elseif covoiturage.status == 'annule' %}
+                                    <span class="badge bg-danger">Annulé</span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if covoiturage.status == 'termine' %}
+                                    <a href="{{ path('app_covoiturage_feedback', { id: covoiturage.id }) }}" class="btn btn-success btn-sm">Valider le trajet</a>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if covoiturage.status == 'en_attente' %}
+                                    <form method="post" action="{{ path('app_covoiturage_annuler', { id: covoiturage.id }) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler votre participation à ce covoiturage ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('annuler_covoiturage_' ~ covoiturage.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Annuler</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         {% else %}
@@ -132,7 +136,7 @@
                             <strong>Modèle :</strong> {{ vehicule.modele }}<br>
                             <strong>Couleur :</strong> {{ vehicule.couleur }}<br>
                             <strong>Immatriculation :</strong> {{ vehicule.immatriculation }}<br>
-                            <strong>Énergie :</strong> {{ vehicule.energie }}<br>
+                            <strong>Énergie :</strong> {{ vehicule.energie|capitalize }}<br>
                             <strong>Places disponibles :</strong> {{ vehicule.placesDispo }}
                         </div>
                         <div>
@@ -180,6 +184,14 @@
             <p class="text-muted">Vous n'avez pas encore enregistré de préférences.</p>
         {% endif %}
         <a href="{{ path('app_user_preferences') }}" class="btn btn-success w-100">Ajouter une préférence</a>
+    </div>
+    {% endif %}
+
+    <!-- Section pour les avis reçus -->
+    {% if app.user.isChauffeur %}
+    <div class="card p-4 shadow-sm border-0 mt-4 mb-4" style="background-color: #f8f9fa;">
+        <h2 class="h5 mb-4" style="color: #155724;">Vos avis reçus</h2>
+        <a href="{{ path('app_chauffeur_avis') }}" class="btn btn-success w-100">Voir vos avis reçus</a>
     </div>
     {% endif %}
 

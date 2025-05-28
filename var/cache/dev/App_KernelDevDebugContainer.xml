@@ -27,6 +27,7 @@
       <parameter key="MakerBundle">Symfony\Bundle\MakerBundle\MakerBundle</parameter>
       <parameter key="TwigComponentBundle">Symfony\UX\TwigComponent\TwigComponentBundle</parameter>
       <parameter key="DoctrineFixturesBundle">Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle</parameter>
+      <parameter key="DoctrineMongoDBBundle">Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle</parameter>
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
@@ -84,6 +85,10 @@
       <parameter key="DoctrineFixturesBundle" type="collection">
         <parameter key="path">/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/doctrine/doctrine-fixtures-bundle</parameter>
         <parameter key="namespace">Doctrine\Bundle\FixturesBundle</parameter>
+      </parameter>
+      <parameter key="DoctrineMongoDBBundle" type="collection">
+        <parameter key="path">/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/doctrine/mongodb-odm-bundle</parameter>
+        <parameter key="namespace">Doctrine\Bundle\MongoDBBundle</parameter>
       </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
@@ -265,6 +270,24 @@
         </parameter>
       </parameter>
     </parameter>
+    <parameter key="doctrine_mongodb.odm.default_connection">default</parameter>
+    <parameter key="doctrine_mongodb.odm.default_document_manager">default</parameter>
+    <parameter key="doctrine_mongodb.odm.proxy_namespace">MongoDBODMProxies</parameter>
+    <parameter key="doctrine_mongodb.odm.proxy_dir">/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/var/cache/dev/doctrine/odm/mongodb/Proxies</parameter>
+    <parameter key="doctrine_mongodb.odm.auto_generate_proxy_classes">3</parameter>
+    <parameter key="doctrine_mongodb.odm.hydrator_namespace">Hydrators</parameter>
+    <parameter key="doctrine_mongodb.odm.hydrator_dir">/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/var/cache/dev/doctrine/odm/mongodb/Hydrators</parameter>
+    <parameter key="doctrine_mongodb.odm.auto_generate_hydrator_classes">0</parameter>
+    <parameter key="doctrine_mongodb.odm.default_commit_options" type="collection"/>
+    <parameter key="doctrine_mongodb.odm.persistent_collection_dir">/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/var/cache/dev/doctrine/odm/mongodb/PersistentCollections</parameter>
+    <parameter key="doctrine_mongodb.odm.persistent_collection_namespace">PersistentCollections</parameter>
+    <parameter key="doctrine_mongodb.odm.auto_generate_persistent_collection_classes">0</parameter>
+    <parameter key="doctrine_mongodb.odm.connections" type="collection">
+      <parameter key="default">doctrine_mongodb.odm.default_connection</parameter>
+    </parameter>
+    <parameter key="doctrine_mongodb.odm.document_managers" type="collection">
+      <parameter key="default">doctrine_mongodb.odm.default_document_manager</parameter>
+    </parameter>
     <parameter key="data_collector.templates" type="collection">
       <parameter key="data_collector.request" type="collection">
         <parameter>request</parameter>
@@ -357,6 +380,10 @@
       <parameter key="serializer.data_collector" type="collection">
         <parameter>serializer</parameter>
         <parameter>@WebProfiler/Collector/serializer.html.twig</parameter>
+      </parameter>
+      <parameter key="doctrine_mongodb.odm.data_collector" type="collection">
+        <parameter>mongodb</parameter>
+        <parameter>@DoctrineMongoDB/Collector/mongodb.html.twig</parameter>
       </parameter>
       <parameter key="data_collector.config" type="collection">
         <parameter>config</parameter>
@@ -1427,6 +1454,7 @@
         <argument>Symfony\Component\Form\Extension\Core\Type</argument>
         <argument>App\Form</argument>
         <argument>Symfony\Bridge\Doctrine\Form\Type</argument>
+        <argument>Doctrine\Bundle\MongoDBBundle\Form\Type</argument>
       </argument>
       <argument type="collection">
         <argument>App\Form\ChangePasswordFormType</argument>
@@ -1435,6 +1463,7 @@
         <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ColorType</argument>
         <argument>Symfony\Bridge\Doctrine\Form\Type\EntityType</argument>
+        <argument>Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType</argument>
       </argument>
       <argument type="collection">
         <argument>Symfony\Component\Form\Extension\Core\Type\TransformationFailureExtension</argument>
@@ -1451,6 +1480,7 @@
       <argument type="collection">
         <argument>Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser</argument>
         <argument>Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser</argument>
+        <argument>Doctrine\Bundle\MongoDBBundle\Form\DoctrineMongoDBTypeGuesser</argument>
       </argument>
       <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
       <call method="setName">
@@ -2454,6 +2484,7 @@
           <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/symfony/maker-bundle/translations</argument>
           <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/symfony/ux-twig-component/translations</argument>
           <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/doctrine/doctrine-fixtures-bundle/translations</argument>
+          <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/doctrine/mongodb-odm-bundle/translations</argument>
         </argument>
         <argument key="cache_vary" type="collection">
           <argument key="scanned_directories" type="collection">
@@ -2475,6 +2506,7 @@
             <argument>vendor/symfony/maker-bundle/translations</argument>
             <argument>vendor/symfony/ux-twig-component/translations</argument>
             <argument>vendor/doctrine/doctrine-fixtures-bundle/translations</argument>
+            <argument>vendor/doctrine/mongodb-odm-bundle/translations</argument>
           </argument>
         </argument>
       </argument>
@@ -2648,6 +2680,7 @@
         <argument>NoSuspiciousCharacters</argument>
         <argument>UniqueEntity</argument>
         <argument>UserPassword</argument>
+        <argument>UniqueEntity</argument>
       </argument>
     </service>
     <service id="translation.reader" class="Symfony\Component\Translation\Reader\TranslationReader">
@@ -3399,6 +3432,22 @@
         <argument>-255</argument>
       </call>
       <call method="addListener">
+        <argument>Symfony\Component\Messenger\Event\WorkerMessageHandledEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="doctrine_mongodb.messenger.event_subscriber.doctrine_clear_document_manager"/>
+          <argument>onWorkerMessageHandled</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
+        <argument>Symfony\Component\Messenger\Event\WorkerMessageFailedEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="doctrine_mongodb.messenger.event_subscriber.doctrine_clear_document_manager"/>
+          <argument>onWorkerMessageFailed</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\CheckPassportEvent</argument>
         <argument type="collection">
           <argument type="service_closure" id="security.listener.csrf_protection"/>
@@ -3936,7 +3985,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.5oboeFg"/>
+      <argument type="service" id=".service_locator.ZeQFfoP"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -3960,6 +4009,7 @@
       <argument type="iterator">
         <argument type="service" id="form.type_guesser.validator"/>
         <argument type="service" id="form.type_guesser.doctrine"/>
+        <argument type="service" id="form.type_guesser.doctrine.mongodb"/>
       </argument>
     </service>
     <service id="form.type_guesser.validator" class="Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser">
@@ -4060,6 +4110,7 @@
       <call method="addObjectInitializers">
         <argument type="collection">
           <argument type="service" id="doctrine.orm.validator_initializer"/>
+          <argument type="service" id="doctrine_odm.mongodb.validator_initializer"/>
         </argument>
       </call>
       <call method="addLoader">
@@ -4080,7 +4131,7 @@
       <argument type="service" id="cache.validator"/>
     </service>
     <service id="validator.validator_factory" class="Symfony\Component\Validator\ContainerConstraintValidatorFactory">
-      <argument type="service" id=".service_locator.F9PKc.7"/>
+      <argument type="service" id=".service_locator.81DM9mm"/>
     </service>
     <service id="Symfony\Component\Validator\Constraints\ExpressionLanguageSyntaxValidator" class="Symfony\Component\Validator\Constraints\ExpressionLanguageSyntaxValidator" abstract="true">
       <tag name="container.excluded" source="in &quot;config/validator.php&quot;"/>
@@ -4733,6 +4784,9 @@
       </call>
       <call method="add">
         <argument type="service" id="serializer.data_collector"/>
+      </call>
+      <call method="add">
+        <argument type="service" id="doctrine_mongodb.odm.data_collector"/>
       </call>
       <call method="add">
         <argument type="service" id="data_collector.config"/>
@@ -6006,6 +6060,14 @@
       <call method="addPath">
         <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/symfony/ux-twig-component/templates</argument>
         <argument>!TwigComponent</argument>
+      </call>
+      <call method="addPath">
+        <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/doctrine/mongodb-odm-bundle/templates</argument>
+        <argument>DoctrineMongoDB</argument>
+      </call>
+      <call method="addPath">
+        <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/vendor/doctrine/mongodb-odm-bundle/templates</argument>
+        <argument>!DoctrineMongoDB</argument>
       </call>
       <call method="addPath">
         <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/templates</argument>
@@ -7453,6 +7515,255 @@
     <service id="doctrine.fixtures.purger.orm_purger_factory" class="Doctrine\Bundle\FixturesBundle\Purger\ORMPurgerFactory">
       <tag name="doctrine.fixtures.purger_factory" alias="default"/>
     </service>
+    <service id="doctrine_mongodb.odm.connection.event_manager" class="Symfony\Bridge\Doctrine\ContainerAwareEventManager" abstract="true">
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="doctrine_mongodb.odm.container_repository_factory" class="Doctrine\Bundle\MongoDBBundle\Repository\ContainerRepositoryFactory">
+      <argument type="service" id=".service_locator.Xbsa8iG"/>
+    </service>
+    <service id="doctrine_mongodb.odm.manager_configurator.abstract" class="Doctrine\Bundle\MongoDBBundle\ManagerConfigurator" abstract="true">
+      <argument type="abstract">enabled filters</argument>
+    </service>
+    <service id="doctrine_mongodb.odm.security.user.provider" class="Symfony\Bridge\Doctrine\Security\User\EntityUserProvider" abstract="true">
+      <argument type="service" id="doctrine_mongodb"/>
+    </service>
+    <service id="doctrine_mongodb" class="Doctrine\Bundle\MongoDBBundle\ManagerRegistry" public="true">
+      <argument>MongoDB</argument>
+      <argument>%doctrine_mongodb.odm.connections%</argument>
+      <argument>%doctrine_mongodb.odm.document_managers%</argument>
+      <argument>default</argument>
+      <argument>default</argument>
+      <argument>Doctrine\Persistence\Proxy</argument>
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="doctrine_mongodb.odm.listeners.resolve_target_document" class="Doctrine\ODM\MongoDB\Tools\ResolveTargetDocumentListener"/>
+    <service id="doctrine_mongodb.odm.symfony.fixtures.loader" class="Doctrine\Bundle\MongoDBBundle\Loader\SymfonyFixturesLoader">
+      <call method="addFixtures">
+        <argument type="collection"/>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.proxy_cache_warmer" class="Doctrine\Bundle\MongoDBBundle\CacheWarmer\ProxyCacheWarmer">
+      <tag name="kernel.cache_warmer" priority="25"/>
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="doctrine_mongodb.odm.hydrator_cache_warmer" class="Doctrine\Bundle\MongoDBBundle\CacheWarmer\HydratorCacheWarmer">
+      <tag name="kernel.cache_warmer" priority="25"/>
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="doctrine_mongodb.odm.persistent_collection_cache_warmer" class="Doctrine\Bundle\MongoDBBundle\CacheWarmer\PersistentCollectionCacheWarmer">
+      <tag name="kernel.cache_warmer" priority="25"/>
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="doctrine_mongodb.odm.command.clear_metadata_cache" class="Doctrine\Bundle\MongoDBBundle\Command\ClearMetadataCacheDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:cache:clear-metadata"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:cache:clear-metadata</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.create_schema" class="Doctrine\Bundle\MongoDBBundle\Command\CreateSchemaDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:schema:create"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:schema:create</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.drop_schema" class="Doctrine\Bundle\MongoDBBundle\Command\DropSchemaDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:schema:drop"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:schema:drop</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.generate_hydrators" class="Doctrine\Bundle\MongoDBBundle\Command\GenerateHydratorsDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:generate:hydrators"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:generate:hydrators</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.generate_proxies" class="Doctrine\Bundle\MongoDBBundle\Command\GenerateProxiesDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:generate:proxies"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:generate:proxies</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.info" class="Doctrine\Bundle\MongoDBBundle\Command\InfoDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:mapping:info"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="doctrine_mongodb"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:mapping:info</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.load_data_fixtures" class="Doctrine\Bundle\MongoDBBundle\Command\LoadDataFixturesDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:fixtures:load"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="doctrine_mongodb"/>
+      <argument type="service" id="doctrine_mongodb.odm.symfony.fixtures.loader"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:fixtures:load</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.query" class="Doctrine\Bundle\MongoDBBundle\Command\QueryDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:query"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:query</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.shard" class="Doctrine\Bundle\MongoDBBundle\Command\ShardDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:schema:shard"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:schema:shard</argument>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.command.update_schema" class="Doctrine\Bundle\MongoDBBundle\Command\UpdateSchemaDoctrineODMCommand">
+      <tag name="console.command" command="doctrine:mongodb:schema:update"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>doctrine:mongodb:schema:update</argument>
+      </call>
+    </service>
+    <service id="form.type.mongodb_document" class="Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType">
+      <tag name="form.type" alias="document"/>
+      <argument type="service" id="doctrine_mongodb"/>
+    </service>
+    <service id="form.type_guesser.doctrine.mongodb" class="Doctrine\Bundle\MongoDBBundle\Form\DoctrineMongoDBTypeGuesser">
+      <tag name="form.type_guesser"/>
+      <argument type="service" id="doctrine_mongodb"/>
+    </service>
+    <service id="doctrine_mongodb.odm.command_logger_registry" class="Doctrine\Bundle\MongoDBBundle\APM\CommandLoggerRegistry" public="true">
+      <argument type="tagged_iterator" tag="doctrine_mongodb.odm.command_logger"/>
+    </service>
+    <service id="doctrine_mongodb.odm.stopwatch_command_logger" class="Doctrine\Bundle\MongoDBBundle\APM\StopwatchCommandLogger">
+      <tag name="doctrine_mongodb.odm.command_logger"/>
+      <argument type="service" id="debug.stopwatch" on-invalid="null"/>
+    </service>
+    <service id="doctrine_mongodb.odm.psr_command_logger" class="Doctrine\Bundle\MongoDBBundle\APM\PSRCommandLogger">
+      <tag name="monolog.logger" channel="doctrine"/>
+      <tag name="doctrine_mongodb.odm.command_logger"/>
+      <argument type="service" id="monolog.logger.doctrine" on-invalid="null"/>
+    </service>
+    <service id="doctrine_mongodb.odm.data_collector.command_logger" class="Doctrine\ODM\MongoDB\APM\CommandLogger">
+      <tag name="doctrine_mongodb.odm.command_logger"/>
+    </service>
+    <service id="doctrine_mongodb.odm.data_collector" class="Doctrine\Bundle\MongoDBBundle\DataCollector\CommandDataCollector">
+      <tag name="data_collector" id="mongodb" template="@DoctrineMongoDB/Collector/mongodb.html.twig"/>
+      <argument type="service" id="doctrine_mongodb.odm.data_collector.command_logger"/>
+    </service>
+    <service id="doctrine_odm.mongodb.validator.unique" class="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator">
+      <tag name="validator.constraint_validator" alias="doctrine_odm.mongodb.unique"/>
+      <argument type="service" id="doctrine_mongodb"/>
+    </service>
+    <service id="doctrine_odm.mongodb.validator_initializer" class="Symfony\Bridge\Doctrine\Validator\DoctrineInitializer">
+      <tag name="validator.initializer"/>
+      <argument type="service" id="doctrine_mongodb"/>
+    </service>
+    <service id="doctrine_mongodb.odm.default_connection.event_manager" class="Symfony\Bridge\Doctrine\ContainerAwareEventManager">
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="doctrine_mongodb.odm.default_configuration" class="Doctrine\ODM\MongoDB\Configuration">
+      <tag name="doctrine.odm.configuration"/>
+      <call method="setDocumentNamespaces">
+        <argument type="collection"/>
+      </call>
+      <call method="setMetadataCache">
+        <argument type="service" id="doctrine_mongodb.odm.default_metadata_cache"/>
+      </call>
+      <call method="setMetadataDriverImpl">
+        <argument type="service" id="doctrine_mongodb.odm.default_metadata_driver"/>
+      </call>
+      <call method="setProxyDir">
+        <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/var/cache/dev/doctrine/odm/mongodb/Proxies</argument>
+      </call>
+      <call method="setProxyNamespace">
+        <argument>MongoDBODMProxies</argument>
+      </call>
+      <call method="setAutoGenerateProxyClasses">
+        <argument>3</argument>
+      </call>
+      <call method="setHydratorDir">
+        <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/var/cache/dev/doctrine/odm/mongodb/Hydrators</argument>
+      </call>
+      <call method="setHydratorNamespace">
+        <argument>Hydrators</argument>
+      </call>
+      <call method="setAutoGenerateHydratorClasses">
+        <argument>0</argument>
+      </call>
+      <call method="setDefaultDB">
+        <argument>ecoRide</argument>
+      </call>
+      <call method="setDefaultCommitOptions">
+        <argument type="collection"/>
+      </call>
+      <call method="setDefaultDocumentRepositoryClassName">
+        <argument>Doctrine\ODM\MongoDB\Repository\DocumentRepository</argument>
+      </call>
+      <call method="setDefaultGridFSRepositoryClassName">
+        <argument>Doctrine\ODM\MongoDB\Repository\DefaultGridFSRepository</argument>
+      </call>
+      <call method="setPersistentCollectionDir">
+        <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/var/cache/dev/doctrine/odm/mongodb/PersistentCollections</argument>
+      </call>
+      <call method="setPersistentCollectionNamespace">
+        <argument>PersistentCollections</argument>
+      </call>
+      <call method="setAutoGeneratePersistentCollectionClasses">
+        <argument>0</argument>
+      </call>
+      <call method="setUseLazyGhostObject">
+        <argument>true</argument>
+      </call>
+      <call method="setUseTransactionalFlush">
+        <argument>false</argument>
+      </call>
+      <call method="setRepositoryFactory">
+        <argument type="service" id="doctrine_mongodb.odm.container_repository_factory"/>
+      </call>
+    </service>
+    <service id="doctrine_mongodb.odm.default_connection" class="MongoDB\Client" public="true">
+      <argument>%env(resolve:MONGODB_URL)%</argument>
+      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="typeMap" type="collection">
+          <argument key="root">array</argument>
+          <argument key="document">array</argument>
+        </argument>
+        <argument key="driver" type="collection">
+          <argument key="name">symfony-mongodb</argument>
+          <argument key="version">2.11.2</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="doctrine_mongodb.odm.default_metadata_driver" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain"/>
+    <service id="doctrine_mongodb.odm.default_metadata_cache" class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
+    <service id="doctrine_mongodb.odm.default_manager_configurator" class="Doctrine\Bundle\MongoDBBundle\ManagerConfigurator">
+      <argument type="collection"/>
+    </service>
+    <service id="doctrine_mongodb.odm.default_document_manager" class="Doctrine\ODM\MongoDB\DocumentManager" public="true" constructor="create">
+      <tag name="doctrine_mongodb.odm.document_manager"/>
+      <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
+      <argument type="service" id="doctrine_mongodb.odm.default_configuration"/>
+      <argument type="service" id="doctrine_mongodb.odm.default_connection.event_manager"/>
+      <configurator service="doctrine_mongodb.odm.default_manager_configurator" method="configure"/>
+    </service>
+    <service id="doctrine_mongodb.messenger.event_subscriber.doctrine_clear_document_manager" class="Symfony\Bridge\Doctrine\Messenger\DoctrineClearEntityManagerWorkerSubscriber">
+      <tag name="kernel.event_subscriber"/>
+      <argument type="service" id="doctrine_mongodb"/>
+    </service>
+    <service id="doctrine_mongodb.odm.entity_value_resolver" class="Symfony\Bridge\Doctrine\ArgumentResolver\EntityValueResolver">
+      <argument type="service" id="doctrine_mongodb"/>
+      <argument type="service" id="doctrine_mongodb.odm.document_value_resolver.expression_language" on-invalid="ignore"/>
+    </service>
+    <service id="doctrine_mongodb.odm.document_value_resolver.expression_language" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage"/>
+    <service id="doctrine_mongodb.odm.document_value_resolver" class="Doctrine\Bundle\MongoDBBundle\ArgumentResolver\DocumentValueResolver">
+      <tag name="Doctrine\Bundle\MongoDBBundle\ArgumentResolver\DocumentValueResolver" priority="110">controller.argument_value_resolver</tag>
+      <argument type="service" id="doctrine_mongodb.odm.entity_value_resolver"/>
+    </service>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -8064,10 +8375,10 @@
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
       </argument>
     </service>
-    <service id=".service_locator.F9PKc.7" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.81DM9mm" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator" type="service_closure" id="doctrine.orm.validator.unique"/>
+        <argument key="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator" type="service_closure" id="doctrine_odm.mongodb.validator.unique"/>
         <argument key="Symfony\Component\Security\Core\Validator\Constraints\UserPasswordValidator" type="service_closure" id="security.validator.user_password"/>
         <argument key="Symfony\Component\Validator\Constraints\EmailValidator" type="service_closure" id="validator.email"/>
         <argument key="Symfony\Component\Validator\Constraints\ExpressionValidator" type="service_closure" id="validator.expression"/>
@@ -8075,6 +8386,7 @@
         <argument key="Symfony\Component\Validator\Constraints\NotCompromisedPasswordValidator" type="service_closure" id="validator.not_compromised_password"/>
         <argument key="Symfony\Component\Validator\Constraints\WhenValidator" type="service_closure" id="validator.when"/>
         <argument key="doctrine.orm.validator.unique" type="service_closure" id="doctrine.orm.validator.unique"/>
+        <argument key="doctrine_odm.mongodb.unique" type="service_closure" id="doctrine_odm.mongodb.validator.unique"/>
         <argument key="security.validator.user_password" type="service_closure" id="security.validator.user_password"/>
         <argument key="validator.expression" type="service_closure" id="validator.expression"/>
       </argument>
@@ -8177,6 +8489,10 @@
       <argument type="service" id="doctrine.orm.entity_value_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
+    <service id=".debug.value_resolver.doctrine_mongodb.odm.document_value_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver">
+      <argument type="service" id="doctrine_mongodb.odm.document_value_resolver"/>
+      <argument type="service" id="debug.stopwatch"/>
+    </service>
     <service id=".debug.value_resolver.argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver">
       <argument type="service" id="argument_resolver.backed_enum_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
@@ -8225,10 +8541,11 @@
       <argument type="service" id="argument_resolver.query_parameter_value_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.5oboeFg" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.ZeQFfoP" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Form\ChangePasswordFormType" type="service_closure" id="App\Form\ChangePasswordFormType"/>
+        <argument key="Doctrine\Bundle\MongoDBBundle\Form\Type\DocumentType" type="service_closure" id="form.type.mongodb_document"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service_closure" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service_closure" id="form.type.choice"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ColorType" type="service_closure" id="form.type.color"/>
@@ -8802,9 +9119,10 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.j7D0Vt4" method="withContext"/>
     </service>
-    <service id=".service_locator.gHpsvM5" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.jrZi1Vu" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="Doctrine\Bundle\MongoDBBundle\ArgumentResolver\DocumentValueResolver" type="service_closure" id=".debug.value_resolver.doctrine_mongodb.odm.document_value_resolver"/>
         <argument key="Symfony\Bridge\Doctrine\ArgumentResolver\EntityValueResolver" type="service_closure" id=".debug.value_resolver.doctrine.orm.entity_value_resolver"/>
         <argument key="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver" type="service_closure" id=".debug.value_resolver.argument_resolver.backed_enum_resolver"/>
         <argument key="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DateTimeValueResolver" type="service_closure" id=".debug.value_resolver.argument_resolver.datetime"/>
@@ -8942,6 +9260,7 @@
         <argument type="service" id=".debug.value_resolver.security.user_value_resolver"/>
         <argument type="service" id=".debug.value_resolver.security.security_token_value_resolver"/>
         <argument type="service" id=".debug.value_resolver.doctrine.orm.entity_value_resolver"/>
+        <argument type="service" id=".debug.value_resolver.doctrine_mongodb.odm.document_value_resolver"/>
         <argument type="service" id=".debug.value_resolver.argument_resolver.backed_enum_resolver"/>
         <argument type="service" id=".debug.value_resolver.argument_resolver.uid"/>
         <argument type="service" id=".debug.value_resolver.argument_resolver.datetime"/>
@@ -8953,7 +9272,7 @@
         <argument type="service" id=".debug.value_resolver.argument_resolver.variadic"/>
         <argument type="service" id=".debug.value_resolver.argument_resolver.not_tagged_controller"/>
       </argument>
-      <argument type="service" id=".service_locator.gHpsvM5"/>
+      <argument type="service" id=".service_locator.jrZi1Vu"/>
     </service>
     <service id="debug.serializer.inner" class="Symfony\Component\Serializer\Serializer">
       <argument type="collection">
@@ -9834,7 +10153,7 @@
     </service>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
-      <argument type="service" id=".service_locator.T5Crumz"/>
+      <argument type="service" id=".service_locator.z5g..uC"/>
       <argument type="collection">
         <argument key="about">console.command.about</argument>
         <argument key="assets:install">console.command.assets_install</argument>
@@ -9923,6 +10242,16 @@
         <argument key="security:hash-password">security.command.user_password_hash</argument>
         <argument key="debug:twig-component">ux.twig_component.command.debug</argument>
         <argument key="doctrine:fixtures:load">doctrine.fixtures_load_command</argument>
+        <argument key="doctrine:mongodb:cache:clear-metadata">doctrine_mongodb.odm.command.clear_metadata_cache</argument>
+        <argument key="doctrine:mongodb:schema:create">doctrine_mongodb.odm.command.create_schema</argument>
+        <argument key="doctrine:mongodb:schema:drop">doctrine_mongodb.odm.command.drop_schema</argument>
+        <argument key="doctrine:mongodb:generate:hydrators">doctrine_mongodb.odm.command.generate_hydrators</argument>
+        <argument key="doctrine:mongodb:generate:proxies">doctrine_mongodb.odm.command.generate_proxies</argument>
+        <argument key="doctrine:mongodb:mapping:info">doctrine_mongodb.odm.command.info</argument>
+        <argument key="doctrine:mongodb:fixtures:load">doctrine_mongodb.odm.command.load_data_fixtures</argument>
+        <argument key="doctrine:mongodb:query">doctrine_mongodb.odm.command.query</argument>
+        <argument key="doctrine:mongodb:schema:shard">doctrine_mongodb.odm.command.shard</argument>
+        <argument key="doctrine:mongodb:schema:update">doctrine_mongodb.odm.command.update_schema</argument>
         <argument key="make:auth">maker.auto_command.make_auth</argument>
         <argument key="make:command">maker.auto_command.make_command</argument>
         <argument key="make:twig-component">maker.auto_command.make_twig_component</argument>
@@ -9955,7 +10284,7 @@
         <argument key="make:webhook">maker.auto_command.make_webhook</argument>
       </argument>
     </service>
-    <service id=".service_locator.T5Crumz" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.z5g..uC" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="console.command.about" type="service_closure" id=".console.command.about.lazy"/>
@@ -10045,6 +10374,16 @@
         <argument key="security.command.user_password_hash" type="service_closure" id=".security.command.user_password_hash.lazy"/>
         <argument key="ux.twig_component.command.debug" type="service_closure" id=".ux.twig_component.command.debug.lazy"/>
         <argument key="doctrine.fixtures_load_command" type="service_closure" id="doctrine.fixtures_load_command"/>
+        <argument key="doctrine_mongodb.odm.command.clear_metadata_cache" type="service_closure" id="doctrine_mongodb.odm.command.clear_metadata_cache"/>
+        <argument key="doctrine_mongodb.odm.command.create_schema" type="service_closure" id="doctrine_mongodb.odm.command.create_schema"/>
+        <argument key="doctrine_mongodb.odm.command.drop_schema" type="service_closure" id="doctrine_mongodb.odm.command.drop_schema"/>
+        <argument key="doctrine_mongodb.odm.command.generate_hydrators" type="service_closure" id="doctrine_mongodb.odm.command.generate_hydrators"/>
+        <argument key="doctrine_mongodb.odm.command.generate_proxies" type="service_closure" id="doctrine_mongodb.odm.command.generate_proxies"/>
+        <argument key="doctrine_mongodb.odm.command.info" type="service_closure" id="doctrine_mongodb.odm.command.info"/>
+        <argument key="doctrine_mongodb.odm.command.load_data_fixtures" type="service_closure" id="doctrine_mongodb.odm.command.load_data_fixtures"/>
+        <argument key="doctrine_mongodb.odm.command.query" type="service_closure" id="doctrine_mongodb.odm.command.query"/>
+        <argument key="doctrine_mongodb.odm.command.shard" type="service_closure" id="doctrine_mongodb.odm.command.shard"/>
+        <argument key="doctrine_mongodb.odm.command.update_schema" type="service_closure" id="doctrine_mongodb.odm.command.update_schema"/>
         <argument key="maker.auto_command.make_auth" type="service_closure" id=".maker.auto_command.make_auth.lazy"/>
         <argument key="maker.auto_command.make_command" type="service_closure" id=".maker.auto_command.make_command.lazy"/>
         <argument key="maker.auto_command.make_twig_component" type="service_closure" id=".maker.auto_command.make_twig_component.lazy"/>
@@ -10361,6 +10700,10 @@
     <service id="console.command.stimulus_component_debug" alias="ux.twig_component.command.debug">
       <deprecated package="symfony/ux-twig-component" version="2.13">%alias_id%</deprecated>
     </service>
+    <service id="Doctrine\ODM\MongoDB\DocumentManager" alias="doctrine_mongodb.odm.default_document_manager"/>
+    <service id="Doctrine\Bundle\MongoDBBundle\ManagerRegistry" alias="doctrine_mongodb"/>
+    <service id="doctrine_mongodb.odm.document_manager" alias="doctrine_mongodb.odm.default_document_manager" public="true"/>
+    <service id="doctrine_mongodb.odm.event_manager" alias="doctrine_mongodb.odm.default_connection.event_manager"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.w7.f4fT" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
     <service id="argument_resolver.controller_locator" alias=".service_locator.IJmZZq8"/>
@@ -10392,8 +10735,8 @@
     <service id=".service_locator.ar5NMPa" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.8HEHVDJ" alias=".service_locator.zT40IkP"/>
     <service id=".service_locator.0mjwYix" alias=".service_locator.IJmZZq8"/>
-    <service id=".service_locator.BFrsqsn" alias=".service_locator.F9PKc.7"/>
-    <service id=".service_locator.VYixrii" alias=".service_locator.5oboeFg"/>
+    <service id=".service_locator.N1RL2Lu" alias=".service_locator.81DM9mm"/>
+    <service id=".service_locator.nHsWOad" alias=".service_locator.ZeQFfoP"/>
     <service id=".service_locator.XtmiKbi" alias=".service_locator.MfxSDRP"/>
     <service id=".service_locator.O24_MAy" alias=".service_locator.yY.p4P7"/>
     <service id=".service_locator.jUv.zyj" alias=".service_locator.O2p6Lk7"/>
@@ -10429,7 +10772,7 @@
     <service id=".service_locator.vZ0XCjM" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.JcEy_Zo" alias=".service_locator.zT40IkP"/>
     <service id=".service_locator.Q1z.f9O" alias=".service_locator.O2p6Lk7"/>
-    <service id=".service_locator.iUxT8yA" alias=".service_locator.gHpsvM5"/>
+    <service id=".service_locator.D9_950y" alias=".service_locator.jrZi1Vu"/>
     <service id=".service_locator._kIAbz1" alias=".service_locator.TpoC7U9"/>
     <service id=".service_locator.hnz5ZNh" alias=".service_locator.0TACwl3"/>
     <service id=".service_locator..Fs8Kd7" alias=".service_locator.e_.xxAP"/>

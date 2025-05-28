@@ -6,6 +6,7 @@ require_once __DIR__.\DIRECTORY_SEPARATOR.'ProviderConfig'.\DIRECTORY_SEPARATOR.
 require_once __DIR__.\DIRECTORY_SEPARATOR.'ProviderConfig'.\DIRECTORY_SEPARATOR.'EntityConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'ProviderConfig'.\DIRECTORY_SEPARATOR.'MemoryConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'ProviderConfig'.\DIRECTORY_SEPARATOR.'LdapConfig.php';
+require_once __DIR__.\DIRECTORY_SEPARATOR.'ProviderConfig'.\DIRECTORY_SEPARATOR.'MongodbConfig.php';
 
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -20,6 +21,7 @@ class ProviderConfig
     private $entity;
     private $memory;
     private $ldap;
+    private $mongodb;
     private $_usedProperties = [];
 
     /**
@@ -83,6 +85,18 @@ class ProviderConfig
         return $this->ldap;
     }
 
+    public function mongodb(array $value = []): \Symfony\Config\Security\ProviderConfig\MongodbConfig
+    {
+        if (null === $this->mongodb) {
+            $this->_usedProperties['mongodb'] = true;
+            $this->mongodb = new \Symfony\Config\Security\ProviderConfig\MongodbConfig($value);
+        } elseif (0 < \func_num_args()) {
+            throw new InvalidConfigurationException('The node created by "mongodb()" has already been initialized. You cannot pass values the second time you call mongodb().');
+        }
+
+        return $this->mongodb;
+    }
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('id', $value)) {
@@ -115,6 +129,12 @@ class ProviderConfig
             unset($value['ldap']);
         }
 
+        if (array_key_exists('mongodb', $value)) {
+            $this->_usedProperties['mongodb'] = true;
+            $this->mongodb = new \Symfony\Config\Security\ProviderConfig\MongodbConfig($value['mongodb']);
+            unset($value['mongodb']);
+        }
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
@@ -137,6 +157,9 @@ class ProviderConfig
         }
         if (isset($this->_usedProperties['ldap'])) {
             $output['ldap'] = $this->ldap->toArray();
+        }
+        if (isset($this->_usedProperties['mongodb'])) {
+            $output['mongodb'] = $this->mongodb->toArray();
         }
 
         return $output;

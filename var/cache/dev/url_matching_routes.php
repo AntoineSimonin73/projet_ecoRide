@@ -35,6 +35,7 @@ return [
         '/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
         '/logout-message' => [[['_route' => 'app_logout_message', '_controller' => 'App\\Controller\\SecurityController::logoutMessage'], null, null, null, false, false, null]],
         '/register' => [[['_route' => 'app_register', '_controller' => 'App\\Controller\\SecurityController::register'], null, null, null, false, false, null]],
+        '/changer-mot-de-passe' => [[['_route' => 'app_change_password', '_controller' => 'App\\Controller\\SecurityController::changePassword'], null, null, null, false, false, null]],
         '/mon-espace' => [[['_route' => 'app_user_space', '_controller' => 'App\\Controller\\UserController::userSpace'], null, null, null, false, false, null]],
         '/mon-espace/ajouter-vehicule' => [[['_route' => 'app_user_add_vehicle', '_controller' => 'App\\Controller\\UserController::addVehicle'], null, null, null, false, false, null]],
         '/mon-espace/preferences' => [[['_route' => 'app_user_preferences', '_controller' => 'App\\Controller\\UserController::managePreferences'], null, null, null, false, false, null]],
@@ -79,17 +80,18 @@ return [
                         .'|(\\d+)/terminer(*:472)'
                         .'|(\\d+)/validation(*:496)'
                         .'|(\\d+)/feedback(*:518)'
+                        .'|([^/]++)/avis(*:539)'
                     .')'
                 .')'
                 .'|/employe/avis/([^/]++)/(?'
-                    .'|valider(*:561)'
-                    .'|refuser(*:576)'
+                    .'|valider(*:582)'
+                    .'|refuser(*:597)'
                 .')'
                 .'|/mon\\-espace/(?'
-                    .'|preferences/supprimer/([^/]++)(*:631)'
+                    .'|preferences/supprimer/([^/]++)(*:652)'
                     .'|vehicule/(?'
-                        .'|supprimer/([^/]++)(*:669)'
-                        .'|modifier/([^/]++)(*:694)'
+                        .'|supprimer/([^/]++)(*:690)'
+                        .'|modifier/([^/]++)(*:715)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -115,11 +117,12 @@ return [
         472 => [[['_route' => 'app_covoiturage_end', '_controller' => 'App\\Controller\\CovoiturageController::endCovoiturage'], ['id'], ['POST' => 0], null, false, false, null]],
         496 => [[['_route' => 'app_covoiturage_validate', '_controller' => 'App\\Controller\\CovoiturageController::validateCovoiturage'], ['id'], ['POST' => 0], null, false, false, null]],
         518 => [[['_route' => 'app_covoiturage_feedback', '_controller' => 'App\\Controller\\CovoiturageController::feedback'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        561 => [[['_route' => 'app_employe_valider_avis', '_controller' => 'App\\Controller\\EmployeController::validerAvis'], ['id'], ['POST' => 0], null, false, false, null]],
-        576 => [[['_route' => 'app_employe_refuser_avis', '_controller' => 'App\\Controller\\EmployeController::refuserAvis'], ['id'], ['POST' => 0], null, false, false, null]],
-        631 => [[['_route' => 'app_user_delete_preference', '_controller' => 'App\\Controller\\UserController::deletePreference'], ['id'], ['POST' => 0], null, false, true, null]],
-        669 => [[['_route' => 'app_user_delete_vehicle', '_controller' => 'App\\Controller\\UserController::deleteVehicle'], ['id'], ['POST' => 0], null, false, true, null]],
-        694 => [
+        539 => [[['_route' => 'app_covoiturage_load_avis', '_controller' => 'App\\Controller\\CovoiturageController::loadAvis'], ['id'], ['GET' => 0], null, false, false, null]],
+        582 => [[['_route' => 'app_employe_valider_avis', '_controller' => 'App\\Controller\\EmployeController::validerAvis'], ['id'], ['POST' => 0], null, false, false, null]],
+        597 => [[['_route' => 'app_employe_refuser_avis', '_controller' => 'App\\Controller\\EmployeController::refuserAvis'], ['id'], ['POST' => 0], null, false, false, null]],
+        652 => [[['_route' => 'app_user_delete_preference', '_controller' => 'App\\Controller\\UserController::deletePreference'], ['id'], ['POST' => 0], null, false, true, null]],
+        690 => [[['_route' => 'app_user_delete_vehicle', '_controller' => 'App\\Controller\\UserController::deleteVehicle'], ['id'], ['POST' => 0], null, false, true, null]],
+        715 => [
             [['_route' => 'app_user_edit_vehicle', '_controller' => 'App\\Controller\\UserController::editVehicle'], ['id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

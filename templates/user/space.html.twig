@@ -211,5 +211,28 @@
             <button type="submit" class="btn btn-success w-100">Mettre à jour mon rôle</button>
         </form>
     </div>
+
+    <!-- Section pour changer le mot de passe -->
+    <div class="card p-4 shadow-sm border-0 mt-4" style="background-color: #f8f9fa;">
+        <h2 class="h5 mb-4" style="color: #155724;">Changer votre mot de passe</h2>
+        {{ form_start(changePasswordForm) }}
+            <div class="mb-3">
+                {{ form_label(changePasswordForm.currentPassword) }}
+                {{ form_widget(changePasswordForm.currentPassword) }}
+                {{ form_errors(changePasswordForm.currentPassword) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(changePasswordForm.plainPassword) }}
+                {{ form_widget(changePasswordForm.plainPassword) }}
+                {{ form_errors(changePasswordForm.plainPassword) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(changePasswordForm.confirmPassword) }}
+                {{ form_widget(changePasswordForm.confirmPassword) }}
+                {{ form_errors(changePasswordForm.confirmPassword) }}
+            </div>
+            <button type="submit" class="btn btn-success w-100">Changer le mot de passe</button>
+        {{ form_end(changePasswordForm) }}
+    </div>
 </div>
 {% endblock %}

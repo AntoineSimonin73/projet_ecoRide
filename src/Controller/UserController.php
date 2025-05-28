@@ -9,12 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Vehicule;
 use App\Entity\Preference;
-
+use App\Form\ChangePasswordFormType;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
     #[Route('/mon-espace', name: 'app_user_space')]
-    public function userSpace(Request $request, EntityManagerInterface $entityManager): Response
+    public function userSpace(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         /** @var \App\Entity\Utilisateur $user */
         $user = $this->getUser();
@@ -22,6 +23,36 @@ class UserController extends AbstractController
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour accéder à votre espace.');
             return $this->redirectToRoute('app_login');
+        }
+
+        // Créer le formulaire de changement de mot de passe
+        $form = $this->createForm(ChangePasswordFormType::class);
+        $form->handleRequest($request);
+
+        // Gestion du changement de mot de passe
+        if ($form->isSubmitted() && $form->isValid()) {
+            $currentPassword = $form->get('currentPassword')->getData();
+            $newPassword = $form->get('plainPassword')->getData();
+            $confirmPassword = $form->get('confirmPassword')->getData();
+
+            // Vérifier que le mot de passe actuel est correct
+            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+                return $this->redirectToRoute('app_user_space');
+            }
+
+            // Vérifier que les nouveaux mots de passe correspondent
+            if ($newPassword !== $confirmPassword) {
+                $this->addFlash('error', 'Les nouveaux mots de passe ne correspondent pas.');
+                return $this->redirectToRoute('app_user_space');
+            }
+
+            // Mettre à jour le mot de passe
+            $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre mot de passe a été modifié avec succès.');
+            return $this->redirectToRoute('app_user_space');
         }
 
         // Mise à jour du rôle
@@ -38,6 +69,8 @@ class UserController extends AbstractController
 
         return $this->render('user/space.html.twig', [
             'user' => $user,
+            'changePasswordForm' => $form->createView(), // Transmettre le formulaire au template
+
         ]);
     }
 

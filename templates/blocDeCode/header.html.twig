@@ -21,7 +21,11 @@
             </ul>
             <div class="col-md-3 text-end">
                 {% if app.user %}
-                    <a href="{{ path('app_user_space') }}" class="btn btn-outline-dark me-2">Mon espace</a>
+                    {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_EMPLOYE' in app.user.roles %}
+                        <a href="{{ path('app_change_password') }}" class="btn btn-outline-dark me-2">Mon espace</a>
+                    {% else %}
+                        <a href="{{ path('app_user_space') }}" class="btn btn-outline-dark me-2">Mon espace</a>
+                    {% endif %}
                     <a href="{{ path('app_logout') }}" class="btn btn-dark">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn-outline-dark me-2">Connexion</a>

@@ -430,6 +430,9 @@
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
     </service>
+    <service id="App\Form\ChangePasswordFormType" class="App\Form\ChangePasswordFormType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
     <service id="App\Repository\AvisRepository" class="App\Repository\AvisRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -490,7 +493,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.K4OxMeS"/>
+      <argument type="service" id=".service_locator.IJmZZq8"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -1422,9 +1425,11 @@
       <argument type="service" id="form.registry"/>
       <argument type="collection">
         <argument>Symfony\Component\Form\Extension\Core\Type</argument>
+        <argument>App\Form</argument>
         <argument>Symfony\Bridge\Doctrine\Form\Type</argument>
       </argument>
       <argument type="collection">
+        <argument>App\Form\ChangePasswordFormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
@@ -3423,7 +3428,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.K4OxMeS"/>
+      <argument type="service" id=".service_locator.IJmZZq8"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -3931,7 +3936,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.y4dplYt"/>
+      <argument type="service" id=".service_locator.5oboeFg"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -7473,6 +7478,8 @@
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\CovoiturageFixtures" class="App\DataFixtures\CovoiturageFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\CovoiturageFixtures" class="App\DataFixtures\CovoiturageFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\ChangePasswordFormType" class="App\Form\ChangePasswordFormType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\ChangePasswordFormType" class="App\Form\ChangePasswordFormType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AvisRepository" class="App\Repository\AvisRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\AvisRepository" class="App\Repository\AvisRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CovoiturageRepository" class="App\Repository\CovoiturageRepository" autowire="true" abstract="true"/>
@@ -7974,7 +7981,7 @@
         <argument key="vehicule" type="service_closure" id=".errored..service_locator.zT40IkP.App\Entity\Vehicule"/>
       </argument>
     </service>
-    <service id=".service_locator.K4OxMeS" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.IJmZZq8" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AdminController::createEmploye" type="service_closure" id=".service_locator.ESgEUJd"/>
@@ -7991,18 +7998,20 @@
         <argument key="App\Controller\CovoiturageController::annulerCovoiturage" type="service_closure" id=".service_locator.UGQzfSd"/>
         <argument key="App\Controller\CovoiturageController::avisRecus" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::deleteCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
-        <argument key="App\Controller\CovoiturageController::details" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\CovoiturageController::details" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController::editCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::endCovoiturage" type="service_closure" id=".service_locator.WZeIXfO"/>
         <argument key="App\Controller\CovoiturageController::feedback" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::historiqueCovoiturages" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::index" type="service_closure" id=".service_locator.o6sN0hZ"/>
+        <argument key="App\Controller\CovoiturageController::loadAvis" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController::participer" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController::startCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::validateCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController::index" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController::refuserAvis" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController::validerAvis" type="service_closure" id=".service_locator.eCo3lwU"/>
+        <argument key="App\Controller\SecurityController::changePassword" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Controller\SecurityController::login" type="service_closure" id=".service_locator.rSTd.nA"/>
         <argument key="App\Controller\SecurityController::register" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Controller\UserController::addVehicle" type="service_closure" id=".service_locator.CsMkqUa"/>
@@ -8010,7 +8019,7 @@
         <argument key="App\Controller\UserController::deleteVehicle" type="service_closure" id=".service_locator.zT40IkP"/>
         <argument key="App\Controller\UserController::editVehicle" type="service_closure" id=".service_locator.zT40IkP"/>
         <argument key="App\Controller\UserController::managePreferences" type="service_closure" id=".service_locator.CsMkqUa"/>
-        <argument key="App\Controller\UserController::userSpace" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\UserController::userSpace" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
@@ -8029,18 +8038,20 @@
         <argument key="App\Controller\CovoiturageController:annulerCovoiturage" type="service_closure" id=".service_locator.UGQzfSd"/>
         <argument key="App\Controller\CovoiturageController:avisRecus" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:deleteCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
-        <argument key="App\Controller\CovoiturageController:details" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\CovoiturageController:details" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController:editCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:endCovoiturage" type="service_closure" id=".service_locator.WZeIXfO"/>
         <argument key="App\Controller\CovoiturageController:feedback" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:historiqueCovoiturages" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:index" type="service_closure" id=".service_locator.o6sN0hZ"/>
+        <argument key="App\Controller\CovoiturageController:loadAvis" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController:participer" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController:startCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:validateCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController:index" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController:refuserAvis" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController:validerAvis" type="service_closure" id=".service_locator.eCo3lwU"/>
+        <argument key="App\Controller\SecurityController:changePassword" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Controller\SecurityController:login" type="service_closure" id=".service_locator.rSTd.nA"/>
         <argument key="App\Controller\SecurityController:register" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Controller\UserController:addVehicle" type="service_closure" id=".service_locator.CsMkqUa"/>
@@ -8048,7 +8059,7 @@
         <argument key="App\Controller\UserController:deleteVehicle" type="service_closure" id=".service_locator.zT40IkP"/>
         <argument key="App\Controller\UserController:editVehicle" type="service_closure" id=".service_locator.zT40IkP"/>
         <argument key="App\Controller\UserController:managePreferences" type="service_closure" id=".service_locator.CsMkqUa"/>
-        <argument key="App\Controller\UserController:userSpace" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\UserController:userSpace" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
       </argument>
@@ -8214,9 +8225,10 @@
       <argument type="service" id="argument_resolver.query_parameter_value_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.y4dplYt" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.5oboeFg" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Form\ChangePasswordFormType" type="service_closure" id="App\Form\ChangePasswordFormType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service_closure" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service_closure" id="form.type.choice"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ColorType" type="service_closure" id="form.type.color"/>
@@ -10351,7 +10363,7 @@
     </service>
     <service id="container.env_var_processors_locator" alias=".service_locator.w7.f4fT" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.K4OxMeS"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.IJmZZq8"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10379,9 +10391,9 @@
     <service id=".service_locator.qrNhk2c" alias=".service_locator.ESgEUJd"/>
     <service id=".service_locator.ar5NMPa" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.8HEHVDJ" alias=".service_locator.zT40IkP"/>
-    <service id=".service_locator.wAiFCu2" alias=".service_locator.K4OxMeS"/>
+    <service id=".service_locator.0mjwYix" alias=".service_locator.IJmZZq8"/>
     <service id=".service_locator.BFrsqsn" alias=".service_locator.F9PKc.7"/>
-    <service id=".service_locator.Za9MpXe" alias=".service_locator.y4dplYt"/>
+    <service id=".service_locator.VYixrii" alias=".service_locator.5oboeFg"/>
     <service id=".service_locator.XtmiKbi" alias=".service_locator.MfxSDRP"/>
     <service id=".service_locator.O24_MAy" alias=".service_locator.yY.p4P7"/>
     <service id=".service_locator.jUv.zyj" alias=".service_locator.O2p6Lk7"/>

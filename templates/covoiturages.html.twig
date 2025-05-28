@@ -19,7 +19,8 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label for="dateDepart" class="form-label" style="color: #155724;">Date de départ</label>
-                <input type="date" name="dateDepart" id="dateDepart" class="form-control" value="{{ app.request.query.get('dateDepart') }}" required>
+                <input type="date" name="dateDepart" id="dateDepart" class="form-control" 
+                       value="{{ app.request.query.get('dateDepart') ?: today }}" required>
             </div>
         </div>
 
@@ -98,9 +99,9 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </span>
-                                            <small>({{ noteMoyenne }}/5)</small>
+                                            <small>({{ noteMoyenne }}/5)</small><br>
                                         {% else %}
-                                            <p class="text-muted">Pas encore de note pour ce chauffeur !</p>
+                                            <p class="text-muted">Pas encore de note pour ce chauffeur !</p><br>
                                         {% endif %}
                                         <strong>Départ :</strong> {{ covoiturage.dateDepart|date('d/m/Y') }} à {{ covoiturage.heureDepart }}<br>
                                         <strong>Arrivée :</strong> {{ covoiturage.dateArrivee|date('d/m/Y') }} à {{ covoiturage.heureArrivee }}<br>

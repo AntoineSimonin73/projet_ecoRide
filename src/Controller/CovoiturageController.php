@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class CovoiturageController extends AbstractController
@@ -149,35 +150,43 @@ class CovoiturageController extends AbstractController
             'covoituragesData' => $covoituragesData,
             'prochaineDate' => $prochaineDate,
             'hasFilter' => $hasFilter, // Indique si des filtres ont été appliqués
+            'today' => (new \DateTime())->format('Y-m-d'), // Ajout de la date du jour
         ]);
     }
 
     #[Route('/covoiturages/{id<\d+>}', name: 'app_covoiturage_details')]
-    public function details(int $id, EntityManagerInterface $entityManager): Response
+    public function details(int $id, ManagerRegistry $doctrine): Response
     {
-        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+        $repository = $doctrine->getRepository(Covoiturage::class);
+        $covoiturage = $repository->find($id);
 
         if (!$covoiturage) {
             throw $this->createNotFoundException('Covoiturage introuvable.');
         }
 
-        // Récupère les avis validés pour le chauffeur
-        $avisValides = $entityManager->getRepository(Avis::class)->findBy([
-            'destinataire' => $covoiturage->getChauffeur(),
+        $chauffeur = $covoiturage->getChauffeur();
+        $avisRepository = $doctrine->getRepository(Avis::class);
+
+        // Récupérer les avis validés pour le chauffeur
+        $avisValides = $avisRepository->findBy([
+            'destinataire' => $chauffeur,
             'isValide' => true,
         ]);
 
-        // Calcul de la note moyenne
-        $noteMoyenne = $covoiturage->getChauffeur()->calculerNoteMoyenne();
-
-        // Compte le nombre d'avis validés
-        $nombreAvis = count($avisValides);
+        // Calculer la note moyenne
+        $noteMoyenne = null;
+        if (count($avisValides) > 0) {
+            $sommeNotes = array_reduce($avisValides, function ($carry, $avis) {
+                return $carry + $avis->getNote();
+            }, 0);
+            $noteMoyenne = round($sommeNotes / count($avisValides), 2);
+        }
 
         return $this->render('detailsCovoiturage.html.twig', [
             'covoiturage' => $covoiturage,
             'avisValides' => $avisValides,
             'noteMoyenne' => $noteMoyenne,
-            'nombreAvis' => $nombreAvis, // Passe le nombre d'avis au template
+            'nombreAvis' => count($avisValides),
         ]);
     }
 
@@ -629,5 +638,35 @@ class CovoiturageController extends AbstractController
         return $this->render('user/avis_recus.html.twig', [
             'avisRecus' => $avisRecus,
         ]);
+    }
+
+    #[Route('/covoiturage/{id}/avis', name: 'app_covoiturage_load_avis', methods: ['GET'])]
+    public function loadAvis(int $id, Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $offset = $request->query->getInt('offset', 0);
+        $repository = $doctrine->getRepository(Covoiturage::class);
+        $covoiturage = $repository->find($id);
+
+        if (!$covoiturage) {
+            return new JsonResponse(['error' => 'Covoiturage introuvable.'], 404);
+        }
+
+        $avisRepository = $doctrine->getRepository(Avis::class);
+        $avisValides = $avisRepository->findBy(
+            ['destinataire' => $covoiturage->getChauffeur(), 'isValide' => true],
+            ['id' => 'DESC'], // Trier par les plus récents
+            5, // Limite
+            $offset // Décalage
+        );
+
+        $avisData = array_map(function ($avis) {
+            return [
+                'auteur' => $avis->getAuteur()->getPseudo(),
+                'note' => $avis->getNote(),
+                'commentaires' => $avis->getCommentaires(),
+            ];
+        }, $avisValides);
+
+        return new JsonResponse(['avis' => $avisData]);
     }
 }

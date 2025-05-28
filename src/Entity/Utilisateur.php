@@ -37,7 +37,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column (nullable: true)]
     private ?int $credits = 20;
 
-    #[ORM\Column (nullable: true)]
+    #[ORM\Column (type: 'float', nullable: true)]
     private ?float $noteMoyenne = 0.0;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -167,7 +167,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->noteMoyenne;
     }
 
-    public function setNoteMoyenne(float $noteMoyenne): static
+    public function setNoteMoyenne(float $noteMoyenne): self
     {
         $this->noteMoyenne = $noteMoyenne;
 
@@ -461,22 +461,20 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function calculerNoteMoyenne(): float
+    public function calculerNoteMoyenne(): ?float
     {
-        $totalNotes = 0;
-        $nombreAvis = 0;
+        $avisValides = $this->avis->filter(function (Avis $avis) {
+            return $avis->isValide();
+        });
 
-        foreach ($this->avisReçus as $avis) {
-            if ($avis->IsValide()) { // Ne prendre en compte que les avis validés
-                $totalNotes += $avis->getNote();
-                $nombreAvis++;
-            }
+        if ($avisValides->count() === 0) {
+            return null; // Pas de note si aucun avis validé
         }
 
-        if ($nombreAvis === 0) {
-            return 0; // Pas d'avis validé, donc note moyenne = 0
-        }
+        $sommeNotes = array_reduce($avisValides->toArray(), function ($carry, Avis $avis) {
+            return $carry + $avis->getNote();
+        }, 0);
 
-        return round($totalNotes / $nombreAvis, 1); // Arrondi à une décimale
+        return round($sommeNotes / $avisValides->count(), 2); // Arrondi à 2 décimales
     }
 }

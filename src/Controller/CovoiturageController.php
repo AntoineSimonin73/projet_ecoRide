@@ -51,14 +51,14 @@ class CovoiturageController extends AbstractController
                 ->andWhere('c.placesRestantes > 0')
                 ->andWhere('c.dateDepart >= :now') // Exclure les covoiturages passés
                 ->andWhere('c.status != :statusEnCours') // Exclure les covoiturages en cours
-                ->andWhere('c.status != :statusTermine') // Exclure les covoiturages terminés
+                //->andWhere('c.status != :statusTermine') // Exclure les covoiturages terminés
                 ->setParameter('adresseDepart', '%' . $adresseDepart . '%')
                 ->setParameter('adresseArrivee', '%' . $adresseArrivee . '%')
                 ->setParameter('dateStart', $dateStart)
                 ->setParameter('dateEnd', $dateEnd)
                 ->setParameter('now', new \DateTime()) // Date et heure actuelles
-                ->setParameter('statusEnCours', 'en_cours') // Ajout du paramètre manquant
-                ->setParameter('statusTermine', 'termine'); // Ajout du paramètre manquant
+                ->setParameter('statusEnCours', 'en_cours'); // Ajout du paramètre manquant
+                //->setParameter('statusTermine', 'termine'); // Ajout du paramètre manquant
 
             // Filtre écologique
             if ($ecologique !== null && $ecologique !== '') {
@@ -83,22 +83,29 @@ class CovoiturageController extends AbstractController
 
             // Filtre durée max (en PHP car dépend de la logique métier)
             if ($dureeMax !== null && $dureeMax !== '') {
-                $covoiturages = array_filter($covoiturages, function($covoit) use ($dureeMax) {
-                    $heureDepart = $covoit->getHeureDepart(); // Exemple : "10h00"
-                    $heureArrivee = $covoit->getHeureArrivee(); // Exemple : "15h00"
+                $covoiturages = array_filter($covoiturages, function ($covoit) use ($dureeMax) {
+                    try {
+                        $heureDepart = \DateTime::createFromFormat('H:i', $covoit->getHeureDepart());
+                        $heureArrivee = \DateTime::createFromFormat('H:i', $covoit->getHeureArrivee());
 
-                    // Convertir les heures en minutes pour effectuer la comparaison
-                    [$heureDep, $minuteDep] = sscanf($heureDepart, '%dh%d');
-                    [$heureArr, $minuteArr] = sscanf($heureArrivee, '%dh%d');
+                        if (!$heureDepart || !$heureArrivee) {
+                            return false; // Exclure si les heures ne sont pas valides
+                        }
 
-                    // Calculer la durée totale en minutes
-                    $dureeTotaleMinutes = ($heureArr * 60 + $minuteArr) - ($heureDep * 60 + $minuteDep);
+                        // Calculer la différence entre l'heure de départ et l'heure d'arrivée
+                        $interval = $heureDepart->diff($heureArrivee);
 
-                    // Convertir la durée maximale en minutes
-                    $dureeMaxMinutes = $dureeMax * 60;
+                        // Convertir la durée en minutes
+                        $dureeTotaleMinutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
 
-                    // Vérifier si la durée totale est inférieure ou égale à la durée maximale
-                    return $dureeTotaleMinutes <= $dureeMaxMinutes;
+                        // Convertir la durée maximale en minutes
+                        $dureeMaxMinutes = $dureeMax * 60;
+
+                        // Vérifier si la durée totale est inférieure ou égale à la durée maximale
+                        return $dureeTotaleMinutes <= $dureeMaxMinutes;
+                    } catch (\Exception $e) {
+                        return false; // Exclure en cas d'erreur
+                    }
                 });
             }
 
@@ -128,7 +135,7 @@ class CovoiturageController extends AbstractController
                 'destinataire' => $chauffeur,
                 'isValide' => true,
             ]);
-            $noteMoyenne = $chauffeur->calculerNoteMoyenne();
+            $noteMoyenne = $chauffeur->getNoteMoyenne();
             $nombreAvis = count($avisValides);
 
             $covoituragesData[] = [

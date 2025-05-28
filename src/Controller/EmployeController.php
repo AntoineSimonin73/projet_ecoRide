@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\AvisService;
 
 class EmployeController extends AbstractController
 {
@@ -42,7 +43,7 @@ class EmployeController extends AbstractController
     }
 
     #[Route('/employe/avis/{id}/valider', name: 'app_employe_valider_avis', methods: ['POST'])]
-    public function validerAvis(int $id, EntityManagerInterface $entityManager): Response
+    public function validerAvis(int $id, EntityManagerInterface $entityManager, AvisService $avisService): Response
     {
         $avis = $entityManager->getRepository(Avis::class)->find($id);
 
@@ -57,6 +58,9 @@ class EmployeController extends AbstractController
         // Vérifie si le covoiturage peut être archivé
         $covoiturage = $avis->getCovoiturage();
         $this->archiveCovoiturageIfValidated($covoiturage, $entityManager);
+
+        // Met à jour la note moyenne du chauffeur
+        $avisService->updateNoteMoyenne($avis->getDestinataire());
 
         $this->addFlash('success', 'Avis validé avec succès.');
         return $this->redirectToRoute('app_employe_space');

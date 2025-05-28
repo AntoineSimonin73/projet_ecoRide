@@ -35,11 +35,11 @@ class Covoiturage
     #[ORM\Column(type: 'datetime', nullable: false)]
     private ?\DateTimeInterface $dateArrivee = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $heureDepart = null;
+    #[ORM\Column(type: 'string', length: 5, nullable: false)]
+    private string $heureDepart;
 
-    #[ORM\Column(length: 255)]
-    private ?string $heureArrivee = null;
+    #[ORM\Column(type: 'string', length: 5, nullable: false)]
+    private string $heureArrivee;
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     private ?bool $isEcologique = null;
@@ -158,7 +158,7 @@ class Covoiturage
         return $this;
     }
 
-    public function getHeureDepart(): ?string
+    public function getHeureDepart(): string
     {
         return $this->heureDepart;
     }
@@ -170,7 +170,7 @@ class Covoiturage
         return $this;
     }
 
-    public function getHeureArrivee(): ?string
+    public function getHeureArrivee(): string
     {
         return $this->heureArrivee;
     }

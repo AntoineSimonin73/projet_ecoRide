@@ -436,6 +436,15 @@
         <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\HomeController"/>
       </call>
     </service>
+    <service id="App\Controller\RideController" class="App\Controller\RideController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="App\Service\RideStatsService"/>
+      <argument type="service" id="doctrine_mongodb.odm.default_document_manager"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\RideController"/>
+      </call>
+    </service>
     <service id="App\Controller\SecurityController" class="App\Controller\SecurityController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -457,6 +466,9 @@
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
     </service>
+    <service id="App\Document\RideStats" class="App\Document\RideStats" autowire="true" autoconfigure="true">
+      <tag name="container.excluded" source="with #[Doctrine\ODM\MongoDB\Mapping\Annotations\Document] attribute"/>
+    </service>
     <service id="App\Form\ChangePasswordFormType" class="App\Form\ChangePasswordFormType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
@@ -471,6 +483,10 @@
     <service id="App\Repository\PreferenceRepository" class="App\Repository\PreferenceRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\RideStatsRepository" class="App\Repository\RideStatsRepository" autowire="true" autoconfigure="true">
+      <tag name="container.error" message="Cannot autowire service &quot;App\Repository\RideStatsRepository&quot;: argument &quot;$uow&quot; of method &quot;Doctrine\ODM\MongoDB\Repository\DocumentRepository::__construct()&quot; references class &quot;Doctrine\ODM\MongoDB\UnitOfWork&quot; but no such service exists."/>
+      <argument type="service" id="doctrine_mongodb.odm.default_document_manager"/>
     </service>
     <service id="App\Repository\RoleRepository" class="App\Repository\RoleRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
@@ -489,6 +505,12 @@
     </service>
     <service id="App\Service\AvisService" class="App\Service\AvisService" autowire="true" autoconfigure="true">
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
+    </service>
+    <service id="App\Service\RideStatsService" class="App\Service\RideStatsService" autowire="true" autoconfigure="true">
+      <argument type="service" id="doctrine_mongodb.odm.default_document_manager"/>
+    </service>
+    <service id="App\Twig\AppExtension" class="App\Twig\AppExtension" autowire="true" autoconfigure="true">
+      <tag name="twig.extension"/>
     </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
@@ -520,7 +542,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.IJmZZq8"/>
+      <argument type="service" id=".service_locator.RMoq6H7"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3477,7 +3499,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.IJmZZq8"/>
+      <argument type="service" id=".service_locator.RMoq6H7"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -5912,6 +5934,9 @@
         <argument type="service" id="twig.extension.security"/>
       </call>
       <call method="addExtension">
+        <argument type="service" id="App\Twig\AppExtension"/>
+      </call>
+      <call method="addExtension">
         <argument type="service" id="doctrine.twig.doctrine_extension"/>
       </call>
       <call method="addExtension">
@@ -7668,7 +7693,9 @@
     <service id="doctrine_mongodb.odm.default_configuration" class="Doctrine\ODM\MongoDB\Configuration">
       <tag name="doctrine.odm.configuration"/>
       <call method="setDocumentNamespaces">
-        <argument type="collection"/>
+        <argument type="collection">
+          <argument key="App">App\Document</argument>
+        </argument>
       </call>
       <call method="setMetadataCache">
         <argument type="service" id="doctrine_mongodb.odm.default_metadata_cache"/>
@@ -7739,7 +7766,17 @@
         </argument>
       </argument>
     </service>
-    <service id="doctrine_mongodb.odm.default_metadata_driver" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain"/>
+    <service id="doctrine_mongodb.odm.default_attribute_metadata_driver" class="Doctrine\ODM\MongoDB\Mapping\Driver\AttributeDriver">
+      <argument type="collection">
+        <argument>/Users/antoine/Desktop/Projet EcoRide/ecoRide/projet_ecoRide/src/Document</argument>
+      </argument>
+    </service>
+    <service id="doctrine_mongodb.odm.default_metadata_driver" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
+      <call method="addDriver">
+        <argument type="service" id="doctrine_mongodb.odm.default_attribute_metadata_driver"/>
+        <argument>App\Document</argument>
+      </call>
+    </service>
     <service id="doctrine_mongodb.odm.default_metadata_cache" class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
     <service id="doctrine_mongodb.odm.default_manager_configurator" class="Doctrine\Bundle\MongoDBBundle\ManagerConfigurator">
       <argument type="collection"/>
@@ -7779,6 +7816,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\HomeController" class="App\Controller\HomeController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\RideController" class="App\Controller\RideController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\RideController" class="App\Controller\RideController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\RideController" class="App\Controller\RideController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -7789,6 +7829,8 @@
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\CovoiturageFixtures" class="App\DataFixtures\CovoiturageFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\CovoiturageFixtures" class="App\DataFixtures\CovoiturageFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.App\Document\RideStats.0.App\Document\RideStats" class="App\Document\RideStats" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Document\RideStats" class="App\Document\RideStats" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\ChangePasswordFormType" class="App\Form\ChangePasswordFormType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\ChangePasswordFormType" class="App\Form\ChangePasswordFormType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\AvisRepository" class="App\Repository\AvisRepository" autowire="true" abstract="true"/>
@@ -7803,6 +7845,8 @@
     <service id=".abstract.instanceof.App\Repository\UtilisateurRepository" class="App\Repository\UtilisateurRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\VehiculeRepository" class="App\Repository\VehiculeRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\VehiculeRepository" class="App\Repository\VehiculeRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Twig\Extension\ExtensionInterface.0.App\Twig\AppExtension" class="App\Twig\AppExtension" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Twig\AppExtension" class="App\Twig\AppExtension" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.w7.f4fT" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -8226,6 +8270,13 @@
         <argument key="loader" type="service_closure" id=".errored..service_locator.y4_Zrx..Symfony\Component\Config\Loader\LoaderInterface"/>
       </argument>
     </service>
+    <service id=".service_locator.HYfo8nU" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="dm" type="service_closure" id="doctrine_mongodb.odm.default_document_manager"/>
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
     <service id=".service_locator.CsMkqUa" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -8292,11 +8343,11 @@
         <argument key="vehicule" type="service_closure" id=".errored..service_locator.zT40IkP.App\Entity\Vehicule"/>
       </argument>
     </service>
-    <service id=".service_locator.IJmZZq8" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.RMoq6H7" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AdminController::createEmploye" type="service_closure" id=".service_locator.ESgEUJd"/>
-        <argument key="App\Controller\AdminController::dashboard" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\AdminController::dashboard" type="service_closure" id=".service_locator.HYfo8nU"/>
         <argument key="App\Controller\AdminController::deleteEmploye" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\AdminController::listUsers" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\AdminController::manageAvis" type="service_closure" id=".service_locator.CsMkqUa"/>
@@ -8336,7 +8387,7 @@
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="App\Controller\AdminController:createEmploye" type="service_closure" id=".service_locator.ESgEUJd"/>
-        <argument key="App\Controller\AdminController:dashboard" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\AdminController:dashboard" type="service_closure" id=".service_locator.HYfo8nU"/>
         <argument key="App\Controller\AdminController:deleteEmploye" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\AdminController:listUsers" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\AdminController:manageAvis" type="service_closure" id=".service_locator.CsMkqUa"/>
@@ -9047,6 +9098,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.O2p6Lk7" method="withContext"/>
     </service>
+    <service id=".service_locator.O2p6Lk7.App\Controller\RideController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\RideController"/>
+      <argument>App\Controller\RideController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
+    </service>
     <service id=".service_locator.O2p6Lk7.App\Controller\SecurityController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\SecurityController"/>
       <argument>App\Controller\SecurityController</argument>
@@ -9248,6 +9305,7 @@
           <argument>App\Controller\CovoiturageController</argument>
           <argument>App\Controller\EmployeController</argument>
           <argument>App\Controller\HomeController</argument>
+          <argument>App\Controller\RideController</argument>
           <argument>App\Controller\SecurityController</argument>
           <argument>App\Controller\UserController</argument>
           <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
@@ -10706,7 +10764,7 @@
     <service id="doctrine_mongodb.odm.event_manager" alias="doctrine_mongodb.odm.default_connection.event_manager"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.w7.f4fT" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.IJmZZq8"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.RMoq6H7"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10734,7 +10792,7 @@
     <service id=".service_locator.qrNhk2c" alias=".service_locator.ESgEUJd"/>
     <service id=".service_locator.ar5NMPa" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.8HEHVDJ" alias=".service_locator.zT40IkP"/>
-    <service id=".service_locator.0mjwYix" alias=".service_locator.IJmZZq8"/>
+    <service id=".service_locator.ft7vhhE" alias=".service_locator.RMoq6H7"/>
     <service id=".service_locator.N1RL2Lu" alias=".service_locator.81DM9mm"/>
     <service id=".service_locator.nHsWOad" alias=".service_locator.ZeQFfoP"/>
     <service id=".service_locator.XtmiKbi" alias=".service_locator.MfxSDRP"/>
@@ -10761,6 +10819,7 @@
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id="security.event_dispatcher.main" alias="debug.security.event_dispatcher.main"/>
     <service id=".service_locator.gFlme_s" alias=".service_locator.y4_Zrx."/>
+    <service id=".service_locator.nAoe_vK" alias=".service_locator.HYfo8nU"/>
     <service id=".service_locator.9e2t_lq" alias=".service_locator.CsMkqUa"/>
     <service id=".service_locator.OJmnvRJ" alias=".service_locator.uVvF4gL"/>
     <service id=".service_locator.eQ296SW" alias=".service_locator.o6sN0hZ"/>

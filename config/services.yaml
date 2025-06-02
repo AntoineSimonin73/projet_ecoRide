@@ -22,3 +22,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Twig\AppExtension:
+        tags: ['twig.extension']
+    App\Repository\RideStatsRepository:
+        arguments:
+            $dm: '@doctrine_mongodb.odm.document_manager'

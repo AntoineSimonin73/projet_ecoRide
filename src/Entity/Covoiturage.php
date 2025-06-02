@@ -15,7 +15,7 @@ class Covoiturage
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: 'covoituragesEnTantQueChauffeur')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $chauffeur = null;
 

@@ -56,7 +56,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title text-center">Nombre de covoiturages par jour</h5>
-                    <canvas id="covoituragesChart"></canvas>
+                    <canvas id="ridesChart"></canvas>
                 </div>
             </div>
         </div>
@@ -70,59 +70,50 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const covoituragesData = {{ covoituragesData|json_encode|raw }};
-    const creditsData = {{ creditsData|json_encode|raw }};
-
-    // Graphique des covoiturages par jour
-    const ctx1 = document.getElementById('covoituragesChart').getContext('2d');
-    new Chart(ctx1, {
-        type: 'line',
+    const rideCtx = document.getElementById('ridesChart').getContext('2d');
+    const ridesChart = new Chart(rideCtx, {
+        type: 'bar',
         data: {
-            labels: covoituragesData.labels,
+            labels: {{ covoituragesData.labels|json_encode|raw }},
             datasets: [{
                 label: 'Covoiturages',
-                data: covoituragesData.values,
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderWidth: 2,
-                fill: true
+                data: {{ covoituragesData.values|json_encode|raw }},
+                backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                borderColor: 'rgba(40, 167, 69, 1)',
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
         }
     });
 
-    // Graphique des crédits par jour
-    const ctx2 = document.getElementById('creditsChart').getContext('2d');
-    new Chart(ctx2, {
-        type: 'line',
+    const creditCtx = document.getElementById('creditsChart').getContext('2d');
+    const creditsChart = new Chart(creditCtx, {
+        type: 'bar',
         data: {
-            labels: creditsData.labels,
+            labels: {{ creditsData.labels|json_encode|raw }},
             datasets: [{
-                label: 'Crédits',
-                data: creditsData.values,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 2,
-                fill: true
+                label: 'Crédits gagnés',
+                data: {{ creditsData.values|json_encode|raw }},
+                backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                borderColor: 'rgba(0, 123, 255, 1)',
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
         }

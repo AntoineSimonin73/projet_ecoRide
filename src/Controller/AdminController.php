@@ -11,58 +11,59 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\RideStatsRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
-    #[Route('/', name: 'app_admin_dashboard')]
-    public function dashboard(EntityManagerInterface $entityManager): Response
+    #[Route('/admin', name: 'app_admin_dashboard')]
+    public function dashboard(DocumentManager $dm, EntityManagerInterface $entityManager): Response
     {
-        // Récupère les covoiturages par jour
-        $covoiturages = $entityManager->createQuery(
-            'SELECT COUNT(c.id) as count, SUBSTRING(c.dateDepart, 1, 10) as date
-             FROM App\Entity\Covoiturage c
-             GROUP BY date
-             ORDER BY date ASC'
-        )->getResult();
+        $startDate = (new \DateTime())->modify('-7 days')->setTime(0, 0, 0);
+        $endDate = (new \DateTime())->setTime(23, 59, 59);
+
+        $repository = $dm->getRepository(\App\Document\RideStats::class);
+
+        // Récupère les statistiques depuis MongoDB
+        $stats = $repository->createQueryBuilder()
+            ->field('date')->gte($startDate)
+            ->field('date')->lte($endDate)
+            ->sort('date', 'ASC')
+            ->getQuery()
+            ->execute()
+            ->toArray();
 
         $covoituragesData = [
-            'labels' => array_column($covoiturages, 'date'),
-            'values' => array_column($covoiturages, 'count'),
+            'labels' => array_map(fn($s) => $s->getDate()->format('Y-m-d'), $stats),
+            'values' => array_map(fn($s) => $s->getRideCount(), $stats),
         ];
-
-        $covoituragesTotal = array_sum($covoituragesData['values']);
-
-        // Calcul des crédits gagnés par la plateforme (2 crédits par covoiturage)
-        $credits = $entityManager->createQuery(
-            'SELECT COUNT(c.id) as count, SUBSTRING(c.dateDepart, 1, 10) as date
-             FROM App\Entity\Covoiturage c
-             GROUP BY date
-             ORDER BY date ASC'
-        )->getResult();
 
         $creditsData = [
-            'labels' => array_column($credits, 'date'),
-            'values' => array_map(fn($count) => $count * 2, array_column($credits, 'count')), // Multiplie chaque covoiturage par 2 crédits
+            'labels' => $covoituragesData['labels'],
+            'values' => array_map(fn($s) => $s->getCreditsEarned(), $stats),
         ];
 
-        // Calcul du total des crédits
-        $totalCredits = $covoituragesTotal * 2;
+        $totalCredits = array_sum($creditsData['values']);
+        $covoituragesTotal = array_sum($covoituragesData['values']);
 
-        // Récupère les employés
+        // Récupération des utilisateurs relationnels
         $roleEmploye = $entityManager->getRepository(Role::class)->findOneBy(['name' => 'ROLE_EMPLOYE']);
-        $employes = $entityManager->getRepository(Utilisateur::class)->findBy(['role' => $roleEmploye]);
+        $roleUtilisateur = $entityManager->getRepository(Role::class)->findOneBy(['name' => 'ROLE_UTILISATEUR']);
 
-        // Récupère tous les utilisateurs
-        $utilisateurs = $entityManager->getRepository(Utilisateur::class)->findAll();
+        $employes = $roleEmploye ? $entityManager->getRepository(Utilisateur::class)->findBy(['role' => $roleEmploye]) : [];
+        $utilisateurs = $roleUtilisateur ? $entityManager->getRepository(Utilisateur::class)->findBy(['role' => $roleUtilisateur]) : [];
+        $utilisateursTotal = count($utilisateurs);
+
 
         return $this->render('admin/dashboard.html.twig', [
             'covoituragesData' => $covoituragesData,
-            'covoituragesTotal' => $covoituragesTotal,
             'creditsData' => $creditsData,
             'totalCredits' => $totalCredits,
+            'covoituragesTotal' => $covoituragesTotal,
             'employes' => $employes,
-            'utilisateursTotal' => count($utilisateurs),
+            'utilisateurs' => $utilisateurs,
+            'utilisateursTotal' => $utilisateursTotal,
         ]);
     }
 

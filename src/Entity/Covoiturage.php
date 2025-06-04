@@ -342,6 +342,7 @@ class Covoiturage
     public function clearProblemes(): self
     {
         $this->problemes = [];
+        $this->status = 'archived'; // Change le statut après avoir retiré les problèmes
 
         return $this;
     }

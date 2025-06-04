@@ -9,9 +9,11 @@
                 <div class="card p-4 shadow-sm border-0" style="background-color: #f8f9fa;"> <!-- Fond gris clair -->
                     <h2 class="h5 mb-4 text-center" style="color: #155724;">Créer un compte sur EcoRide</h2>
 
-                    {% if error %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ error }}
+                    {% if app.session.flashBag.has('error') %}
+                        <div class="alert alert-danger">
+                            {% for message in app.session.flashBag.get('error') %}
+                                {{ message }}
+                            {% endfor %}
                         </div>
                     {% endif %}
 
@@ -28,7 +30,11 @@
 
                         <div class="mb-3">
                             <label for="inputPassword" class="form-label" style="color: #155724;">Mot de passe</label>
-                            <input type="password" name="password" id="inputPassword" required class="form-control" placeholder="Entrez un mot de passe sécurisé">
+                            <input type="password" name="password" id="inputPassword" required class="form-control" 
+                                   placeholder="Entrez un mot de passe sécurisé"
+                                   minlength="8" 
+                                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" 
+                                   title="Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.">
                         </div>
 
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">

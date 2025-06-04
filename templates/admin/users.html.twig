@@ -11,7 +11,6 @@
                 <th>ID</th>
                 <th>Email</th>
                 <th>Pseudo</th>
-                <th>Rôle</th>
                 <th>Statut</th>
                 <th>Actions</th>
             </tr>
@@ -22,7 +21,6 @@
                     <td>{{ utilisateur.id }}</td>
                     <td>{{ utilisateur.email }}</td>
                     <td>{{ utilisateur.pseudo }}</td>
-                    <td>{{ utilisateur.role.name }}</td>
                     <td>
                         {% if utilisateur.isActive %}
                             <span class="badge bg-success">Actif</span>

@@ -59,7 +59,11 @@
                         {% endif %}
                         <strong>Départ :</strong> {{ covoiturage.adresseDepart }}<br>
                         <strong>Arrivée :</strong> {{ covoiturage.adresseArrivee }}<br>
-                        <strong>Date :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }} - {{ covoiturage.dateArrivee|date('d/m/Y H:i') }}
+                        <strong>Date :</strong> {{ covoiturage.dateDepart|date('d/m/Y H:i') }} - {{ covoiturage.dateArrivee|date('d/m/Y H:i') }}<br>
+                        <form method="post" action="{{ path('app_employe_archiver_covoiturage', { id: covoiturage.id }) }}" class="mt-2">
+                            <input type="hidden" name="_token" value="{{ csrf_token('archiver_covoiturage_' ~ covoiturage.id) }}">
+                            <button type="submit" class="btn btn-warning btn-sm">Archiver</button>
+                        </form>
                     </li>
                 {% endfor %}
             </ul>

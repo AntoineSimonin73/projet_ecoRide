@@ -32,7 +32,7 @@ class EmployeController extends AbstractController
              FROM App\Entity\Covoiturage c
              JOIN c.chauffeur chauffeur
              LEFT JOIN c.passagers passagers
-             WHERE c.status = :status'
+             WHERE c.status = :status AND c.isArchived = false'
         )->setParameter('status', 'probleme')->getResult();
 
         return $this->render('employe/space.html.twig', [
@@ -81,6 +81,32 @@ class EmployeController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Avis refusé avec succès.');
+        return $this->redirectToRoute('app_employe_space');
+    }
+
+    #[Route('/employe/covoiturage/{id}/archiver', name: 'app_employe_archiver_covoiturage', methods: ['POST'])]
+    public function archiverCovoiturage(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $covoiturage = $entityManager->getRepository(Covoiturage::class)->find($id);
+
+        if (!$covoiturage) {
+            $this->addFlash('error', 'Covoiturage introuvable.');
+            return $this->redirectToRoute('app_employe_space');
+        }
+
+        // Vérifie si le covoiturage est problématique
+        if ($covoiturage->getStatus() !== 'probleme') {
+            $this->addFlash('error', 'Seuls les covoiturages problématiques peuvent être archivés.');
+            return $this->redirectToRoute('app_employe_space');
+        }
+
+        // Archive le covoiturage et retire son statut de problématique
+        $covoiturage->setIsArchived(true);
+        $covoiturage->setStatus('archived'); // Met à jour le statut à "archivé"
+        $covoiturage->clearProblemes(); // Retire les problèmes signalés
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Covoiturage archivé avec succès.');
         return $this->redirectToRoute('app_employe_space');
     }
 

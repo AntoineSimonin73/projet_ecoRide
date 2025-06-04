@@ -502,6 +502,7 @@
     </service>
     <service id="App\Security\SecurityControllerAuthenticator" class="App\Security\SecurityControllerAuthenticator" autowire="true" autoconfigure="true">
       <argument type="service" id="router.default"/>
+      <argument type="service" id="App\Repository\UtilisateurRepository"/>
     </service>
     <service id="App\Service\AvisService" class="App\Service\AvisService" autowire="true" autoconfigure="true">
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
@@ -542,7 +543,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.RMoq6H7"/>
+      <argument type="service" id=".service_locator.4vbAC1g"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3499,7 +3500,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.RMoq6H7"/>
+      <argument type="service" id=".service_locator.4vbAC1g"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -8322,6 +8323,14 @@
         <argument key="authenticationUtils" type="service_closure" id="security.authentication_utils"/>
       </argument>
     </service>
+    <service id=".service_locator.Pf3dv.D" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="passwordHasher" type="service_closure" id="security.user_password_hasher"/>
+        <argument key="validator" type="service_closure" id="debug.validator"/>
+      </argument>
+    </service>
     <service id=".service_locator.ESgEUJd" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -8343,7 +8352,7 @@
         <argument key="vehicule" type="service_closure" id=".errored..service_locator.zT40IkP.App\Entity\Vehicule"/>
       </argument>
     </service>
-    <service id=".service_locator.RMoq6H7" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.4vbAC1g" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\AdminController::createEmploye" type="service_closure" id=".service_locator.ESgEUJd"/>
@@ -8370,12 +8379,13 @@
         <argument key="App\Controller\CovoiturageController::participer" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController::startCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController::validateCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\EmployeController::archiverCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController::index" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController::refuserAvis" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController::validerAvis" type="service_closure" id=".service_locator.eCo3lwU"/>
         <argument key="App\Controller\SecurityController::changePassword" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Controller\SecurityController::login" type="service_closure" id=".service_locator.rSTd.nA"/>
-        <argument key="App\Controller\SecurityController::register" type="service_closure" id=".service_locator.ESgEUJd"/>
+        <argument key="App\Controller\SecurityController::register" type="service_closure" id=".service_locator.Pf3dv.D"/>
         <argument key="App\Controller\UserController::addVehicle" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\UserController::deletePreference" type="service_closure" id=".service_locator.Pi_ZIDY"/>
         <argument key="App\Controller\UserController::deleteVehicle" type="service_closure" id=".service_locator.zT40IkP"/>
@@ -8410,12 +8420,13 @@
         <argument key="App\Controller\CovoiturageController:participer" type="service_closure" id=".service_locator.o6sN0hZ"/>
         <argument key="App\Controller\CovoiturageController:startCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\CovoiturageController:validateCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\EmployeController:archiverCovoiturage" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController:index" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController:refuserAvis" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\EmployeController:validerAvis" type="service_closure" id=".service_locator.eCo3lwU"/>
         <argument key="App\Controller\SecurityController:changePassword" type="service_closure" id=".service_locator.ESgEUJd"/>
         <argument key="App\Controller\SecurityController:login" type="service_closure" id=".service_locator.rSTd.nA"/>
-        <argument key="App\Controller\SecurityController:register" type="service_closure" id=".service_locator.ESgEUJd"/>
+        <argument key="App\Controller\SecurityController:register" type="service_closure" id=".service_locator.Pf3dv.D"/>
         <argument key="App\Controller\UserController:addVehicle" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\UserController:deletePreference" type="service_closure" id=".service_locator.Pi_ZIDY"/>
         <argument key="App\Controller\UserController:deleteVehicle" type="service_closure" id=".service_locator.zT40IkP"/>
@@ -10764,7 +10775,7 @@
     <service id="doctrine_mongodb.odm.event_manager" alias="doctrine_mongodb.odm.default_connection.event_manager"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.w7.f4fT" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.RMoq6H7"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.4vbAC1g"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10789,10 +10800,11 @@
     <service id=".service_locator.h8Jkkd2" alias="messenger.retry_strategy_locator"/>
     <service id=".service_locator.bJ.4HC5" alias=".service_locator.w7.f4fT"/>
     <service id=".service_locator.M2bqOZc" alias=".service_locator.eCo3lwU"/>
+    <service id=".service_locator.P8A6VsN" alias=".service_locator.Pf3dv.D"/>
     <service id=".service_locator.qrNhk2c" alias=".service_locator.ESgEUJd"/>
     <service id=".service_locator.ar5NMPa" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.8HEHVDJ" alias=".service_locator.zT40IkP"/>
-    <service id=".service_locator.ft7vhhE" alias=".service_locator.RMoq6H7"/>
+    <service id=".service_locator.blfgvsW" alias=".service_locator.4vbAC1g"/>
     <service id=".service_locator.N1RL2Lu" alias=".service_locator.81DM9mm"/>
     <service id=".service_locator.nHsWOad" alias=".service_locator.ZeQFfoP"/>
     <service id=".service_locator.XtmiKbi" alias=".service_locator.MfxSDRP"/>
@@ -10827,6 +10839,7 @@
     <service id=".service_locator.hOuXX4M" alias=".service_locator.WZeIXfO"/>
     <service id=".service_locator.eiUcdGq" alias=".service_locator.eCo3lwU"/>
     <service id=".service_locator.7NIAq8D" alias=".service_locator.rSTd.nA"/>
+    <service id=".service_locator.aKO3ZCT" alias=".service_locator.Pf3dv.D"/>
     <service id=".service_locator.GEFQPA3" alias=".service_locator.ESgEUJd"/>
     <service id=".service_locator.vZ0XCjM" alias=".service_locator.Pi_ZIDY"/>
     <service id=".service_locator.JcEy_Zo" alias=".service_locator.zT40IkP"/>

@@ -85,15 +85,18 @@ return [
                         .'|([^/]++)/avis(*:539)'
                     .')'
                 .')'
-                .'|/employe/avis/([^/]++)/(?'
-                    .'|valider(*:582)'
-                    .'|refuser(*:597)'
+                .'|/employe/(?'
+                    .'|avis/([^/]++)/(?'
+                        .'|valider(*:585)'
+                        .'|refuser(*:600)'
+                    .')'
+                    .'|covoiturage/([^/]++)/archiver(*:638)'
                 .')'
                 .'|/mon\\-espace/(?'
-                    .'|preferences/supprimer/([^/]++)(*:652)'
+                    .'|preferences/supprimer/([^/]++)(*:693)'
                     .'|vehicule/(?'
-                        .'|supprimer/([^/]++)(*:690)'
-                        .'|modifier/([^/]++)(*:715)'
+                        .'|supprimer/([^/]++)(*:731)'
+                        .'|modifier/([^/]++)(*:756)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -120,11 +123,12 @@ return [
         496 => [[['_route' => 'app_covoiturage_validate', '_controller' => 'App\\Controller\\CovoiturageController::validateCovoiturage'], ['id'], ['POST' => 0], null, false, false, null]],
         518 => [[['_route' => 'app_covoiturage_feedback', '_controller' => 'App\\Controller\\CovoiturageController::feedback'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
         539 => [[['_route' => 'app_covoiturage_load_avis', '_controller' => 'App\\Controller\\CovoiturageController::loadAvis'], ['id'], ['GET' => 0], null, false, false, null]],
-        582 => [[['_route' => 'app_employe_valider_avis', '_controller' => 'App\\Controller\\EmployeController::validerAvis'], ['id'], ['POST' => 0], null, false, false, null]],
-        597 => [[['_route' => 'app_employe_refuser_avis', '_controller' => 'App\\Controller\\EmployeController::refuserAvis'], ['id'], ['POST' => 0], null, false, false, null]],
-        652 => [[['_route' => 'app_user_delete_preference', '_controller' => 'App\\Controller\\UserController::deletePreference'], ['id'], ['POST' => 0], null, false, true, null]],
-        690 => [[['_route' => 'app_user_delete_vehicle', '_controller' => 'App\\Controller\\UserController::deleteVehicle'], ['id'], ['POST' => 0], null, false, true, null]],
-        715 => [
+        585 => [[['_route' => 'app_employe_valider_avis', '_controller' => 'App\\Controller\\EmployeController::validerAvis'], ['id'], ['POST' => 0], null, false, false, null]],
+        600 => [[['_route' => 'app_employe_refuser_avis', '_controller' => 'App\\Controller\\EmployeController::refuserAvis'], ['id'], ['POST' => 0], null, false, false, null]],
+        638 => [[['_route' => 'app_employe_archiver_covoiturage', '_controller' => 'App\\Controller\\EmployeController::archiverCovoiturage'], ['id'], ['POST' => 0], null, false, false, null]],
+        693 => [[['_route' => 'app_user_delete_preference', '_controller' => 'App\\Controller\\UserController::deletePreference'], ['id'], ['POST' => 0], null, false, true, null]],
+        731 => [[['_route' => 'app_user_delete_vehicle', '_controller' => 'App\\Controller\\UserController::deleteVehicle'], ['id'], ['POST' => 0], null, false, true, null]],
+        756 => [
             [['_route' => 'app_user_edit_vehicle', '_controller' => 'App\\Controller\\UserController::editVehicle'], ['id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

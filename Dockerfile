@@ -1,23 +1,37 @@
-# Étape 1 : image PHP avec Composer
-FROM php:8.2-cli
+# Étape 1 : Utiliser une image officielle PHP avec Apache
+FROM php:8.2-apache
 
-# Installer les extensions PHP nécessaires
+# Installer les dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
-    git zip unzip libicu-dev libpq-dev libonig-dev libzip-dev \
-    && docker-php-ext-install intl pdo pdo_mysql zip
+    git unzip zip libicu-dev libonig-dev libzip-dev libpng-dev libxml2-dev \
+    libcurl4-openssl-dev pkg-config libssl-dev \
+    && docker-php-ext-install intl pdo pdo_mysql zip opcache
 
-# Installer Composer
+# 👉 Installer l'extension MongoDB (obligatoire pour mongodb/mongodb dans composer.json)
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
+
+# Activer le module Apache pour les URL "propres"
+RUN a2enmod rewrite
+
+# Installer Composer (depuis l'image officielle)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copier le code source
-WORKDIR /app
-COPY . .
+# Copier tout le projet Symfony
+COPY . /var/www/html
+WORKDIR /var/www/html
 
-# Installer les dépendances
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Donner les bons droits
+RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor
 
-# Port utilisé par Symfony en dev
-EXPOSE 8000
+# ⚠️ Installer les dépendances PHP, maintenant que mongodb est disponible
+RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# Commande de démarrage
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+# Configuration Apache pour Symfony
+RUN echo "<Directory /var/www/html/public>
+    AllowOverride All
+</Directory>" > /etc/apache2/conf-available/symfony.conf && \
+    a2enconf symfony
+
+EXPOSE 80
+CMD ["apache2-foreground"]

@@ -25,7 +25,7 @@ WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor
 
 # ⚠️ Installer les dépendances PHP, maintenant que mongodb est disponible
-RUN composer install --no-dev --optimize-autoloader --prefer-dist
+RUN composer install --no-dev --optimize-autoloader --prefer-dist --no-scripts
 
 # Configuration Apache pour Symfony
 RUN echo '<Directory /var/www/html/public>' \

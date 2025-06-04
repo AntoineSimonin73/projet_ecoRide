@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ecoRide
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: APP_SECRET
+        value: CHANGE_THIS_SECRET
+      - key: DATABASE_URL
+        sync: false
+      - key: MONGODB_URL
+        sync: false
+      - key: MONGODB_DB
+        sync: false

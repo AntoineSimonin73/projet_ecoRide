@@ -1,6 +1,9 @@
 # Étape 1 : Utiliser une image officielle PHP avec Apache
 FROM php:8.2-apache
 
+# Modifier le DocumentRoot d’Apache vers public/
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+
 # Installer les dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
     git unzip zip libicu-dev libonig-dev libzip-dev libpng-dev libxml2-dev \

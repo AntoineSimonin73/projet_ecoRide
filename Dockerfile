@@ -28,10 +28,12 @@ RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
 # Configuration Apache pour Symfony
-RUN echo "<Directory /var/www/html/public>
-    AllowOverride All
-</Directory>" > /etc/apache2/conf-available/symfony.conf && \
+RUN echo '<Directory /var/www/html/public>' \
+    > /etc/apache2/conf-available/symfony.conf && \
+    echo '    AllowOverride All' \
+    >> /etc/apache2/conf-available/symfony.conf && \
+    echo '</Directory>' \
+    >> /etc/apache2/conf-available/symfony.conf && \
     a2enconf symfony
-
 EXPOSE 80
 CMD ["apache2-foreground"]

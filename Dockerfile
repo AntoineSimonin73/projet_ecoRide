@@ -8,7 +8,10 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
 RUN apt-get update && apt-get install -y \
     git unzip zip libicu-dev libonig-dev libzip-dev libpng-dev libxml2-dev \
     libcurl4-openssl-dev pkg-config libssl-dev \
-    && docker-php-ext-install intl pdo pdo_mysql zip opcache
+    ca-certificates openssl \
+    && docker-php-ext-install intl pdo pdo_mysql zip opcache \
+    && pecl install mongodb && docker-php-ext-enable mongodb \
+    && a2enmod rewrite
 
 # 👉 Installer l'extension MongoDB (obligatoire pour mongodb/mongodb dans composer.json)
 RUN pecl install mongodb \

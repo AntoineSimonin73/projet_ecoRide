@@ -10,12 +10,8 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev pkg-config libssl-dev \
     ca-certificates openssl \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache \
-    && pecl install mongodb && docker-php-ext-enable mongodb \
+    && docker-php-ext-enable mongodb \
     && a2enmod rewrite
-
-# 👉 Installer l'extension MongoDB (obligatoire pour mongodb/mongodb dans composer.json)
-RUN pecl install mongodb \
-    && docker-php-ext-enable mongodb
 
 # Activer le module Apache pour les URL "propres"
 RUN a2enmod rewrite

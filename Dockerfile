@@ -1,5 +1,5 @@
 # Étape 1 : Utiliser une image officielle PHP avec Apache
-FROM php:8.2-apache
+FROM php:8.2.19-apache-bullseye
 
 # Modifier le DocumentRoot d’Apache vers public/
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf

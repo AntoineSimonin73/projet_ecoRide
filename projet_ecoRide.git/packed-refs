@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+e17dccc5ee6fd1c756207578ecf6b76b43613aba refs/heads/Ajout-mongodb
+cf247af67e8e02feceaa8ced5c214298ca6ae8f5 refs/heads/DemarrerArreterCovoiturage
+36a726039c598b12ad4e1de75f28435beec42aa6 refs/heads/admin
+544e50e8fe68495c2ce3392d0debe0c79ea43bd4 refs/heads/back_end
+5e71560a37abbfcfacbd838d0e344c18d0365256 refs/heads/frontend
+2fd3527b2c36deb867331138fa8ad8bc5279c51b refs/heads/master
+09ae4aa5821a84c34a8a212f7e6eeb0f8ebd5ac3 refs/pull/1/head

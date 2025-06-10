@@ -7,10 +7,11 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
 # Installer les dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
     git unzip zip libicu-dev libonig-dev libzip-dev libpng-dev libxml2-dev \
-    libcurl4-openssl-dev pkg-config libssl-dev \
-    ca-certificates openssl \
-    && docker-php-ext-install intl pdo pdo_mysql zip opcache \
+    libcurl4-openssl-dev pkg-config libssl-dev ca-certificates \
+    openssl curl gnupg zlib1g-dev \
+    && pecl install mongodb \
     && docker-php-ext-enable mongodb \
+    && docker-php-ext-install intl pdo pdo_mysql zip opcache \
     && a2enmod rewrite
 
 # Activer le module Apache pour les URL "propres"

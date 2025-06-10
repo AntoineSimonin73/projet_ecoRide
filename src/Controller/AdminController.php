@@ -23,29 +23,37 @@ class AdminController extends AbstractController
         $startDate = (new \DateTime())->modify('-7 days')->setTime(0, 0, 0);
         $endDate = (new \DateTime())->setTime(23, 59, 59);
 
-        $repository = $dm->getRepository(\App\Document\RideStats::class);
+        try {
+            $repository = $dm->getRepository(\App\Document\RideStats::class);
 
-        // Récupère les statistiques depuis MongoDB
-        $stats = $repository->createQueryBuilder()
-            ->field('date')->gte($startDate)
-            ->field('date')->lte($endDate)
-            ->sort('date', 'ASC')
-            ->getQuery()
-            ->execute()
-            ->toArray();
+            $stats = $repository->createQueryBuilder()
+                ->field('date')->gte($startDate)
+                ->field('date')->lte($endDate)
+                ->sort('date', 'ASC')
+                ->getQuery()
+                ->execute()
+                ->toArray();
 
-        $covoituragesData = [
-            'labels' => array_map(fn($s) => $s->getDate()->format('Y-m-d'), $stats),
-            'values' => array_map(fn($s) => $s->getRideCount(), $stats),
-        ];
+            $covoituragesData = [
+                'labels' => array_map(fn($s) => $s->getDate()->format('Y-m-d'), $stats),
+                'values' => array_map(fn($s) => $s->getRideCount(), $stats),
+            ];
 
-        $creditsData = [
-            'labels' => $covoituragesData['labels'],
-            'values' => array_map(fn($s) => $s->getCreditsEarned(), $stats),
-        ];
+            $creditsData = [
+                'labels' => $covoituragesData['labels'],
+                'values' => array_map(fn($s) => $s->getCreditsEarned(), $stats),
+            ];
 
-        $totalCredits = array_sum($creditsData['values']);
-        $covoituragesTotal = array_sum($covoituragesData['values']);
+            $totalCredits = array_sum($creditsData['values']);
+            $covoituragesTotal = array_sum($covoituragesData['values']);
+        } catch (\Throwable $e) {
+            $this->addFlash('error', 'Erreur de connexion à MongoDB : ' . $e->getMessage());
+
+            $covoituragesData = ['labels' => [], 'values' => []];
+            $creditsData = ['labels' => [], 'values' => []];
+            $totalCredits = 0;
+            $covoituragesTotal = 0;
+        }
 
         // Récupération des utilisateurs relationnels
         $roleEmploye = $entityManager->getRepository(Role::class)->findOneBy(['name' => 'ROLE_EMPLOYE']);

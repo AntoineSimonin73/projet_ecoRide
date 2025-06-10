@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev pkg-config libssl-dev \
     ca-certificates openssl \
     && docker-php-ext-install intl pdo pdo_mysql zip opcache \
-    && pecl install mongodb && docker-php-ext-enable mongodb \
+    && docker-php-ext-enable mongodb \
     && a2enmod rewrite
 
 # Activer le module Apache pour les URL "propres"

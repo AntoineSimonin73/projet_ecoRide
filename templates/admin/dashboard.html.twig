@@ -50,19 +50,6 @@
             </div>
         </div>
     </div>
-    {% if covoituragesData.labels is not empty %}
-    <div class="alert alert-info">
-        <h5>Données récupérées depuis MongoDB :</h5>
-        <p><strong>Dates :</strong> {{ covoituragesData.labels|join(', ') }}</p>
-        <p><strong>Covoiturages :</strong> {{ covoituragesData.values|join(', ') }}</p>
-        <p><strong>Crédits :</strong> {{ creditsData.values|join(', ') }}</p>
-    </div>
-    {% else %}
-        <div class="alert alert-warning">
-            <p><strong>⚠️ Aucune donnée MongoDB récupérée.</strong></p>
-        </div>
-    {% endif %}
-
     <div class="row mt-5">
         <div class="col-md-6">
             <div class="card shadow-sm">

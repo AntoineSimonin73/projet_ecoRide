@@ -5,7 +5,7 @@ namespace App\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
-#[MongoDB\Document(repositoryClass: "App\Repository\RideStatsRepository")]
+#[MongoDB\Document(collection: "rideStats", repositoryClass: "App\Repository\RideStatsRepository")]
 class RideStats
 {
     #[MongoDB\Id]
@@ -18,7 +18,7 @@ class RideStats
     private int $rideCount = 0;
 
     #[MongoDB\Field(type: "int")]
-    private float $creditsEarned = 0;
+    private int $creditsEarned = 0;
 
     public function __construct(\DateTime $date)
     {
@@ -30,7 +30,7 @@ class RideStats
         $this->rideCount += $count;
     }
 
-    public function addCredits(float $credits): void
+    public function addCredits(int $credits): void
     {
         $this->creditsEarned += $credits;
     }
@@ -45,7 +45,7 @@ class RideStats
         return $this->rideCount;
     }
 
-    public function getCreditsEarned(): float
+    public function getCreditsEarned(): int
     {
         return $this->creditsEarned;
     }

@@ -20,14 +20,14 @@
                 {% endif %}
                 {% if app.user %}
                     {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_EMPLOYE' in app.user.roles %}
-                        <a href="{{ path('app_change_password') }}" class="btn btn-outline-dark me-2">Mon espace</a>
+                        <li><a href="{{ path('app_change_password') }}" class="nav-link px-2 text-dark hover-highlight">Mon espace</a></li>
                     {% else %}
-                        <a href="{{ path('app_user_space') }}" class="btn btn-outline-dark me-2">Mon espace</a>
+                        <li><a href="{{ path('app_user_space') }}" class="nav-link px-2 text-dark hover-highlight">Mon espace</a></li>
                     {% endif %}
-                    <a href="{{ path('app_logout') }}" class="btn btn-dark">Déconnexion</a>
+                        <li><a href="{{ path('app_logout') }}" class="btn btn-dark">Déconnexion</a></li>
                 {% else %}
-                    <a href="{{ path('app_login') }}" class="btn btn-outline-dark me-2">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-dark">S'inscrire</a>
+                    <li><a href="{{ path('app_login') }}" class="nav-link px-2 text-dark hover-highlight">Connexion</a></li>
+                    <li><a href="{{ path('app_register') }}" class="nav-link px-2 text-dark hover-highlight">S'inscrire</a></li>
                 {% endif %}
             </ul>
         </div>

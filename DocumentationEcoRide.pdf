@@ -1,0 +1,66 @@
+Projet EcoRide
+
+
+Comptes :
+
+-admin : admin@example.com / adminpassword
+-employé : employe@example.com / employepassword
+-utilisateur : user1@example.com / password1
+
+
+Liens : 
+
+-github : https://github.com/AntoineSimonin73/projet_ecoRide
+-application : https://projet-ecoride.onrender.com
+-trello : https://trello.com/b/145yUpoA/projet-ecoride
+
+
+Charte graphique :
+
+-polices :      Police principale :
+Utilisée pour les titres, les paragraphes et les boutons.
+Police : Arial, Helvetica, sans-serif.
+Police secondaire :
+Utilisée pour les graphiques et les éléments décoratifs.
+Police : Roboto, sans-serif.
+
+-couleurs :   Vert :
+Utilisé pour les titres, boutons et bordures des cartes.
+Code couleur : #155724 (vert foncé) et #28a745 (vert clair).
+Header et footer : #d4edda
+Blanc :
+Utilisé comme couleur de fond pour les cartes et le contenu principal.
+Code couleur : #ffffff.
+Gris clair :
+Utilisé pour les bordures et les arrière-plans secondaires.
+Code couleur : #f8f9fa.
+Bleu :
+Utilisé pour les graphiques (gains de la plateforme).
+Code couleur : #007bff (bleu clair).
+Noir :
+Utilisé pour le texte principal.
+Code couleur : #000000.
+
+
+Gestion de projet :
+
+Pour ma gestion de projet j’ai essayé de le découper en partie correspondante a des fonctionnalités ou des parties distinctes (comme le choix du stack technique).
+Puis j’ai essayé de classer les différentes parties par ordre de priorités pour ne pas être bloqué par une autre fonctionnalité dont je n’avais pas encore commencé à m’occuper.
+
+
+
+
+
+Documentation technique :
+
+N’ayant pas de connaissance en développement web avant de commencer cette formation, c’est en m’appuyant sur le peu vu en cours, les projets en live et surtout un livre sur symfony 6 que j’ai fais le choix de mon stack technique :
+
+-Visual studio code comme IDE
+-Figma pour les maquettes
+-Trello pour la gestion de projet
+-Symfony pour développer mon application
+-Git et Github pour gérer les étapes du développement 
+
+
+Pour déployer mon application, les cours étant très incomplets et insuffisants j’ai surtout eu recours à ChatGPT, qui m’a aidé à trouver quel site utiliser pour déployer mon application de manière gratuite, adapté à mon stack et mes besoins.
+Ainsi que résoudre les très nombreuses petites erreur et difficultés que j’ai rencontrées lors du déploiement.

@@ -2,4 +2,4 @@
 
 -Vous aurez besoin de MongoDB et MySQL
 
--Vous pouvez télécharger les fichier des base de données sur GitHub
+-Vous pouvez télécharger les fichier des bases de données sur GitHub
